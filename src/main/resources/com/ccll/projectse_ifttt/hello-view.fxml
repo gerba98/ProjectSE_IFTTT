@@ -13,11 +13,6 @@
             <Button fx:id="CreateRuleButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
             <Button fx:id="DeleteRuleButton" layoutX="14.0" layoutY="55.0" mnemonicParsing="false" text="Delete rule" />
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-            <Pane id="RulePaneCreation" fx:id="RulePaneCreation" layoutX="16.0" layoutY="14.0" prefHeight="324.0" prefWidth="326.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
-                <Button fx:id="CancelCreationButton" layoutX="262.0" layoutY="281.0" mnemonicParsing="false" text="Cancel" />
-                <Button fx:id="SaveRuleButton" layoutX="195.0" layoutY="281.0" mnemonicParsing="false" text="Save rule" />
-            </Pane>
-        </AnchorPane>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
     </SplitPane>
 </VBox>
