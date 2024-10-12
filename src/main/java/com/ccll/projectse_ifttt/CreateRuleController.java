@@ -25,6 +25,12 @@ public class CreateRuleController {
     private ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day","Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
     private ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio","Write string","Copy File","Move file","Remove file","Execute Program");
+    @FXML
+    private FXMLDocumentController fxmlDocumentController;
+
+    public void setFXMLDocumentController(FXMLDocumentController fxmlDocumentController) {
+        this.fxmlDocumentController = fxmlDocumentController;
+    }
 
     public void initialize(){
         triggerBox.setItems(triggersList);
@@ -38,6 +44,7 @@ public class CreateRuleController {
 
         //new Rule();
 
+        fxmlDocumentController.insertItems(name);
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
