@@ -8,7 +8,7 @@ import javafx.scene.control.Alert;
  * per mostrare un messaggio all'utente quando l'azione viene eseguita.
  */
 public class DisplayMessageAction implements Action {
-    private String message;
+    private final String message;
 
     /**
      * Costruttore della classe {@code DisplayMessageAction}.

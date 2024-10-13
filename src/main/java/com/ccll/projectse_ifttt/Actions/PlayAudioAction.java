@@ -102,4 +102,9 @@ public class PlayAudioAction implements Action {
     public String toString() {
         return "Riproduci audio: " + audioFilePath.getFileName();
     }
+
+    public Path getAudioFilePath() {
+        return audioFilePath;
+    }
+
 }
