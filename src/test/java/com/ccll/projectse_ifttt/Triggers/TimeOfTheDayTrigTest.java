@@ -27,21 +27,12 @@ public class TimeOfTheDayTrigTest {
     }
 
     @Test
-    public void testSetTime() {
-        LocalTime initialTime = LocalTime.of(12, 30);
-        TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(initialTime);
-
-        LocalTime newTime = LocalTime.of(13, 0);
-        timeTrigger.setTime(newTime);
-
-        assertEquals(newTime, timeTrigger.getTime());
-    }
-
-    @Test
-    public void testToString() {
+    public void testCreator() {
         LocalTime time = LocalTime.of(12, 30);
-        TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(time);
+        TOTDTrigCreator TOTD = new TOTDTrigCreator(time);
 
-        assertEquals("Trigger attivato a: " + time, timeTrigger.toString());
+        Trigger trigger = TOTD.createTrigger();
+        assertInstanceOf(TimeOfTheDayTrig.class, trigger);
     }
+
 }

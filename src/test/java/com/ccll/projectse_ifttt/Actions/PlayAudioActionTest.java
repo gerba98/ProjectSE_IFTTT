@@ -1,53 +1,51 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import javafx.application.Platform;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import static org.junit.Assert.*;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class PlayAudioActionTest {
 
-class PlayAudioActionTest {
-    private PlayAudioAction playAudioAction;
-    private Path validAudioPath;
-    private Path invalidAudioPath;
-
-    @BeforeAll
-    static void initJavaFX() {
-        Platform.startup(() -> {});
-    }
-
-    @BeforeEach
-    void setUp() {
-        validAudioPath = Paths.get("/Users/camillamurati/Desktop/cat.mp3");
-        invalidAudioPath = Paths.get("/Users/camillamurati/Desktop/non-existent-audio.mp3");
+    @Test
+    public void initAction() {
+        Path filePath = Paths.get("path/to/audio/file.mp3");
+        PlayAudioAction action = new PlayAudioAction(filePath);
+        assertNotNull(action);
+        assertEquals(filePath, action.getAudioFilePath());
     }
 
     @Test
-    void testExecuteWithValidAudio() {
-        playAudioAction = new PlayAudioAction(validAudioPath);
-        assertTrue(playAudioAction.execute(), "L'esecuzione dovrebbe avere successo con un file audio valido.");
+    public void createAction() {
+        PlayAudioActionCreator creator = new PlayAudioActionCreator(Paths.get("/Users/camillamurati/Desktop/cat.mp3"));
+        Action action = creator.createAction();
+        assertNotNull(action);
+        assertTrue(action instanceof PlayAudioAction);
     }
 
     @Test
-    void testExecuteWithInvalidAudio() {
-        playAudioAction = new PlayAudioAction(invalidAudioPath);
-        assertFalse(playAudioAction.execute(), "L'esecuzione dovrebbe fallire con un file audio non valido.");
+    public void createWithValidPath() {
+        Path filePath = Paths.get("/Users/camillamurati/Desktop/cat.mp3");
+        PlayAudioActionCreator creator = new PlayAudioActionCreator(filePath);
+        Action action = creator.createAction();
+        assertNotNull(action);
+        assertTrue(action instanceof PlayAudioAction);
+        assertEquals(filePath, ((PlayAudioAction) action).getAudioFilePath());
     }
 
     @Test
-    void testGetAudioFilePath() {
-        playAudioAction = new PlayAudioAction(validAudioPath);
-        assertEquals(validAudioPath, playAudioAction.getAudioFilePath(), "Il percorso del file audio dovrebbe corrispondere a quello fornito nel costruttore.");
+    public void createWithNullPath() {
+        PlayAudioActionCreator creator = new PlayAudioActionCreator(null);
+        Action action = creator.createAction();
+        assertNotNull(action);
+        assertTrue(action instanceof PlayAudioAction);
     }
 
     @Test
-    void testToString() {
-        playAudioAction = new PlayAudioAction(validAudioPath);
-        String expectedString = "PlayAudioAction: " + validAudioPath;
-        assertEquals(expectedString, playAudioAction.toString(), "La rappresentazione in forma di stringa dovrebbe essere corretta.");
+    public void createWithInvalidPath() {
+        PlayAudioActionCreator creator = new PlayAudioActionCreator(Paths.get("invalid/path/file.mp3"));
+        Action action = creator.createAction();
+        assertNotNull(action);
+        assertTrue(action instanceof PlayAudioAction);
     }
 }

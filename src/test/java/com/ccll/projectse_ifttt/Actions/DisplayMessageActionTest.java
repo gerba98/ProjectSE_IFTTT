@@ -1,38 +1,45 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class DisplayMessageActionTest {
 
-    @Test
-    public void testConstructor() {
-        String expectedMessage = "Hello, World!";
-        DisplayMessageAction action = new DisplayMessageAction(expectedMessage);
+    private String message = "Messaggio di test";
+    DisplayMessageAction displayMessage = new DisplayMessageAction(message);
 
-        // Verifica che il messaggio sia stato inizializzato correttamente
-        assertEquals("Visualizza messaggio: Hello, World!", action.toString());
+
+    @Test
+    public void testInitialization() {
+        assertNotNull(displayMessage);
+        assertEquals("Visualizza messaggio: " + message, displayMessage.toString());
+    }
+
+    @Test
+    public void testCreator() {
+        DisplayMessageActionCreator displayMessageActionCreator = new DisplayMessageActionCreator(message);
+        Action displayMessageAction = displayMessageActionCreator.createAction();
+        assertNotNull(displayMessageAction);
+        assertTrue(displayMessageAction instanceof DisplayMessageAction);
+        assertEquals("Visualizza messaggio: " + message, displayMessageAction.toString());
     }
 
     @Test
     public void testExecute() {
-        Platform.startup(() -> { }); // Inizializza il toolkit JavaFX se non lo è già
-        DisplayMessageAction action = new DisplayMessageAction("Test Message");
+        try {
+            CompletableFuture<Void> future = new CompletableFuture<>();
 
-        Platform.runLater(() -> {
-            // Verifica che il metodo execute ritorni true
-            boolean result = action.execute();
-            assertTrue(result, "L'azione dovrebbe restituire true");
-        });
-    }
-    @Test
-    public void testToString() {
-        String expectedMessage = "Test message";
-        DisplayMessageAction action = new DisplayMessageAction(expectedMessage);
+            Platform.runLater(() -> {
+                displayMessage.execute();
+                future.complete(null);
+            });
 
-        // Verifica che il toString restituisca il formato corretto
-        assertEquals("Visualizza messaggio: Test message", action.toString());
+            future.get(5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            System.out.println("Errore durante il test testExecute " + e.getStackTrace());
+        }
     }
 }

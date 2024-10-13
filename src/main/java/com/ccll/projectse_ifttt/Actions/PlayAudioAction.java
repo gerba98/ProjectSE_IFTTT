@@ -30,6 +30,10 @@ public class PlayAudioAction implements Action {
         this.audioFilePath = audioFilePath;
     }
 
+    public Path getAudioFilePath() {
+        return audioFilePath;
+    }
+
     /**
      * Esegue l'azione per riprodurre il file audio utilizzando MediaPlayer di JavaFX.
      * @return true se il file audio è stato riprodotto correttamente, false altrimenti.
