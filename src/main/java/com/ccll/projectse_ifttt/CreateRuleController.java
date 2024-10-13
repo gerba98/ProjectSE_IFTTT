@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Iterator;
 
 public class CreateRuleController {
 
@@ -51,9 +52,11 @@ public class CreateRuleController {
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
             if(!paneItems.isEmpty())
             {
-                for(Object item : paneItems){
+                Iterator<Object> iterator = paneItems.iterator();
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
                     rulePane.getChildren().remove(item);
-                    paneItems.remove(item);
+                    iterator.remove(); // Rimozione sicura dell'elemento
                 }
             }
             createItem(labelTriggerSelected, selectedItem);
@@ -63,6 +66,7 @@ public class CreateRuleController {
 
     private void createItem(Label label, String text)
     {
+
         switch (text) {
             case "Time of the Day":
                 label.setText("Time of the Day (hh:mm)");
@@ -71,6 +75,7 @@ public class CreateRuleController {
                 timeField.setPromptText("hh:mm");
                 timeField.setLayoutX(285.0);
                 timeField.setLayoutY(142.0);
+
 
                 rulePane.getChildren().add(timeField);
                 paneItems.add(timeField);
@@ -150,7 +155,7 @@ public class CreateRuleController {
 
                 TextField statusProgramField = new TextField();
                 statusProgramField.setPromptText("Insert the status program");
-
+                
                 statusProgramField.setLayoutX(285.0);
                 statusProgramField.setLayoutY(142.0);
                 statusProgramField.setPrefWidth(250);
@@ -166,6 +171,7 @@ public class CreateRuleController {
         String action = actionBox.getValue();
 
         //new Rule();
+
 
         fxmlDocumentController.insertItems(name);
         Stage stage = (Stage) createButton.getScene().getWindow();
