@@ -45,6 +45,9 @@ public class CreateRuleController {
     @FXML
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
 
+    private String trigger = "";
+    private String action = "";
+
     @FXML
     public void setFXMLDocumentController(FXMLDocumentController fxmlDocumentController) {
         this.fxmlDocumentController = fxmlDocumentController;
@@ -300,13 +303,32 @@ public class CreateRuleController {
     @FXML
     public void onCreateButtonClick(ActionEvent actionEvent) {
         String name = ruleNameTxtField.getText();
-        String trigger = triggerBox.getValue();
-        String action = actionBox.getValue();
+
+        Iterator<Object> iterator = triggerPaneItems.iterator();
+        while (iterator.hasNext()) {
+            Object item = iterator.next();
+
+            if(item instanceof TextField){
+                trigger += ((TextField) item).getText() + " ";
+            }
+
+
+        }
+
+        iterator = actionPaneItems.iterator();
+        while (iterator.hasNext()) {
+            Object item = iterator.next();
+            if(item instanceof TextField){
+                action += ((TextField) item).getText() + " ";
+            }
+
+        }
 
         //new Rule();
 
+        String rule = name + " " + trigger + " " + action;
 
-        fxmlDocumentController.insertItems(name);
+        fxmlDocumentController.insertItems(rule);
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
