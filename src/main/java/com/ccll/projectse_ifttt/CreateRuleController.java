@@ -6,13 +6,12 @@ import javafx.collections.ObservableList;
 import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
+import java.time.Month;
 
 public class CreateRuleController {
 
@@ -50,10 +49,12 @@ public class CreateRuleController {
 
         triggerBox.setOnAction(e -> {
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
-            if(paneItems.size() > 0)
+            if(!paneItems.isEmpty())
             {
-                rulePane.getChildren().remove(paneItems.getFirst());
-                paneItems.remove(0);
+                for(Object item : paneItems){
+                    rulePane.getChildren().remove(item);
+                    paneItems.remove(item);
+                }
             }
             createItem(labelTriggerSelected, selectedItem);
         });
@@ -90,8 +91,72 @@ public class CreateRuleController {
 
                 break;
             case "Day of the month":
-                label.setText("Day of the month (1, 2, etc..)");
+                label.setText("Choose a day of the month");
+                DatePicker dayMonthField = new DatePicker();
+
+                dayMonthField.setLayoutX(285.0);
+                dayMonthField.setLayoutY(142.0);
+
+                rulePane.getChildren().add(dayMonthField);
+                paneItems.add(dayMonthField);
+
                 break;
+            case "Date":
+                label.setText("Choose a date");
+                DatePicker dateFiled = new DatePicker();
+
+                dateFiled.setLayoutX(285.0);
+                dateFiled.setLayoutY(142.0);
+
+                rulePane.getChildren().add(dateFiled);
+                paneItems.add(dateFiled);
+
+                break;
+            case "File existence":
+                label.setText("Insert a file path");
+                TextField fileExistenceField = new TextField();
+
+                fileExistenceField.setLayoutX(285.0);
+                fileExistenceField.setLayoutY(142.0);
+
+                fileExistenceField.setPrefWidth(250);
+
+                rulePane.getChildren().add(fileExistenceField);
+                paneItems.add(fileExistenceField);
+
+                break;
+            case "File dimension":
+                label.setText("Insert a file dimension and specify the unit");
+                TextField fileDimensionField = new TextField();
+                ComboBox<String> unit = new ComboBox<String>();
+
+                ObservableList<String> unitList = FXCollections.observableArrayList("B","KB","MB","GB");
+                unit.setItems(unitList);
+
+                fileDimensionField.setPromptText("Insert a file dimension");
+                fileDimensionField.setLayoutX(285.0);
+                fileDimensionField.setLayoutY(142.0);
+                fileDimensionField.setPrefWidth(100);
+
+                unit.setLayoutX(400.0);
+                unit.setLayoutY(142.0);
+
+                rulePane.getChildren().addAll(fileDimensionField,unit);
+                paneItems.addAll(fileDimensionField,unit);
+
+                break;
+            case "Status program":
+                label.setText("Insert the status program");
+
+                TextField statusProgramField = new TextField();
+                statusProgramField.setPromptText("Insert the status program");
+
+                statusProgramField.setLayoutX(285.0);
+                statusProgramField.setLayoutY(142.0);
+                statusProgramField.setPrefWidth(250);
+
+                rulePane.getChildren().add(statusProgramField);
+                paneItems.add(statusProgramField);
         }
     }
 
