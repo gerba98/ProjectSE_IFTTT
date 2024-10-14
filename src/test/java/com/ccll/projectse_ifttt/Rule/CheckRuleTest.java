@@ -1,7 +1,6 @@
 package com.ccll.projectse_ifttt.Rule;
-
-
 import com.ccll.projectse_ifttt.Actions.Action;
+
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -138,6 +137,7 @@ class CheckRuleTest {
     }
 
     // Implementazione di test per Action
+    // Implementa l'interfaccia Action
     static class TestAction implements Action {
         private boolean executed = false;
 
@@ -160,4 +160,5 @@ class CheckRuleTest {
             return "TestAction{executed=" + executed + '}';
         }
     }
+
 }

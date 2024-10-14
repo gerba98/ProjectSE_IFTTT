@@ -1,7 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import com.ccll.projectse_ifttt.Actions.Action;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
+import com.ccll.projectse_ifttt.Actions.Action;
 
 
 /**
