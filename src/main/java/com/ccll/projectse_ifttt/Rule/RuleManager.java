@@ -9,40 +9,61 @@ import javafx.collections.ObservableList;
  * RuleManager durante l'esecuzione dell'applicazione.
  */
 public class RuleManager {
-    private static RuleManager instance;
+    private static volatile RuleManager instance;
     private final ObservableList<Rule> rules;
-    private final CheckRule ruleChecker;
+    private CheckRule ruleChecker;
 
     /**
-     * Costruttore privato per inizializzare il RuleManager.
-     * Crea un'istanza di CheckRule e avvia il thread per il controllo delle regole.
+     * Costruttore privato per inizializzare il RuleManager  e la lista delle regole.
      */
     private RuleManager() {
-        ruleChecker = new CheckRule(this);
-        ruleChecker.start();
         this.rules = FXCollections.observableArrayList();
     }
 
     /**
      * Restituisce l'istanza singleton di RuleManager.
+     * Se l'istanza non è ancora stata creata, la crea.
      * @return L'istanza di RuleManager.
      */
     public static RuleManager getInstance() {
-        if (instance == null) {
-            instance = new RuleManager();
+        RuleManager result = instance;
+        if (result == null) {
+            synchronized (RuleManager.class) {
+                result = instance;
+                if (result == null) {
+                    instance = result = new RuleManager();
+                }
+            }
         }
-        return instance;
+        return result;
     }
 
     /**
-     * Aggiunge una nuova regola alla lista delle regole gestite.
-     * Se è la prima regola aggiunta, avvia il controllo delle regole definito in CheckRule.
+     * Aggiunge una nuova regola alla lista delle regole.
+     * Se è la prima regola aggiunta, istanzia un nuovo thread per il controllo delle regole e
+     * inizia il controllo.
      * @param rule La regola da aggiungere.
      */
     public void addRule(Rule rule) {
         rules.add(rule);
         if (rules.size() == 1) {
-            ruleChecker.setRunning(true);
+            if (ruleChecker == null) {
+                ruleChecker =  new CheckRule();
+                ruleChecker.start();
+            }
+        }
+    }
+
+    /**
+     * Rimuove una regola dalla lista delle regole gestite.
+     * Se, dopo la rimozione, non ci sono più regole, ferma il controllo delle regole.
+     *
+     * @param rule La regola da rimuovere.
+     */
+    public void removeRule(Rule rule) {
+        rules.remove(rule);
+        if (rules.isEmpty() && ruleChecker != null) {
+            ruleChecker.stop();
         }
     }
 
@@ -53,9 +74,5 @@ public class RuleManager {
     public ObservableList<Rule> getRules() {
         return rules;
     }
-
-//        public void removeRule(Rule rule) {
-//        rules.remove(rule);
-//    }
 
 }

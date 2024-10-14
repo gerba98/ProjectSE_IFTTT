@@ -1,5 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
+import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.Triggers.Trigger;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,8 +38,13 @@ class RuleManagerTest {
     @Test
     @DisplayName("Verifica Aggiunta Regole")
     void testMultipleRuleAdditions() {
-        Rule rule1 = new Rule(null, null, "Regola 1");
-        Rule rule2 = new Rule(null, null, "Regola 2");
+        CheckRuleTest.TestTrigger trigger1 = new CheckRuleTest.TestTrigger(true);
+        CheckRuleTest.TestAction action1 = new CheckRuleTest.TestAction();
+        Rule rule1 = new Rule(trigger1, action1, "Regola 1");
+
+        CheckRuleTest.TestTrigger trigger2 = new CheckRuleTest.TestTrigger(false);
+        CheckRuleTest.TestAction action2 = new CheckRuleTest.TestAction();
+        Rule rule2 = new Rule(trigger2, action2, "Regola 2");
 
         testRuleManager.addRule(rule1);
         testRuleManager.addRule(rule2);
@@ -49,16 +56,50 @@ class RuleManagerTest {
         assertTrue(rules.contains(rule1) && rules.contains(rule2), "La lista delle regole dovrebbe contenere entrambe le regole aggiunte");
     }
 
+    // Implementazione di test per Trigger
+    private static class TestTrigger implements Trigger {
+        private boolean shouldTrigger;
 
-//    @Test
-//    @DisplayName("Verifica Immutabilità Lista Regole")
-//    void testRulesListImmutability() {
-//        Rule regolaMock = new Rule(null, null, "Regola di Test");
-//        ruleManager.addRule(regolaMock);
-//
-//        ObservableList<Rule> regole = ruleManager.getRules();
-//        assertThrows(UnsupportedOperationException.class, () -> regole.add(new Rule(null, null, "Altra Regola")),
-//                "La lista delle regole dovrebbe essere non modificabile");
-//    }
-//
+        public TestTrigger(boolean shouldTrigger) {
+            this.shouldTrigger = shouldTrigger;
+        }
+
+        @Override
+        public boolean evaluate() {
+            return shouldTrigger;
+        }
+
+        public void setShouldTrigger(boolean shouldTrigger) {
+            this.shouldTrigger = shouldTrigger;
+        }
+
+        @Override
+        public String toString() {
+            return "TestTrigger{shouldTrigger=" + shouldTrigger + '}';
+        }
+    }
+
+    // Implementazione di test per Action
+    private static class TestAction implements Action {
+        private boolean executed = false;
+
+        @Override
+        public boolean execute() {
+            executed = true;
+            return true;
+        }
+
+        public boolean wasExecuted() {
+            return executed;
+        }
+
+        public void reset() {
+            executed = false;
+        }
+
+        @Override
+        public String toString() {
+            return "TestAction{executed=" + executed + '}';
+        }
+    }
 }

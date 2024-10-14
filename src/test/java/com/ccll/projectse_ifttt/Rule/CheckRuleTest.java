@@ -115,7 +115,7 @@ class CheckRuleTest {
     }
 
     // Implementazione di test per Trigger
-    private static class TestTrigger implements Trigger {
+    static class TestTrigger implements Trigger {
         private boolean shouldTrigger;
 
         public TestTrigger(boolean shouldTrigger) {
@@ -138,7 +138,7 @@ class CheckRuleTest {
     }
 
     // Implementazione di test per Action
-    private static class TestAction implements Action {
+    static class TestAction implements Action {
         private boolean executed = false;
 
         @Override
