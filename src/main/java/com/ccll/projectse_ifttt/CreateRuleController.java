@@ -6,12 +6,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.security.cert.Extension;
+import java.time.LocalTime;
 import java.util.Iterator;
+import java.util.Objects;
 
 public class CreateRuleController {
 
+    @FXML
+    private Label labelError;
     @FXML
     private Pane rulePane;
     @FXML
@@ -31,7 +38,7 @@ public class CreateRuleController {
     @FXML
     private ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
-    private ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio","Write string","Copy File","Move file","Remove file","Execute Program");
+    private ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
     private IndexController indexController;
 
@@ -41,8 +48,7 @@ public class CreateRuleController {
     @FXML
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
 
-    private String trigger = "";
-    private String action = "";
+
 
     @FXML
     public void setFXMLDocumentController(IndexController indexController) {
@@ -90,14 +96,23 @@ public class CreateRuleController {
             case "Time of the Day":
                 label.setText("Time of the Day (hh:mm)");
 
-                TextField timeField = new TextField();
-                timeField.setPromptText("hh:mm");
-                timeField.setLayoutX(285.0);
-                timeField.setLayoutY(142.0);
+                Spinner<Integer> hourSpinner = new Spinner<>(0, 23, LocalTime.now().getHour());
+                Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, LocalTime.now().getMinute());
+
+                hourSpinner.setEditable(true);
+                hourSpinner.setPrefWidth(55);
+                minuteSpinner.setEditable(true);
+                minuteSpinner.setPrefWidth(55);
+
+                hourSpinner.setLayoutX(285.0);
+                hourSpinner.setLayoutY(142.0);
+
+                minuteSpinner.setLayoutX(350.0);
+                minuteSpinner.setLayoutY(142.0);
 
 
-                rulePane.getChildren().add(timeField);
-                triggerPaneItems.add(timeField);
+                rulePane.getChildren().addAll(hourSpinner,minuteSpinner);
+                triggerPaneItems.addAll(hourSpinner,minuteSpinner);
 
                 break;
             case "Day of the week":
@@ -205,14 +220,31 @@ public class CreateRuleController {
             case "Play Audio":
                 label.setText("Audio to reproduce");
 
-                TextField pathAudio = new TextField();
-                pathAudio.setPromptText("Audio path...");  //modifichiamolo in un file browser
+                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files","*.mp3","*.aac","*.ogg");
+                Button browseAudioButton = new Button("Browse...");
 
-                pathAudio.setLayoutX(285.0);
-                pathAudio.setLayoutY(225);
+                TextField pathAudioField = new TextField();
+                pathAudioField.setLayoutX(285);
+                pathAudioField.setLayoutY(225);
+                pathAudioField.setFocusTraversable(false);
+                pathAudioField.setEditable(false);
+                pathAudioField.setDisable(false);
 
-                rulePane.getChildren().add(pathAudio);
-                actionPaneItems.add(pathAudio);
+                browseAudioButton.setLayoutX(450.0);
+                browseAudioButton.setLayoutY(225);
+
+                browseAudioButton.setOnAction(e ->{
+                    FileChooser playFileChooser = new FileChooser();
+                    playFileChooser.setTitle("File audio...");
+                    playFileChooser.getExtensionFilters().add(audio);
+
+                    Stage stage = (Stage) browseAudioButton.getScene().getWindow();
+                    File selectedFile = playFileChooser.showOpenDialog(stage);
+                    pathAudioField.setText(selectedFile.getPath());
+                });
+
+                rulePane.getChildren().addAll(browseAudioButton,pathAudioField);
+                actionPaneItems.addAll(browseAudioButton,pathAudioField);
 
                 break;
             case "Write string":
@@ -272,14 +304,27 @@ public class CreateRuleController {
                 break;
             case "Remove file":
                 label.setText("Specify which file to remove");
-                TextField removeFileField = new TextField();        //modifichiamolo in un file browser
-                removeFileField.setPromptText("File path...");
+                Button browseRemButton = new Button("Browse...");
+                TextField pathRemField = new TextField();
+                pathRemField.setLayoutX(285);
+                pathRemField.setLayoutY(225);
+                pathRemField.setFocusTraversable(false);
+                pathRemField.setEditable(false);
+                pathRemField.setDisable(false);
 
-                removeFileField.setLayoutX(285.0);
-                removeFileField.setLayoutY(225);
+                browseRemButton.setLayoutX(450.0);
+                browseRemButton.setLayoutY(225);
 
-                rulePane.getChildren().addAll(removeFileField);
-                actionPaneItems.addAll(removeFileField);
+                browseRemButton.setOnAction(e ->{
+                    FileChooser removeFileChooser = new FileChooser();
+                    removeFileChooser.setTitle("File to remove...");
+
+                    Stage stage = (Stage) browseRemButton.getScene().getWindow();
+                    File selectedFile = removeFileChooser.showOpenDialog(stage);
+                    pathRemField.setText(selectedFile.getPath());
+                });
+                rulePane.getChildren().addAll(browseRemButton,pathRemField);
+                actionPaneItems.addAll(browseRemButton,pathRemField);
 
                 break;
             case "Execute Program":
@@ -299,34 +344,58 @@ public class CreateRuleController {
     @FXML
     public void onCreateButtonClick(ActionEvent actionEvent) {
         String name = ruleNameTxtField.getText();
+        boolean errorFlag = false;
+
+        String trigger = "";
+        String action = "";
 
         Iterator<Object> iterator = triggerPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
-
-            if(item instanceof TextField){
-                trigger += ((TextField) item).getText() + " ";
+            if (item instanceof TextField) {
+                if (!((TextField) item).getText().isEmpty()) {
+                    errorFlag = false;
+                    trigger += ((TextField) item).getText() + " ";
+                } else {
+                    errorFlag = true;
+                }
             }
+            if(item instanceof Spinner) {
+                if (((Spinner) item).getValue().toString().length() == 1) {
+                    trigger += "0" + ((Spinner) item).getValue() + ":";
+                } else {
+                    trigger += ((Spinner) item).getValue() + ":";
 
+                }
 
+            }
         }
+        trigger = trigger.substring(0,trigger.length()-1)+" "; //rimuove l'ultimo carattere e lo sostituisce con uno spazio
 
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
-            if(item instanceof TextField){
-                action += ((TextField) item).getText() + " ";
+            if (item instanceof TextField) {
+                if (!((TextField) item).getText().isEmpty()) {
+                    errorFlag = false;
+                    action += ((TextField) item).getText() + " ";
+                } else {
+                    errorFlag = true;
+                }
             }
 
         }
+        if(errorFlag || Objects.equals(name, "")) {
+            labelError.setVisible(true);
+        }else{
+            //new Rule();
+            labelError.setVisible(false);
+            String rule = name + " " + trigger + " " + action;
 
-        //new Rule();
-
-        String rule = name + " " + trigger + " " + action;
-
-        indexController.insertItems(rule);
-        Stage stage = (Stage) createButton.getScene().getWindow();
-        stage.close();
+            indexController.insertItems(rule);
+            Stage stage = (Stage) createButton.getScene().getWindow();
+            stage.close();
+        }
     }
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
