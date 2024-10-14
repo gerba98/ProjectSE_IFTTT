@@ -1,17 +1,13 @@
 package com.ccll.projectse_ifttt;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.time.LocalDate;
-import java.time.Month;
 import java.util.Iterator;
 
 public class CreateRuleController {
@@ -37,7 +33,7 @@ public class CreateRuleController {
     @FXML
     private ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio","Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
-    private FXMLDocumentController fxmlDocumentController;
+    private IndexController indexController;
 
     @FXML
     private ObservableList<Object> triggerPaneItems = FXCollections.observableArrayList();
@@ -49,8 +45,8 @@ public class CreateRuleController {
     private String action = "";
 
     @FXML
-    public void setFXMLDocumentController(FXMLDocumentController fxmlDocumentController) {
-        this.fxmlDocumentController = fxmlDocumentController;
+    public void setFXMLDocumentController(IndexController indexController) {
+        this.indexController = indexController;
     }
     @FXML
     public void initialize(){
@@ -328,7 +324,7 @@ public class CreateRuleController {
 
         String rule = name + " " + trigger + " " + action;
 
-        fxmlDocumentController.insertItems(rule);
+        indexController.insertItems(rule);
         Stage stage = (Stage) createButton.getScene().getWindow();
         stage.close();
     }
