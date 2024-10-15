@@ -1,10 +1,12 @@
 package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.Actions.ActionCreator;
 import com.ccll.projectse_ifttt.Actions.DisplayMessageActionCreator;
 import com.ccll.projectse_ifttt.Actions.PlayAudioActionCreator;
 import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
+import com.ccll.projectse_ifttt.Triggers.TriggerCreator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -28,6 +30,7 @@ public class RuleManager {
     /**
      * Restituisce l'istanza singleton di RuleManager.
      * Se l'istanza non è ancora stata creata, la crea.
+     *
      * @return L'istanza di RuleManager.
      */
     public static RuleManager getInstance() {
@@ -47,13 +50,14 @@ public class RuleManager {
      * Aggiunge una nuova regola alla lista delle regole.
      * Se è la prima regola aggiunta, istanzia un nuovo thread per il controllo delle regole e
      * inizia il controllo.
+     *
      * @param rule La regola da aggiungere.
      */
     public void addRule(Rule rule) {
         rules.add(rule);
         if (rules.size() == 1) {
             if (ruleChecker == null) {
-                ruleChecker =  new CheckRule();
+                ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
         }
@@ -75,6 +79,7 @@ public class RuleManager {
 
     /**
      * Restituisce la lista delle regole attualmente gestite.
+     *
      * @return L'observable list contenente Rule
      */
     public ObservableList<Rule> getRules() {
@@ -82,21 +87,53 @@ public class RuleManager {
     }
 
 
+    /**
+     * Crea una nuova regola basata sui parametri forniti.
+     *
+     * @param triggerType  Il tipo di trigger per la regola
+     * @param triggerValue Il valore del trigger per la regola
+     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger
+     * @param actionValue  Il valore dell'azione da eseguire
+     * @param ruleName     Il nome della regola da creare
+     * @return La nuova regola creata con i parametri forniti
+     */
+    public Rule createRule(String triggerType, String triggerValue, String actionType, String actionValue, String ruleName) {
+        Trigger trigger = createTrigger(triggerType, triggerValue);
+        Action action = createAction(actionType, actionValue);
 
-    public Rule createRule(String triggerType, String triggerValue, String actionType, String actionValue, String ruleName){
-        TOTDTrigCreator TOTD = new TOTDTrigCreator(triggerValue);
-        Trigger trigger = TOTD.createTrigger();
-        Action action;
-        if (actionType.equals("play audio")){
-            DisplayMessageActionCreator displayMessageActionCreator = new DisplayMessageActionCreator(actionValue);
-            action = displayMessageActionCreator.createAction();
-        }
-        else{
-            PlayAudioActionCreator creator = new PlayAudioActionCreator("/Users/camillamurati/Desktop/cat.mp3");
-            action = creator.createAction();
-        }
+        Rule newRule = new Rule(trigger, action, ruleName);
+        addRule(newRule);
 
-        return new Rule(trigger,action,ruleName);
+        return newRule;
+    }
+
+    /**
+     * @param actionType
+     * @param actionValue
+     * @return
+     */
+    public Action createAction(String actionType, String actionValue) {
+        actionType = actionType.toLowerCase();
+        ActionCreator actionCreator = switch (actionType) {
+            case "play audio" -> new PlayAudioActionCreator();
+            case "display message" -> new DisplayMessageActionCreator();
+            default -> throw new IllegalStateException("Unexpected value: " + actionType);
+        };
+        return actionCreator.createAction(actionValue);
+    }
+
+    /**
+     * @param triggerType
+     * @param triggerValue
+     * @return
+     */
+    public Trigger createTrigger(String triggerType, String triggerValue) {
+        triggerType = triggerType.toLowerCase();
+        TriggerCreator triggerCreator = switch (triggerType){
+            case "time of the day" -> new TOTDTrigCreator();
+            default -> throw new IllegalStateException("Unexpected value: " + triggerType);
+        };
+        return triggerCreator.createTrigger(triggerValue);
     }
 
 }
