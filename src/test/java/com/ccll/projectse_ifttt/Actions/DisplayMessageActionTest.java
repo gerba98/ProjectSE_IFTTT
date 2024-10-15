@@ -1,10 +1,12 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.*;
 
 public class DisplayMessageActionTest {

@@ -73,7 +73,6 @@ class RuleManagerTest {
     }
 
 
-
     private static class TestTrigger implements Trigger {
         private boolean shouldTrigger;
 

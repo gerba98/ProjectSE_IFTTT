@@ -12,5 +12,6 @@ public abstract class ActionCreator {
      * @return un'istanza di Action
      */
     public abstract Action createAction(String actionValue);
+
     public abstract String getType();
 }

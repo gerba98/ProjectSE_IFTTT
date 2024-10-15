@@ -14,7 +14,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import java.io.File;
-import java.security.cert.Extension;
 import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Objects;
@@ -26,8 +25,11 @@ import java.util.Objects;
  */
 public class CreateRuleController {
 
+    @FXML
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    @FXML
+    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message", "Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
     RuleManager ruleManager;
-
     @FXML
     private Label labelError;
     @FXML
@@ -47,10 +49,6 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
-    @FXML
-    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
-    @FXML
     private IndexController indexController;
 
     @FXML
@@ -58,7 +56,6 @@ public class CreateRuleController {
 
     @FXML
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
-
 
 
     /**
@@ -76,20 +73,20 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
-     *
+     * <p>
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
      */
     @FXML
-    public void initialize(){
+    public void initialize() {
         ruleManager = RuleManager.getInstance();
         triggerBox.setItems(triggersList);
         actionBox.setItems(actionsList);
 
         triggerBox.setOnAction(e -> {
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
-            if(!triggerPaneItems.isEmpty()) {
+            if (!triggerPaneItems.isEmpty()) {
                 Iterator<Object> iterator = triggerPaneItems.iterator();
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
@@ -102,8 +99,7 @@ public class CreateRuleController {
 
         actionBox.setOnAction(e -> {
             String selectedItem = actionBox.getSelectionModel().getSelectedItem();
-            if(!actionPaneItems.isEmpty())
-            {
+            if (!actionPaneItems.isEmpty()) {
                 Iterator<Object> iterator = actionPaneItems.iterator();
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
@@ -115,17 +111,17 @@ public class CreateRuleController {
         });
 
     }
+
     /**
      * Crea un elemento trigger all'interno del rule pane basato sul testo fornito.
      *
      * @param label l'etichetta da aggiornare con la descrizione specifica del trigger
-     * @param text il tipo di trigger da creare; i valori validi sono "Ora del giorno",
-     *             "Giorno della settimana", "Giorno del mese", "Data", "Esistenza file",
-     *             "Dimensione file" e "Stato programma"
+     * @param text  il tipo di trigger da creare; i valori validi sono "Ora del giorno",
+     *              "Giorno della settimana", "Giorno del mese", "Data", "Esistenza file",
+     *              "Dimensione file" e "Stato programma"
      */
     @FXML
-    private void createTriggerItem(Label label, String text)
-    {
+    private void createTriggerItem(Label label, String text) {
 
         switch (text) {
             case "Time of the Day":
@@ -146,8 +142,8 @@ public class CreateRuleController {
                 minuteSpinner.setLayoutY(142.0);
 
 
-                rulePane.getChildren().addAll(hourSpinner,minuteSpinner);
-                triggerPaneItems.addAll(hourSpinner,minuteSpinner);
+                rulePane.getChildren().addAll(hourSpinner, minuteSpinner);
+                triggerPaneItems.addAll(hourSpinner, minuteSpinner);
 
 
                 break;
@@ -155,7 +151,7 @@ public class CreateRuleController {
                 label.setText("Day of the week (Monday, etc..)");
 
                 ComboBox<String> dayOfWeek = new ComboBox<String>();
-                ObservableList<String> week = FXCollections.observableArrayList("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday");
+                ObservableList<String> week = FXCollections.observableArrayList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
                 dayOfWeek.setItems(week);
 
                 dayOfWeek.setLayoutX(285.0);
@@ -205,7 +201,7 @@ public class CreateRuleController {
                 TextField fileDimensionField = new TextField();
                 ComboBox<String> unit = new ComboBox<String>();
 
-                ObservableList<String> unitList = FXCollections.observableArrayList("B","KB","MB","GB");
+                ObservableList<String> unitList = FXCollections.observableArrayList("B", "KB", "MB", "GB");
                 unit.setItems(unitList);
 
                 fileDimensionField.setPromptText("Insert a file dimension");
@@ -216,8 +212,8 @@ public class CreateRuleController {
                 unit.setLayoutX(400.0);
                 unit.setLayoutY(142.0);
 
-                rulePane.getChildren().addAll(fileDimensionField,unit);
-                triggerPaneItems.addAll(fileDimensionField,unit);
+                rulePane.getChildren().addAll(fileDimensionField, unit);
+                triggerPaneItems.addAll(fileDimensionField, unit);
 
                 break;
             case "Status program":
@@ -225,7 +221,7 @@ public class CreateRuleController {
 
                 TextField statusProgramField = new TextField();
                 statusProgramField.setPromptText("Insert the status program");
-                
+
                 statusProgramField.setLayoutX(285.0);
                 statusProgramField.setLayoutY(142.0);
                 statusProgramField.setPrefWidth(250);
@@ -237,18 +233,17 @@ public class CreateRuleController {
 
     /**
      * Crea un elemento azione all'interno del rule pane basato sul testo fornito.
-     *
+     * <p>
      * A seconda del valore del parametro `text`, questo metodo aggiorna l'etichetta `label`
      * e crea i campi di input o i pulsanti appropriati richiesti per l'azione specificata.
      *
      * @param label l'etichetta da aggiornare con la descrizione specifica dell'azione
-     * @param text il tipo di azione da creare; i valori validi sono "Visualizza messaggio",
-     *             "Riproduci audio", "Scrivi stringa", "Copia file", "Sposta file",
-     *             "Rimuovi file" e "Esegui programma"
+     * @param text  il tipo di azione da creare; i valori validi sono "Visualizza messaggio",
+     *              "Riproduci audio", "Scrivi stringa", "Copia file", "Sposta file",
+     *              "Rimuovi file" e "Esegui programma"
      */
     @FXML
-    private void createActionItem(Label label, String text)
-    {
+    private void createActionItem(Label label, String text) {
 
 
         switch (text) {
@@ -268,7 +263,7 @@ public class CreateRuleController {
             case "Play Audio":
                 label.setText("Audio to reproduce");
 
-                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files","*.mp3","*.aac","*.ogg");
+                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files", "*.mp3", "*.aac", "*.ogg");
                 Button browseAudioButton = new Button("Browse...");
 
                 TextField pathAudioField = new TextField();
@@ -281,7 +276,7 @@ public class CreateRuleController {
                 browseAudioButton.setLayoutX(450.0);
                 browseAudioButton.setLayoutY(225);
 
-                browseAudioButton.setOnAction(e ->{
+                browseAudioButton.setOnAction(e -> {
                     FileChooser playFileChooser = new FileChooser();
                     playFileChooser.setTitle("File audio...");
                     playFileChooser.getExtensionFilters().add(audio);
@@ -291,8 +286,8 @@ public class CreateRuleController {
                     pathAudioField.setText(selectedFile.getPath());
                 });
 
-                rulePane.getChildren().addAll(browseAudioButton,pathAudioField);
-                actionPaneItems.addAll(browseAudioButton,pathAudioField);
+                rulePane.getChildren().addAll(browseAudioButton, pathAudioField);
+                actionPaneItems.addAll(browseAudioButton, pathAudioField);
 
                 break;
             case "Write string":
@@ -363,7 +358,7 @@ public class CreateRuleController {
                 browseRemButton.setLayoutX(450.0);
                 browseRemButton.setLayoutY(225);
 
-                browseRemButton.setOnAction(e ->{
+                browseRemButton.setOnAction(e -> {
                     FileChooser removeFileChooser = new FileChooser();
                     removeFileChooser.setTitle("File to remove...");
 
@@ -371,8 +366,8 @@ public class CreateRuleController {
                     File selectedFile = removeFileChooser.showOpenDialog(stage);
                     pathRemField.setText(selectedFile.getPath());
                 });
-                rulePane.getChildren().addAll(browseRemButton,pathRemField);
-                actionPaneItems.addAll(browseRemButton,pathRemField);
+                rulePane.getChildren().addAll(browseRemButton, pathRemField);
+                actionPaneItems.addAll(browseRemButton, pathRemField);
 
                 break;
             case "Execute Program":
@@ -394,17 +389,17 @@ public class CreateRuleController {
      * l'input dell'utente da vari campi di testo e controlli nell'interfaccia grafica,
      * valida l'input, costruisce una nuova regola usando i dati raccolti e la aggiunge
      * all'istanza di RuleManager.
-     *
+     * <p>
      * Il metodo esegue i seguenti passaggi:
      * 1. Recupera il nome della regola dal `ruleNameTxtField`.
      * 2. Itera attraverso `triggerPaneItems` per costruire la stringa del trigger basata
-     *    sull'input dell'utente dai diversi controlli (TextField, Spinner).
+     * sull'input dell'utente dai diversi controlli (TextField, Spinner).
      * 3. Itera attraverso `actionPaneItems` per costruire la stringa dell'azione basata
-     *    sull'input dell'utente da TextField.
+     * sull'input dell'utente da TextField.
      * 4. Controlla i valori selezionati per `triggerBox` e `actionBox` e valida gli input
-     *    dell'utente.
+     * dell'utente.
      * 5. Se l'input è valido, crea una nuova regola e aggiorna l'interfaccia grafica
-     *    di conseguenza.
+     * di conseguenza.
      * 6. Mostra messaggi di errore se l'input non è valido.
      *
      * @param actionEvent l'evento scatenato quando il pulsante "Crea" viene cliccato
@@ -423,7 +418,6 @@ public class CreateRuleController {
         String actionType = "";
 
 
-
         Iterator<Object> iterator = triggerPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
@@ -435,7 +429,7 @@ public class CreateRuleController {
                     errorFlag = true;
                 }
             }
-            if(item instanceof Spinner) {
+            if (item instanceof Spinner) {
                 if (((Spinner) item).getValue().toString().length() == 1) {
                     trigger += "0" + ((Spinner) item).getValue() + ":";
                 } else {
@@ -446,7 +440,7 @@ public class CreateRuleController {
             }
         }
 
-         //rimuove l'ultimo carattere e lo sostituisce con uno spazio
+        //rimuove l'ultimo carattere e lo sostituisce con uno spazio
 
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
@@ -460,19 +454,18 @@ public class CreateRuleController {
                 }
             }
         }
-        if(Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
-            System.out.println("ciao");
+        if (Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
             errorFlag = true;
         }
 
-        if(errorFlag || Objects.equals(name, "")) {
+        if (errorFlag || Objects.equals(name, "")) {
             labelError.setVisible(true);
-        }else{
+        } else {
             try {
                 //new Rule();
                 labelError.setVisible(false);
-                if (!trigger.isEmpty()){
-                    trigger = trigger.substring(0,trigger.length()-1);
+                if (!trigger.isEmpty()) {
+                    trigger = trigger.substring(0, trigger.length() - 1);
                 }
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
@@ -483,7 +476,7 @@ public class CreateRuleController {
                 stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
                     @Override
                     public void handle(WindowEvent windowEvent) {
-                        if(!ruleManager.getRules().isEmpty()){
+                        if (!ruleManager.getRules().isEmpty()) {
                             indexController.disableButton();
                         }
                     }
@@ -494,15 +487,15 @@ public class CreateRuleController {
                 triggerBox.setValue("");
                 actionBox.setValue("");
 //                stage.close();
-            }catch (Exception e) {
-                System.out.println(e);
+            } catch (Exception e) {
+
                 labelError.setVisible(true);
             }
         }
 
 
-
     }
+
     /**
      * Gestore dell'evento per l'azione di click del pulsante "Cancella". Questo metodo
      * cancella tutti gli input dell'utente e le selezioni nei campi del modulo,

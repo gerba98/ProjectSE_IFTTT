@@ -13,5 +13,6 @@ public abstract class TriggerCreator {
      * @return un'istanza di {Trigger} creata.
      */
     public abstract Trigger createTrigger(String triggerValue);
+
     public abstract String getType();
 }

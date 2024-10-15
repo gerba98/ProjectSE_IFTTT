@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * le regole gestite da RuleManager. Se il trigger associato ad una regola
  * è verificato viene eseguita l'azione associata alla regola.
  */
-public class CheckRule{
+public class CheckRule {
     private final RuleManager ruleManager;
     private Boolean isRunning;
     private ScheduledExecutorService scheduler;
@@ -40,7 +40,6 @@ public class CheckRule{
             isRunning = true;
             scheduler.scheduleAtFixedRate(() -> {
                 for (Rule rule : ruleManager.getRules()) {
-                    System.out.println(ruleManager.getRules().size());
                     if (rule.getTrigger().evaluate()) {
                         rule.executeAction();
                     }
