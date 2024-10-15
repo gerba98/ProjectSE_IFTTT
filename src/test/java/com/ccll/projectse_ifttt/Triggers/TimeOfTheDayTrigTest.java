@@ -28,7 +28,7 @@ public class TimeOfTheDayTrigTest {
 
     @Test
     public void testCreator() {
-        LocalTime time = LocalTime.of(12, 30);
+        String time = "12:30";
         TOTDTrigCreator TOTD = new TOTDTrigCreator(time);
 
         Trigger trigger = TOTD.createTrigger();

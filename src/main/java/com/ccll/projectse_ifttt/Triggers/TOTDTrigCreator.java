@@ -15,8 +15,8 @@ public class TOTDTrigCreator extends TriggerCreator {
      *
      * @param time l'ora alla quale il trigger deve attivarsi.
      */
-    public TOTDTrigCreator(LocalTime time) {
-        this.time = time;
+    public TOTDTrigCreator(String time) {
+        this.time = LocalTime.parse(time);
     }
 
     /**

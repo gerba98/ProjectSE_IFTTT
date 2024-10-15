@@ -1,5 +1,10 @@
 package com.ccll.projectse_ifttt.Rule;
 
+import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.Actions.DisplayMessageActionCreator;
+import com.ccll.projectse_ifttt.Actions.PlayAudioActionCreator;
+import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
+import com.ccll.projectse_ifttt.Triggers.Trigger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -67,12 +72,31 @@ public class RuleManager {
         }
     }
 
+
     /**
      * Restituisce la lista delle regole attualmente gestite.
      * @return L'observable list contenente Rule
      */
     public ObservableList<Rule> getRules() {
         return rules;
+    }
+
+
+
+    public Rule createRule(String triggerType, String triggerValue, String actionType, String actionValue, String ruleName){
+        TOTDTrigCreator TOTD = new TOTDTrigCreator(triggerValue);
+        Trigger trigger = TOTD.createTrigger();
+        Action action;
+        if (actionType.equals("play audio")){
+            DisplayMessageActionCreator displayMessageActionCreator = new DisplayMessageActionCreator(actionValue);
+            action = displayMessageActionCreator.createAction();
+        }
+        else{
+            PlayAudioActionCreator creator = new PlayAudioActionCreator("/Users/camillamurati/Desktop/cat.mp3");
+            action = creator.createAction();
+        }
+
+        return new Rule(trigger,action,ruleName);
     }
 
 }

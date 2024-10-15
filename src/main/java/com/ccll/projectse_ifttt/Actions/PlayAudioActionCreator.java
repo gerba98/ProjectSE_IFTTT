@@ -9,15 +9,16 @@ import java.nio.file.Path;
 public class PlayAudioActionCreator extends ActionCreator {
 
     // Il percorso del file audio per l'azione di riproduzione audio
-    private final Path audioFilePath;
+    private Path audioFilePath;
 
     /**
      * Costruttore per inizializzare PlayAudioActionCreator con il percorso del file audio specificato.
      *
      * @param audioFilePath il percorso del file audio da riprodurre
      */
-    public PlayAudioActionCreator(Path audioFilePath) {
-        this.audioFilePath = audioFilePath;
+    public PlayAudioActionCreator(String audioFilePath) {
+
+        this.audioFilePath = Path.of(audioFilePath);
     }
 
     /**
