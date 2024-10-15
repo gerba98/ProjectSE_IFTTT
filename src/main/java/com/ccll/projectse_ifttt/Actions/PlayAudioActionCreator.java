@@ -1,5 +1,5 @@
 package com.ccll.projectse_ifttt.Actions;
-
+import java.nio.file.Paths;
 import java.nio.file.Path;
 
 /**
@@ -8,26 +8,19 @@ import java.nio.file.Path;
  */
 public class PlayAudioActionCreator extends ActionCreator {
 
-    // Il percorso del file audio per l'azione di riproduzione audio
-    private Path audioFilePath;
-
-    /**
-     * Costruttore per inizializzare PlayAudioActionCreator con il percorso del file audio specificato.
-     *
-     * @param audioFilePath il percorso del file audio da riprodurre
-     */
-    public PlayAudioActionCreator(String audioFilePath) {
-
-        this.audioFilePath = Path.of(audioFilePath);
-    }
-
     /**
      * Crea e restituisce una nuova istanza di PlayAudioAction con il percorso del file audio configurato.
      *
      * @return un'istanza di PlayAudioAction
      */
     @Override
-    public Action createAction() {
-        return new PlayAudioAction(this.audioFilePath);
+    public Action createAction(String actionValue) {
+        Path audioFilePath = Paths.get(actionValue);
+        return new PlayAudioAction(audioFilePath);
+    }
+
+    @Override
+    public String getType() {
+        return "play audio";
     }
 }

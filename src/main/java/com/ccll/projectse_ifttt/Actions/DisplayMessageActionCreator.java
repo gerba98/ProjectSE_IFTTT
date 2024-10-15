@@ -7,16 +7,6 @@ package com.ccll.projectse_ifttt.Actions;
  * quando l'azione viene eseguita.
  */
 public class DisplayMessageActionCreator extends ActionCreator {
-    private final String message;
-
-    /**
-     * Costruttore per inizializzare DisplayMessageActionCreator con un messaggio specifico.
-     *
-     * @param message Il messaggio da visualizzare.
-     */
-    public DisplayMessageActionCreator(String message) {
-        this.message = message;
-    }
 
     /**
      * Crea e restituisce una nuova istanza di DisplayMessageAction con il messaggio configurato.
@@ -24,7 +14,12 @@ public class DisplayMessageActionCreator extends ActionCreator {
      * @return Un'istanza di {@code DisplayMessageAction}.
      */
     @Override
-    public Action createAction() {
-        return new DisplayMessageAction(this.message);
+    public Action createAction(String actionValue) {
+        return new DisplayMessageAction(actionValue);
+    }
+
+    @Override
+    public String getType() {
+        return "display message";
     }
 }

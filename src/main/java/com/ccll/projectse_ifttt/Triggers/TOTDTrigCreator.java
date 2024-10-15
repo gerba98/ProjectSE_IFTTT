@@ -8,16 +8,6 @@ import java.time.LocalTime;
  * un trigger di tipo {TimeOfTheDayTrig}.
  */
 public class TOTDTrigCreator extends TriggerCreator {
-    private final LocalTime time;
-
-    /**
-     * Costruisce un nuovo creatore di trigger con l'ora specificata.
-     *
-     * @param time l'ora alla quale il trigger deve attivarsi.
-     */
-    public TOTDTrigCreator(String time) {
-        this.time = LocalTime.parse(time);
-    }
 
     /**
      * Crea un nuovo trigger di tipo {TimeOfTheDayTrig} con l'ora specificata.
@@ -25,7 +15,13 @@ public class TOTDTrigCreator extends TriggerCreator {
      * @return un nuovo oggetto {Trigger} che si attiva all'ora specificata.
      */
     @Override
-    public Trigger createTrigger() {
-        return new TimeOfTheDayTrig(this.time);
+    public Trigger createTrigger(String triggerValue) {
+        LocalTime time = LocalTime.parse(triggerValue);
+        return new TimeOfTheDayTrig(time);
+    }
+
+    @Override
+    public String getType() {
+        return "time of the day";
     }
 }

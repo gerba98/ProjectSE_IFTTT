@@ -29,9 +29,8 @@ public class TimeOfTheDayTrigTest {
     @Test
     public void testCreator() {
         String time = "12:30";
-        TOTDTrigCreator TOTD = new TOTDTrigCreator(time);
-
-        Trigger trigger = TOTD.createTrigger();
+        TriggerCreator TOTD = new TOTDTrigCreator();
+        Trigger trigger = TOTD.createTrigger(time);
         assertInstanceOf(TimeOfTheDayTrig.class, trigger);
     }
 
