@@ -50,13 +50,30 @@ class RuleManagerTest {
         testRuleManager.addRule(rule2);
 
         ObservableList<Rule> rules = testRuleManager.getRules();
-        // verify getRules() method;
 
         assertEquals(2, rules.size(), "La lista delle regole dovrebbe contenere due regole");
         assertTrue(rules.contains(rule1) && rules.contains(rule2), "La lista delle regole dovrebbe contenere entrambe le regole aggiunte");
     }
 
-    // Implementazione di test per Trigger
+    @Test
+    @DisplayName("Verifica creazione regola")
+    void testCreateRule() {
+        Rule resultRule1 = testRuleManager.createRule("time of the day", "12:00", "display message", "Hello World", "Regola Test 1");
+
+        assertNotNull(resultRule1, "La regola creata non dovrebbe essere null");
+        assertEquals("Regola Test 1", resultRule1.getName(), "Il nome della regola dovrebbe corrispondere");
+        assertInstanceOf(Trigger.class, resultRule1.getTrigger(), "Il trigger dovrebbe essere un'istanza di Trigger");
+        assertInstanceOf(Action.class, resultRule1.getAction(), "L'azione dovrebbe essere un'istanza di Action");
+
+        Rule resultRule2 = testRuleManager.createRule("time of the day", "15:30", "play audio", "/Users/Desktop/cat.mp3", "Regola Test 2");
+
+        assertNotNull(resultRule2, "La regola creata non dovrebbe essere null");
+        assertEquals("Regola Test 2", resultRule2.getName(), "Il nome della regola dovrebbe corrispondere");
+        assertInstanceOf(Action.class, resultRule2.getAction(), "L'azione dovrebbe essere un'istanza di Action");
+    }
+
+
+
     private static class TestTrigger implements Trigger {
         private boolean shouldTrigger;
 
@@ -79,7 +96,7 @@ class RuleManagerTest {
         }
     }
 
-    // Implementazione di test per Action
+
     private static class TestAction implements Action {
         private boolean executed = false;
 

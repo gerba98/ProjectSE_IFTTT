@@ -32,10 +32,9 @@ public class TimeOfTheDayTrigTest {
     @Test
     @DisplayName("Creazione di TimeOfTheDayTrig tramite TOTDTrigCreator")
     public void testCreator() {
-        LocalTime time = LocalTime.of(12, 30);
-        TOTDTrigCreator TOTD = new TOTDTrigCreator(time);
-
-        Trigger trigger = TOTD.createTrigger();
+        String time = "12:30";
+        TriggerCreator TOTD = new TOTDTrigCreator();
+        Trigger trigger = TOTD.createTrigger(time);
         assertInstanceOf(TimeOfTheDayTrig.class, trigger);
     }
 

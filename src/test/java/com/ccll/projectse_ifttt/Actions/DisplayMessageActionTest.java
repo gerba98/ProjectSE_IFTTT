@@ -22,8 +22,8 @@ public class DisplayMessageActionTest {
     @Test
     @DisplayName("Creazione di DisplayMessageAction tramite DisplayMessageActionCreator")
     public void testCreator() {
-        DisplayMessageActionCreator displayMessageActionCreator = new DisplayMessageActionCreator(message);
-        Action displayMessageAction = displayMessageActionCreator.createAction();
+        ActionCreator creator = new DisplayMessageActionCreator();
+        Action displayMessageAction = creator.createAction(message);
         assertNotNull(displayMessageAction);
         assertTrue(displayMessageAction instanceof DisplayMessageAction);
         assertEquals("Visualizza messaggio: " + message, displayMessageAction.toString());

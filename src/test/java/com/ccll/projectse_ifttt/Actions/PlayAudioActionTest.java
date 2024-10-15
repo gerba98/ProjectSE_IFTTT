@@ -11,8 +11,8 @@ public class PlayAudioActionTest {
     @Test
     @DisplayName("Creazione di PlayAudioAction tramite PlayAudioActionCreator")
     public void createAction() {
-        PlayAudioActionCreator creator = new PlayAudioActionCreator(Paths.get("src/main/resources/com/ccll/projectse_ifttt/cat.mp3"));
-        Action action = creator.createAction();
+        ActionCreator creator = new PlayAudioActionCreator();
+        Action action = creator.createAction("/Users/camillamurati/Desktop/cat.mp3");
         assertNotNull(action);
         assertTrue(action instanceof PlayAudioAction);
     }
@@ -20,19 +20,20 @@ public class PlayAudioActionTest {
     @Test
     @DisplayName("Creazione di PlayAudioAction con percorso valido")
     public void createWithValidPath() {
-        Path filePath = Paths.get("src/main/resources/com/ccll/projectse_ifttt/cat.mp3");
-        PlayAudioActionCreator creator = new PlayAudioActionCreator(filePath);
-        Action action = creator.createAction();
+        String stringFilePath = "/Users/camillamurati/Desktop/cat.mp3";
+        ActionCreator creator = new PlayAudioActionCreator();
+        Action action = creator.createAction(stringFilePath);
         assertNotNull(action);
         assertTrue(action instanceof PlayAudioAction);
+        Path filePath = Paths.get(stringFilePath);
         assertEquals(filePath, ((PlayAudioAction) action).getAudioFilePath());
     }
 
     @Test
     @DisplayName("Creazione di PlayAudioAction con percorso non valido")
     public void createWithInvalidPath() {
-        PlayAudioActionCreator creator = new PlayAudioActionCreator(Paths.get("invalid/path/file.mp3"));
-        Action action = creator.createAction();
+        ActionCreator creator = new PlayAudioActionCreator();
+        Action action = creator.createAction("invalid/path/file.mp3");
         assertNotNull(action);
         assertTrue(action instanceof PlayAudioAction);
     }
