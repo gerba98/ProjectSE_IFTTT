@@ -13,25 +13,51 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * Rappresenta un'azione per riprodurre un file audio.
- * Questa classe implementa l'interfaccia Action e fornisce funzionalità
- * per riprodurre un file audio, ripeterlo e consentire all'utente di fermare la riproduzione.
+ * Questa classe rappresenta un'azione per riprodurre un file audio. Implementa l'interfaccia {@link Action}
+ * ed è responsabile della riproduzione del file audio specificato e della gestione delle operazioni correlate,
+ * come l'interruzione della riproduzione tramite un prompt per l'utente.
  */
 public class PlayAudioAction implements Action {
-    private static final Logger LOGGER = Logger.getLogger(PlayAudioAction.class.getName());
-    private final Path audioFilePath;
-    private MediaPlayer mediaPlayer;
-    private boolean isPlaying = false;
-    private boolean isStopped = false; // Aggiungi il flag per indicare che la riproduzione è stata fermata
 
+    /** Logger utilizzato per registrare errori e avvisi durante la riproduzione audio. */
+    private static final Logger LOGGER = Logger.getLogger(PlayAudioAction.class.getName());
+
+    /** Il percorso del file audio che verrà riprodotto */
+    private final Path audioFilePath;
+
+    /** Il MediaPlayer utilizzato per riprodurre l'audio */
+    private MediaPlayer mediaPlayer;
+
+    /** Indica se l'audio è attualmente in riproduzione */
+    private boolean isPlaying = false;
+
+    /** Indica se la riproduzione è stata interrotta */
+    private boolean isStopped = false;
+
+    /**
+     * Costruttore che inizializza l'azione con il percorso del file audio da riprodurre.
+     *
+     * @param audioFilePath Il percorso del file audio.
+     */
     public PlayAudioAction(Path audioFilePath) {
         this.audioFilePath = audioFilePath;
     }
 
+    /**
+     * Restituisce il percorso del file audio associato a questa azione.
+     *
+     * @return Il percorso del file audio.
+     */
     public Path getAudioFilePath() {
         return audioFilePath;
     }
 
+    /**
+     * Esegue l'azione di riproduzione del file audio. Se la riproduzione è già in corso o se l'audio
+     * è stato fermato in precedenza, l'azione non verrà eseguita nuovamente.
+     *
+     * @return true se l'audio viene riprodotto correttamente, false in caso di errore.
+     */
     @Override
     public boolean execute() {
         if (isStopped) {
@@ -69,6 +95,10 @@ public class PlayAudioAction implements Action {
         }
     }
 
+    /**
+     * Mostra un alert che chiede all'utente se desidera fermare la riproduzione della musica.
+     * Se l'utente sceglie di fermare la musica, la riproduzione viene interrotta e lo stato viene aggiornato.
+     */
     private void showStopMusicAlert() {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.NONE);
@@ -89,6 +119,12 @@ public class PlayAudioAction implements Action {
         });
     }
 
+    /**
+     * Mostra un alert di avviso all'utente con un titolo e un messaggio specifici.
+     *
+     * @param title Il titolo dell'alert.
+     * @param message Il messaggio dell'alert.
+     */
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -98,6 +134,11 @@ public class PlayAudioAction implements Action {
         });
     }
 
+    /**
+     * Restituisce una rappresentazione in formato stringa di questa azione.
+     *
+     * @return Una stringa che descrive l'azione, inclusa il nome del file audio.
+     */
     @Override
     public String toString() {
         return "Riproduci audio: " + audioFilePath.getFileName();

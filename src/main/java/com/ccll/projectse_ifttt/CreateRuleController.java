@@ -19,6 +19,11 @@ import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Objects;
 
+/**
+ * Controller per la creazione di nuove regole nel sistema IFTTT. Gestisce
+ * l'interfaccia utente che consente agli utenti di definire e configurare
+ * regole basate su trigger e azioni.
+ */
 public class CreateRuleController {
 
     RuleManager ruleManager;

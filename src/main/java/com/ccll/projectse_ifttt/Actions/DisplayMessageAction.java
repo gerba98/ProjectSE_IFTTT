@@ -3,9 +3,18 @@ package com.ccll.projectse_ifttt.Actions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
+/**
+ * Questa classe rappresenta un'azione per visualizzare un messaggio in una finestra di dialogo.
+ * Implementa l'interfaccia {@link Action} e permette di eseguire l'azione una sola volta,
+ * finché non viene reimpostata.
+ */
 public class DisplayMessageAction implements Action {
+
+    /** Il messaggio da visualizzare nella finestra di dialogo. */
     private String message;
-    private boolean hasExecuted; // Flag per tracciare se l'azione è stata già eseguita
+
+    /** Flag che indica se l'azione è stata già eseguita. */
+    private boolean hasExecuted;
 
     /**
      * Costruttore della classe {@code DisplayMessageAction}.
@@ -48,6 +57,11 @@ public class DisplayMessageAction implements Action {
         hasExecuted = false;
     }
 
+    /**
+     * Restituisce una rappresentazione in formato stringa di questa azione.
+     *
+     * @return Una stringa che descrive l'azione, inclusa il messaggio da visualizzare.
+     */
     @Override
     public String toString() {
         return "Visualizza messaggio: " + message;

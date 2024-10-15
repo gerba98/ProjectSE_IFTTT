@@ -14,6 +14,12 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
+/**
+ * Controller per la gestione della vista principale dell'applicazione.
+ *
+ * Questa classe gestisce le interazioni con vari elementi dell'interfaccia utente,
+ * inclusi pulsanti e un ListView per mostrare elementi di una lista di regole.
+ */
 public class IndexController {
 
     @FXML
