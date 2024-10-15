@@ -48,6 +48,11 @@ public class IndexController {
     }
 
     @FXML
+    public void disableButton(){
+        CreateRuleButton.setDisable(true);
+    }
+
+    @FXML
     public void OnCreateRuleClick()
     {
         try {

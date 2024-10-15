@@ -1,13 +1,17 @@
 package com.ccll.projectse_ifttt;
 
+import com.ccll.projectse_ifttt.Rule.Rule;
+import com.ccll.projectse_ifttt.Rule.RuleManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.File;
 import java.security.cert.Extension;
@@ -16,6 +20,8 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class CreateRuleController {
+
+    RuleManager ruleManager;
 
     @FXML
     private Label labelError;
@@ -36,9 +42,9 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    private ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
-    private ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
+    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
     private IndexController indexController;
 
@@ -56,13 +62,13 @@ public class CreateRuleController {
     }
     @FXML
     public void initialize(){
+        ruleManager = RuleManager.getInstance();
         triggerBox.setItems(triggersList);
         actionBox.setItems(actionsList);
 
         triggerBox.setOnAction(e -> {
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
-            if(!triggerPaneItems.isEmpty())
-            {
+            if(!triggerPaneItems.isEmpty()) {
                 Iterator<Object> iterator = triggerPaneItems.iterator();
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
@@ -113,6 +119,7 @@ public class CreateRuleController {
 
                 rulePane.getChildren().addAll(hourSpinner,minuteSpinner);
                 triggerPaneItems.addAll(hourSpinner,minuteSpinner);
+
 
                 break;
             case "Day of the week":
@@ -202,6 +209,7 @@ public class CreateRuleController {
     @FXML
     private void createActionItem(Label label, String text)
     {
+
 
         switch (text) {
             case "Display message":
@@ -343,11 +351,18 @@ public class CreateRuleController {
 
     @FXML
     public void onCreateButtonClick(ActionEvent actionEvent) {
+        RuleManager ruleManager = RuleManager.getInstance();
+
         String name = ruleNameTxtField.getText();
         boolean errorFlag = false;
 
         String trigger = "";
         String action = "";
+
+        String triggerType = "";
+        String actionType = "";
+
+
 
         Iterator<Object> iterator = triggerPaneItems.iterator();
         while (iterator.hasNext()) {
@@ -370,7 +385,8 @@ public class CreateRuleController {
 
             }
         }
-        trigger = trigger.substring(0,trigger.length()-1)+" "; //rimuove l'ultimo carattere e lo sostituisce con uno spazio
+
+         //rimuove l'ultimo carattere e lo sostituisce con uno spazio
 
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
@@ -378,30 +394,63 @@ public class CreateRuleController {
             if (item instanceof TextField) {
                 if (!((TextField) item).getText().isEmpty()) {
                     errorFlag = false;
-                    action += ((TextField) item).getText() + " ";
+                    action += ((TextField) item).getText();
                 } else {
                     errorFlag = true;
                 }
             }
-
         }
+        if(Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
+            System.out.println("ciao");
+            errorFlag = true;
+        }
+
         if(errorFlag || Objects.equals(name, "")) {
             labelError.setVisible(true);
         }else{
-            //new Rule();
-            labelError.setVisible(false);
-            String rule = name + " " + trigger + " " + action;
+            try {
+                //new Rule();
+                labelError.setVisible(false);
+                if (!trigger.isEmpty()){
+                    trigger = trigger.substring(0,trigger.length()-1);
+                }
+                triggerType = triggerBox.getValue();
+                actionType = actionBox.getValue();
+                Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
 
-            indexController.insertItems(rule);
-            Stage stage = (Stage) createButton.getScene().getWindow();
-            stage.close();
+                indexController.insertItems(newRule.toString());
+                Stage stage = (Stage) createButton.getScene().getWindow();
+                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+                    @Override
+                    public void handle(WindowEvent windowEvent) {
+                        if(!ruleManager.getRules().isEmpty()){
+                            indexController.disableButton();
+                        }
+                    }
+                });
+                labelTriggerSelected.setText("");
+                labelActionSelected.setText("");
+                ruleNameTxtField.clear();
+                triggerBox.setValue("");
+                actionBox.setValue("");
+//                stage.close();
+            }catch (Exception e) {
+                System.out.println(e);
+                labelError.setVisible(true);
+            }
         }
+
+
+
     }
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
+        labelTriggerSelected.setText("");
+        labelActionSelected.setText("");
         ruleNameTxtField.clear();
-        triggerBox.setValue(null);
-        actionBox.setValue(null);
+        triggerBox.setValue("");
+        actionBox.setValue("");
     }
+
 }
 
