@@ -4,6 +4,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import static org.junit.Assert.*;
 
 public class DisplayMessageActionTest {
@@ -11,14 +12,15 @@ public class DisplayMessageActionTest {
     private String message = "Messaggio di test";
     DisplayMessageAction displayMessage = new DisplayMessageAction(message);
 
-
     @Test
+    @DisplayName("Inizializzazione di DisplayMessageAction")
     public void testInitialization() {
         assertNotNull(displayMessage);
         assertEquals("Visualizza messaggio: " + message, displayMessage.toString());
     }
 
     @Test
+    @DisplayName("Creazione di DisplayMessageAction tramite DisplayMessageActionCreator")
     public void testCreator() {
         DisplayMessageActionCreator displayMessageActionCreator = new DisplayMessageActionCreator(message);
         Action displayMessageAction = displayMessageActionCreator.createAction();
@@ -28,6 +30,7 @@ public class DisplayMessageActionTest {
     }
 
     @Test
+    @DisplayName("Esecuzione dell'azione DisplayMessageAction")
     public void testExecute() {
         try {
             CompletableFuture<Void> future = new CompletableFuture<>();

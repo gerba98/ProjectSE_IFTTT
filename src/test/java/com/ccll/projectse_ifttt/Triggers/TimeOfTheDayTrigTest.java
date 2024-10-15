@@ -1,12 +1,14 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.time.LocalTime;
 
 public class TimeOfTheDayTrigTest {
 
     @Test
+    @DisplayName("Valutazione del trigger all'ora specificata")
     public void testEvaluation() {
         LocalTime time = LocalTime.now().withSecond(0).withNano(0);
         TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(time);
@@ -19,6 +21,7 @@ public class TimeOfTheDayTrigTest {
     }
 
     @Test
+    @DisplayName("Inizializzazione di TimeOfTheDayTrig con l'ora specificata")
     public void testInitialization() {
         LocalTime time = LocalTime.of(12, 30);
         TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(time);
@@ -27,6 +30,7 @@ public class TimeOfTheDayTrigTest {
     }
 
     @Test
+    @DisplayName("Creazione di TimeOfTheDayTrig tramite TOTDTrigCreator")
     public void testCreator() {
         LocalTime time = LocalTime.of(12, 30);
         TOTDTrigCreator TOTD = new TOTDTrigCreator(time);
