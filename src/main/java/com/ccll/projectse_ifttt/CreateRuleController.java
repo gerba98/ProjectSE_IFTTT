@@ -56,10 +56,26 @@ public class CreateRuleController {
 
 
 
+    /**
+     * Imposta l'istanza di IndexController per questo CreateRuleController.
+     *
+     * @param indexController l'istanza di IndexController da utilizzare in questo controller
+     */
     @FXML
     public void setFXMLDocumentController(IndexController indexController) {
         this.indexController = indexController;
     }
+
+
+    /**
+     * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
+     * popolando triggerBox e actionBox con i relativi elementi, e configurando
+     * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
+     *
+     * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
+     * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
+     * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
+     */
     @FXML
     public void initialize(){
         ruleManager = RuleManager.getInstance();
@@ -94,6 +110,14 @@ public class CreateRuleController {
         });
 
     }
+    /**
+     * Crea un elemento trigger all'interno del rule pane basato sul testo fornito.
+     *
+     * @param label l'etichetta da aggiornare con la descrizione specifica del trigger
+     * @param text il tipo di trigger da creare; i valori validi sono "Ora del giorno",
+     *             "Giorno della settimana", "Giorno del mese", "Data", "Esistenza file",
+     *             "Dimensione file" e "Stato programma"
+     */
     @FXML
     private void createTriggerItem(Label label, String text)
     {
@@ -206,6 +230,17 @@ public class CreateRuleController {
         }
     }
 
+    /**
+     * Crea un elemento azione all'interno del rule pane basato sul testo fornito.
+     *
+     * A seconda del valore del parametro `text`, questo metodo aggiorna l'etichetta `label`
+     * e crea i campi di input o i pulsanti appropriati richiesti per l'azione specificata.
+     *
+     * @param label l'etichetta da aggiornare con la descrizione specifica dell'azione
+     * @param text il tipo di azione da creare; i valori validi sono "Visualizza messaggio",
+     *             "Riproduci audio", "Scrivi stringa", "Copia file", "Sposta file",
+     *             "Rimuovi file" e "Esegui programma"
+     */
     @FXML
     private void createActionItem(Label label, String text)
     {
@@ -349,6 +384,26 @@ public class CreateRuleController {
         }
     }
 
+    /**
+     * Gestore dell'evento per l'azione di click del pulsante "Crea". Questo metodo cattura
+     * l'input dell'utente da vari campi di testo e controlli nell'interfaccia grafica,
+     * valida l'input, costruisce una nuova regola usando i dati raccolti e la aggiunge
+     * all'istanza di RuleManager.
+     *
+     * Il metodo esegue i seguenti passaggi:
+     * 1. Recupera il nome della regola dal `ruleNameTxtField`.
+     * 2. Itera attraverso `triggerPaneItems` per costruire la stringa del trigger basata
+     *    sull'input dell'utente dai diversi controlli (TextField, Spinner).
+     * 3. Itera attraverso `actionPaneItems` per costruire la stringa dell'azione basata
+     *    sull'input dell'utente da TextField.
+     * 4. Controlla i valori selezionati per `triggerBox` e `actionBox` e valida gli input
+     *    dell'utente.
+     * 5. Se l'input è valido, crea una nuova regola e aggiorna l'interfaccia grafica
+     *    di conseguenza.
+     * 6. Mostra messaggi di errore se l'input non è valido.
+     *
+     * @param actionEvent l'evento scatenato quando il pulsante "Crea" viene cliccato
+     */
     @FXML
     public void onCreateButtonClick(ActionEvent actionEvent) {
         RuleManager ruleManager = RuleManager.getInstance();
@@ -443,6 +498,15 @@ public class CreateRuleController {
 
 
     }
+    /**
+     * Gestore dell'evento per l'azione di click del pulsante "Cancella". Questo metodo
+     * cancella tutti gli input dell'utente e le selezioni nei campi del modulo,
+     * incluso l'azzeramento dei testi di `labelTriggerSelected` e `labelActionSelected`,
+     * la cancellazione di `ruleNameTxtField`, e il reset dei valori di `triggerBox`
+     * e `actionBox`.
+     *
+     * @param actionEvent l'evento scatenato quando il pulsante "Cancella" viene cliccato
+     */
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
         labelTriggerSelected.setText("");

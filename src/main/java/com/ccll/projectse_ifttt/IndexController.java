@@ -35,23 +35,54 @@ public class IndexController {
     private ObservableList<String> rulesList = FXCollections.observableArrayList();
 
 
+    /**
+     * Inizializza il ListView con gli elementi dalla lista osservabile.
+     *
+     * Questo metodo viene chiamato automaticamente quando il file FXML viene caricato.
+     * Imposta gli elementi del ListView come rulesList, permettendo al ListView
+     * di visualizzare qualsiasi elemento presente nella lista osservabile.
+     */
     @FXML
     public void initialize()
     {
         listView.setItems(rulesList);
     }
 
+    /**
+     * Inserisce un elemento nella lista osservabile e aggiorna il ListView.
+     *
+     * @param name Il nome dell'elemento da inserire nella lista.
+     */
     @FXML
     public void insertItems(String name){
         rulesList.add(name);
         listView.setItems(rulesList);
     }
 
+    /**
+     * Disabilita il pulsante "Crea Regola".
+     *
+     * Questo metodo imposta la proprietà disable del pulsante "Crea Regola" su true,
+     * impedendo all'utente di interagire con esso.
+     */
     @FXML
     public void disableButton(){
         CreateRuleButton.setDisable(true);
     }
 
+    /**
+     * Metodo gestore dell'evento che viene attivato quando il pulsante "Crea Regola" viene cliccato.
+     * Carica il layout "create-rule.fxml" e lo visualizza in una nuova finestra modale.
+     *
+     * Questo metodo esegue i seguenti passaggi:
+     * 1. Carica la risorsa FXML "create-rule.fxml".
+     * 2. Recupera il controller associato con il FXML caricato.
+     * 3. Imposta l'istanza del controller corrente al controller FXML.
+     * 4. Inizializza e mostra un nuovo stage (finestra) con il titolo "Crea Regola".
+     *
+     * In caso di IOException durante il processo di caricamento del FXML, un messaggio di errore
+     * viene stampato sull'output standard.
+     */
     @FXML
     public void OnCreateRuleClick()
     {
