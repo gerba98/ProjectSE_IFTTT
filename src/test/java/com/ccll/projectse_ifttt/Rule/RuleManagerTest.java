@@ -72,6 +72,38 @@ class RuleManagerTest {
         assertInstanceOf(Action.class, resultRule2.getAction(), "L'azione dovrebbe essere un'istanza di Action");
     }
 
+    @Test
+    @DisplayName("Verifica Rimozione Regola")
+    void testRemoveRule() {
+        // Creiamo e aggiungiamo due regole
+        CheckRuleTest.TestTrigger trigger1 = new CheckRuleTest.TestTrigger(true);
+        CheckRuleTest.TestAction action1 = new CheckRuleTest.TestAction();
+        Rule rule1 = new Rule(trigger1, action1, "Regola 1");
+
+        CheckRuleTest.TestTrigger trigger2 = new CheckRuleTest.TestTrigger(false);
+        CheckRuleTest.TestAction action2 = new CheckRuleTest.TestAction();
+        Rule rule2 = new Rule(trigger2, action2, "Regola 2");
+
+        testRuleManager.addRule(rule1);
+        testRuleManager.addRule(rule2);
+
+        // Verifichiamo che ci siano due regole
+        assertEquals(2, testRuleManager.getRules().size(), "Dovrebbero esserci due regole prima della rimozione");
+
+        // Rimuoviamo la prima regola
+        testRuleManager.removeRule(0);
+
+        // Verifichiamo che sia rimasta solo una regola
+        assertEquals(1, testRuleManager.getRules().size(), "Dovrebbe rimanere una sola regola dopo la rimozione");
+        assertFalse(testRuleManager.getRules().contains(rule1), "La regola rimossa non dovrebbe essere più presente");
+        assertTrue(testRuleManager.getRules().contains(rule2), "La seconda regola dovrebbe essere ancora presente");
+
+        // Rimuoviamo l'ultima regola
+        testRuleManager.removeRule(0);
+
+        // Verifichiamo che non ci siano più regole
+        assertTrue(testRuleManager.getRules().isEmpty(), "Non dovrebbero esserci più regole dopo la rimozione dell'ultima");
+    }
 
 
     private static class TestTrigger implements Trigger {

@@ -1,7 +1,9 @@
 package com.ccll.projectse_ifttt;
 
+import com.ccll.projectse_ifttt.Rule.RuleManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -108,6 +110,17 @@ public class IndexController {
             stage.show();
         }catch(IOException ex){
             System.out.println("I/O error");
+        }
+    }
+
+    public void onDeleteRuleButton(ActionEvent actionEvent) {
+        RuleManager ruleManager = RuleManager.getInstance();
+        int selectedIndex = listView.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            ruleManager.removeRule(selectedIndex);
+            listView.getItems().remove(selectedIndex);
+        } else {
+            System.out.println("Nessuna regola selezionata per la cancellazione.");
         }
     }
 

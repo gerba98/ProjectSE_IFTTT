@@ -67,10 +67,11 @@ public class RuleManager {
      * Rimuove una regola dalla lista delle regole gestite.
      * Se, dopo la rimozione, non ci sono più regole, ferma il controllo delle regole.
      *
-     * @param rule La regola da rimuovere.
+     * @param ruleIndex L'indice della regola da rimuovere.
      */
-    public void removeRule(Rule rule) {
-        rules.remove(rule);
+    public void removeRule(int ruleIndex) {
+        Rule rule;
+        rule = rules.remove(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }
@@ -108,9 +109,15 @@ public class RuleManager {
     }
 
     /**
-     * @param actionType
-     * @param actionValue
-     * @return
+     * Crea un'azione basata sul tipo e valore specificati.
+     *
+     * @param actionType Il tipo di azione da creare. Deve essere una stringa non nulla.
+     *                   I valori supportati sono "play audio" e "display message" (case-insensitive).
+     * @param actionValue Il valore associato all'azione. Il significato dipende dal tipo di azione:
+     *                    - Per "play audio": il percorso del file audio da riprodurre.
+     *                    - Per "display message": il messaggio da visualizzare.
+     * @return Un'istanza di Action creata in base ai parametri forniti.
+     * @throws IllegalStateException se viene fornito un tipo di azione non supportato.
      */
     private Action createAction(String actionType, String actionValue) {
         actionType = actionType.toLowerCase();
@@ -123,13 +130,18 @@ public class RuleManager {
     }
 
     /**
-     * @param triggerType
-     * @param triggerValue
-     * @return
+     * Crea un trigger basato sul tipo e valore specificati.
+     *
+     * @param triggerType Il tipo di trigger da creare. Deve essere una stringa non nulla.
+     *                    Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
+     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger:
+     *                     - Per "time of the day": l'orario in formato stringa (es. "14:30").
+     * @return Un'istanza di Trigger creata in base ai parametri forniti.
+     * @throws IllegalStateException se viene fornito un tipo di trigger non supportato.
      */
     private Trigger createTrigger(String triggerType, String triggerValue) {
         triggerType = triggerType.toLowerCase();
-        TriggerCreator triggerCreator = switch (triggerType){
+        TriggerCreator triggerCreator = switch (triggerType) {
             case "time of the day" -> new TOTDTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
