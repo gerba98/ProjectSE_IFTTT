@@ -1,19 +1,26 @@
 package com.ccll.projectse_ifttt;
 
 import com.ccll.projectse_ifttt.Rule.RuleManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**
@@ -25,19 +32,21 @@ import java.io.IOException;
 public class IndexController {
 
     @FXML
+    private Label errorLabel;
+    @FXML
     private ListView<String> listView;
 
     @FXML
-    private Button CreateRuleButton;
+    private Button createRuleButton;
 
     @FXML
-    private Button DeleteRuleButton;
+    private Button deleteRuleButton;
 
     @FXML
-    private Button SaveRuleButton;
+    private Button saveRuleButton;
 
     @FXML
-    private Button CancelCreationButton;
+    private Button cancelCreationButton;
 
     @FXML
     private ObservableList<String> rulesList = FXCollections.observableArrayList();
@@ -73,10 +82,7 @@ public class IndexController {
      * Questo metodo imposta la proprietà disable del pulsante "Crea Regola" su true,
      * impedendo all'utente di interagire con esso.
      */
-    @FXML
-    public void disableButton(){
-        CreateRuleButton.setDisable(true);
-    }
+
 
     /**
      * Metodo gestore dell'evento che viene attivato quando il pulsante "Crea Regola" viene cliccato.
@@ -94,6 +100,8 @@ public class IndexController {
     @FXML
     public void OnCreateRuleClick()
     {
+
+        errorLabel.setVisible(false);
         try {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("create-rule.fxml"));
@@ -113,14 +121,16 @@ public class IndexController {
         }
     }
 
+    @FXML
     public void onDeleteRuleButton(ActionEvent actionEvent) {
         RuleManager ruleManager = RuleManager.getInstance();
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             ruleManager.removeRule(selectedIndex);
             listView.getItems().remove(selectedIndex);
-        } else {
-            System.out.println("Nessuna regola selezionata per la cancellazione.");
+            errorLabel.setVisible(false);
+        }else{
+            errorLabel.setVisible(true);
         }
     }
 

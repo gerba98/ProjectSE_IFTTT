@@ -112,7 +112,39 @@ class CheckRuleTest {
 
         Assertions.assertTrue(testAction.wasExecuted(), "L'azione dovrebbe essere stata eseguita dopo il cambiamento del trigger");
     }
+    @Test
+    @DisplayName("Verifica esecuzione di una regola aggiunta dopo che sono state rimosse altre regole")
+    void testRulesExecutionAfterRestart() {
+        TestTrigger trigger1 = new TestTrigger(true);
+        TestAction action1 = new TestAction();
+        Rule rule1 = new Rule(trigger1, action1, "Regola 1");
 
+        testRuleManager.addRule(rule1);
+        try {
+            Thread.sleep(2000); // Attendi che CheckRule elabori
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertTrue(action1.wasExecuted(), "L'azione 1 dovrebbe essere stata eseguita");
+        testRuleManager.removeRule(0);
+        Assertions.assertTrue(testRuleManager.getRules().isEmpty(), "Non dovrebbero esserci più regole dopo la rimozione dell'ultima");
+        try {
+            Thread.sleep(2000); // Attendi che CheckRule elabori
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        TestTrigger trigger2 = new TestTrigger(true);
+        TestAction action2 = new TestAction();
+        Rule rule2 = new Rule(trigger2, action2, "Regola 2");
+        testRuleManager.addRule(rule2);
+        try {
+            Thread.sleep(2000); // Attendi che CheckRule elabori
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        Assertions.assertTrue(action2.wasExecuted(), "L'azione 2 dovrebbe essere stata eseguita");
+    }
     // Implementazione di test per Trigger
     static class TestTrigger implements Trigger {
         private boolean shouldTrigger;

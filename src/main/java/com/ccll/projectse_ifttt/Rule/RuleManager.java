@@ -60,6 +60,10 @@ public class RuleManager {
                 ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
+            if (!ruleChecker.getRunning()){
+                ruleChecker.start();
+            }
+
         }
     }
 

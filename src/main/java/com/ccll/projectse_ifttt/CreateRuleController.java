@@ -268,7 +268,7 @@ public class CreateRuleController {
             case "Play Audio":
                 label.setText("Audio to reproduce");
 
-                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files","*.mp3","*.aac","*.ogg");
+                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files","*.mp3","*.aac");
                 Button browseAudioButton = new Button("Browse...");
 
                 TextField pathAudioField = new TextField();
