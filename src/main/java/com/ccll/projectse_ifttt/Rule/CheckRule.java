@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class CheckRule {
     private final RuleManager ruleManager;
+
+
+
     private Boolean isRunning;
     private ScheduledExecutorService scheduler;
 
@@ -23,6 +26,15 @@ public class CheckRule {
         this.ruleManager = RuleManager.getInstance();
         this.isRunning = false;
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
+    }
+
+
+    /**
+     * Getter per ottenere lo status dell'oggetto CheckerRule
+     * @return la variabile booleana isRunning
+     */
+    public Boolean getRunning() {
+        return isRunning;
     }
 
     /**

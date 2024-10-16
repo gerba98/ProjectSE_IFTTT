@@ -60,6 +60,10 @@ public class RuleManager {
                 ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
+            if (!ruleChecker.getRunning()){
+                ruleChecker.start();
+            }
+
         }
     }
 
@@ -67,10 +71,11 @@ public class RuleManager {
      * Rimuove una regola dalla lista delle regole gestite.
      * Se, dopo la rimozione, non ci sono più regole, ferma il controllo delle regole.
      *
-     * @param rule La regola da rimuovere.
+     * @param ruleIndex L'indice della regola da rimuovere.
      */
-    public void removeRule(Rule rule) {
-        rules.remove(rule);
+    public void removeRule(int ruleIndex) {
+        Rule rule;
+        rule = rules.remove(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }
