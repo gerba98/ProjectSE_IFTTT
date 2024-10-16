@@ -2,7 +2,7 @@
 
 ## Definition of Done (DoD)
 
-È stato definito un documento che descrive la Definition of Done dell'applicazione consultabile al
+È stato definito un documento che descrive la Definition of Done dell'applicazione, consultabile al
 seguente [link](https://docs.google.com/document/d/1lXJ42cxmDTjbMDgV7HQHfl32ohTDAJ-osD8ShoRdMDc/edit?usp=sharing).
 
 ## Architettura Software
@@ -29,6 +29,9 @@ Nel seguente Backlog sono state selezionate le User Stories con priorità massim
 seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=1284521922#gid=1284521922).
 
 ### Sprint Backlog #2
+Nel seguente Backlog sono definite le User Stories appartenenti alla seconda e terza User Epic, sono stati assegnati gli story points e si è
+stimata la velocità della sprint. 
+È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=496373581#gid=496373581).
 
 ### Sprint Backlog #3
 
