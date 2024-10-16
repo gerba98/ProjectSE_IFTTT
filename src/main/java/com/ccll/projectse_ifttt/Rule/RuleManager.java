@@ -114,7 +114,6 @@ public class RuleManager {
      */
     private Action createAction(String actionType, String actionValue) {
         actionType = actionType.toLowerCase();
-        System.out.println(actionValue);
         ActionCreator actionCreator = switch (actionType) {
             case "play audio" -> new PlayAudioActionCreator();
             case "display message" -> new DisplayMessageActionCreator();
@@ -130,7 +129,6 @@ public class RuleManager {
      */
     private Trigger createTrigger(String triggerType, String triggerValue) {
         triggerType = triggerType.toLowerCase();
-        System.out.println(triggerValue);
         TriggerCreator triggerCreator = switch (triggerType){
             case "time of the day" -> new TOTDTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);

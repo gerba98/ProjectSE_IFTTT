@@ -461,7 +461,6 @@ public class CreateRuleController {
             }
         }
         if(Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
-            System.out.println("ciao");
             errorFlag = true;
         }
 
@@ -469,7 +468,6 @@ public class CreateRuleController {
             labelError.setVisible(true);
         }else{
             try {
-                //new Rule();
                 labelError.setVisible(false);
                 if (!trigger.isEmpty()){
                     trigger = trigger.substring(0,trigger.length()-1);
@@ -479,22 +477,12 @@ public class CreateRuleController {
                 Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
 
                 indexController.insertItems(newRule.toString());
-                Stage stage = (Stage) createButton.getScene().getWindow();
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    @Override
-                    public void handle(WindowEvent windowEvent) {
-                        if(!ruleManager.getRules().isEmpty()){
-                            indexController.disableButton();
-                        }
-                    }
-                });
                 labelTriggerSelected.setText("");
                 labelActionSelected.setText("");
                 ruleNameTxtField.clear();
                 triggerBox.setValue("");
                 actionBox.setValue("");
-//                stage.close();
-            }catch (Exception e) {
+            }catch (IllegalStateException e) {
                 System.out.println(e);
                 labelError.setVisible(true);
             }
