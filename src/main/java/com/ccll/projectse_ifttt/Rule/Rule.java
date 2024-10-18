@@ -1,7 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import com.ccll.projectse_ifttt.Triggers.Trigger;
 import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.Triggers.Trigger;
 
 
 /**
@@ -18,8 +18,8 @@ public class Rule {
      * Crea una nuova istanza di Rule dato il trigger, l'azione e il nome specificati.
      *
      * @param trigger Il trigger della regola
-     * @param action L'azione della regola
-     * @param name Il nome della regola
+     * @param action  L'azione della regola
+     * @param name    Il nome della regola
      */
     public Rule(Trigger trigger, Action action, String name) {
         this.trigger = trigger;

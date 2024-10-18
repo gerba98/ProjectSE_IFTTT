@@ -1,14 +1,14 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import java.io.File;
-import java.nio.file.Path;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,19 +19,29 @@ import java.util.logging.Logger;
  */
 public class PlayAudioAction implements Action {
 
-    /** Logger utilizzato per registrare errori e avvisi durante la riproduzione audio. */
+    /**
+     * Logger utilizzato per registrare errori e avvisi durante la riproduzione audio.
+     */
     private static final Logger LOGGER = Logger.getLogger(PlayAudioAction.class.getName());
 
-    /** Il percorso del file audio che verrà riprodotto */
+    /**
+     * Il percorso del file audio che verrà riprodotto
+     */
     private final Path audioFilePath;
 
-    /** Il MediaPlayer utilizzato per riprodurre l'audio */
+    /**
+     * Il MediaPlayer utilizzato per riprodurre l'audio
+     */
     private MediaPlayer mediaPlayer;
 
-    /** Indica se l'audio è attualmente in riproduzione */
+    /**
+     * Indica se l'audio è attualmente in riproduzione
+     */
     private boolean isPlaying = false;
 
-    /** Indica se la riproduzione è stata interrotta */
+    /**
+     * Indica se la riproduzione è stata interrotta
+     */
     private boolean isStopped = false;
 
     /**
@@ -122,7 +132,7 @@ public class PlayAudioAction implements Action {
     /**
      * Mostra un alert di avviso all'utente con un titolo e un messaggio specifici.
      *
-     * @param title Il titolo dell'alert.
+     * @param title   Il titolo dell'alert.
      * @param message Il messaggio dell'alert.
      */
     private void showAlert(String title, String message) {

@@ -1,14 +1,9 @@
 package com.ccll.projectse_ifttt;
 
 import com.ccll.projectse_ifttt.Rule.RuleManager;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,12 +15,11 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 /**
  * Controller per la gestione della vista principale dell'applicazione.
- *
+ * <p>
  * Questa classe gestisce le interazioni con vari elementi dell'interfaccia utente,
  * inclusi pulsanti e un ListView per mostrare elementi di una lista di regole.
  */
@@ -54,14 +48,13 @@ public class IndexController {
 
     /**
      * Inizializza il ListView con gli elementi dalla lista osservabile.
-     *
+     * <p>
      * Questo metodo viene chiamato automaticamente quando il file FXML viene caricato.
      * Imposta gli elementi del ListView come rulesList, permettendo al ListView
      * di visualizzare qualsiasi elemento presente nella lista osservabile.
      */
     @FXML
-    public void initialize()
-    {
+    public void initialize() {
         listView.setItems(rulesList);
     }
 
@@ -71,7 +64,7 @@ public class IndexController {
      * @param name Il nome dell'elemento da inserire nella lista.
      */
     @FXML
-    public void insertItems(String name){
+    public void insertItems(String name) {
         rulesList.add(name);
         listView.setItems(rulesList);
     }
@@ -87,19 +80,18 @@ public class IndexController {
     /**
      * Metodo gestore dell'evento che viene attivato quando il pulsante "Crea Regola" viene cliccato.
      * Carica il layout "create-rule.fxml" e lo visualizza in una nuova finestra modale.
-     *
+     * <p>
      * Questo metodo esegue i seguenti passaggi:
      * 1. Carica la risorsa FXML "create-rule.fxml".
      * 2. Recupera il controller associato con il FXML caricato.
      * 3. Imposta l'istanza del controller corrente al controller FXML.
      * 4. Inizializza e mostra un nuovo stage (finestra) con il titolo "Crea Regola".
-     *
+     * <p>
      * In caso di IOException durante il processo di caricamento del FXML, un messaggio di errore
      * viene stampato sull'output standard.
      */
     @FXML
-    public void OnCreateRuleClick()
-    {
+    public void OnCreateRuleClick() {
 
         errorLabel.setVisible(false);
         try {
@@ -116,7 +108,7 @@ public class IndexController {
             stage.setTitle("Create Rule");
             stage.setScene(new Scene(root1));
             stage.show();
-        }catch(IOException ex){
+        } catch (IOException ex) {
             System.out.println("I/O error");
         }
     }
@@ -129,7 +121,7 @@ public class IndexController {
             ruleManager.removeRule(selectedIndex);
             listView.getItems().remove(selectedIndex);
             errorLabel.setVisible(false);
-        }else{
+        } else {
             errorLabel.setVisible(true);
         }
     }

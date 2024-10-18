@@ -10,10 +10,14 @@ import javafx.scene.control.Alert;
  */
 public class DisplayMessageAction implements Action {
 
-    /** Il messaggio da visualizzare nella finestra di dialogo. */
+    /**
+     * Il messaggio da visualizzare nella finestra di dialogo.
+     */
     private String message;
 
-    /** Flag che indica se l'azione è stata già eseguita. */
+    /**
+     * Flag che indica se l'azione è stata già eseguita.
+     */
     private boolean hasExecuted;
 
     /**

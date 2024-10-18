@@ -1,9 +1,11 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import java.time.LocalTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TimeOfTheDayTrigTest {
 

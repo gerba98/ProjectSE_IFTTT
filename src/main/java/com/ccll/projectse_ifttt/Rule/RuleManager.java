@@ -4,9 +4,7 @@ import com.ccll.projectse_ifttt.Actions.Action;
 import com.ccll.projectse_ifttt.Actions.ActionCreator;
 import com.ccll.projectse_ifttt.Actions.DisplayMessageActionCreator;
 import com.ccll.projectse_ifttt.Actions.PlayAudioActionCreator;
-import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
-import com.ccll.projectse_ifttt.Triggers.Trigger;
-import com.ccll.projectse_ifttt.Triggers.TriggerCreator;
+import com.ccll.projectse_ifttt.Triggers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -60,7 +58,7 @@ public class RuleManager {
                 ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
-            if (!ruleChecker.getRunning()){
+            if (!ruleChecker.getRunning()) {
                 ruleChecker.start();
             }
 
@@ -115,8 +113,8 @@ public class RuleManager {
     /**
      * Crea un'azione basata sul tipo e valore specificati.
      *
-     * @param actionType Il tipo di azione da creare. Deve essere una stringa non nulla.
-     *                   I valori supportati sono "play audio" e "display message" (case-insensitive).
+     * @param actionType  Il tipo di azione da creare. Deve essere una stringa non nulla.
+     *                    I valori supportati sono "play audio" e "display message" (case-insensitive).
      * @param actionValue Il valore associato all'azione. Il significato dipende dal tipo di azione:
      *                    - Per "play audio": il percorso del file audio da riprodurre.
      *                    - Per "display message": il messaggio da visualizzare.
@@ -136,8 +134,8 @@ public class RuleManager {
     /**
      * Crea un trigger basato sul tipo e valore specificati.
      *
-     * @param triggerType Il tipo di trigger da creare. Deve essere una stringa non nulla.
-     *                    Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
+     * @param triggerType  Il tipo di trigger da creare. Deve essere una stringa non nulla.
+     *                     Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
      * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger:
      *                     - Per "time of the day": l'orario in formato stringa (es. "14:30").
      * @return Un'istanza di Trigger creata in base ai parametri forniti.
@@ -147,6 +145,8 @@ public class RuleManager {
         triggerType = triggerType.toLowerCase();
         TriggerCreator triggerCreator = switch (triggerType) {
             case "time of the day" -> new TOTDTrigCreator();
+            case "file dimension" -> new FileDimTrigCreator();
+            case "file existence" -> new FileExisTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

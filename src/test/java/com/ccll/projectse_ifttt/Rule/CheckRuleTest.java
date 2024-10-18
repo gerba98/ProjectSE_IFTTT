@@ -1,6 +1,6 @@
 package com.ccll.projectse_ifttt.Rule;
-import com.ccll.projectse_ifttt.Actions.Action;
 
+import com.ccll.projectse_ifttt.Actions.Action;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,6 +112,7 @@ class CheckRuleTest {
 
         Assertions.assertTrue(testAction.wasExecuted(), "L'azione dovrebbe essere stata eseguita dopo il cambiamento del trigger");
     }
+
     @Test
     @DisplayName("Verifica esecuzione di una regola aggiunta dopo che sono state rimosse altre regole")
     void testRulesExecutionAfterRestart() {
@@ -145,6 +146,7 @@ class CheckRuleTest {
         }
         Assertions.assertTrue(action2.wasExecuted(), "L'azione 2 dovrebbe essere stata eseguita");
     }
+
     // Implementazione di test per Trigger
     static class TestTrigger implements Trigger {
         private boolean shouldTrigger;

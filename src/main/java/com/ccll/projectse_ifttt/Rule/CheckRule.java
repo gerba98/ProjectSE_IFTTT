@@ -9,9 +9,8 @@ import java.util.concurrent.TimeUnit;
  * le regole gestite da RuleManager. Se il trigger associato ad una regola
  * è verificato viene eseguita l'azione associata alla regola.
  */
-public class CheckRule{
+public class CheckRule {
     private final RuleManager ruleManager;
-
 
 
     private Boolean isRunning;
@@ -31,6 +30,7 @@ public class CheckRule{
 
     /**
      * Getter per ottenere lo status dell'oggetto CheckerRule
+     *
      * @return la variabile booleana isRunning
      */
     public Boolean getRunning() {

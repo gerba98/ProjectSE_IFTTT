@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox alignment="CENTER" prefHeight="392.0" prefWidth="555.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.IndexController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="CENTER" prefHeight="392.0" prefWidth="555.0" spacing="20.0"
+      xmlns="http://javafx.com/javafx/17.0.12" fx:controller="com.ccll.projectse_ifttt.IndexController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="168.0">
-            <Button fx:id="createRuleButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
-            <Button fx:id="deleteRuleButton" layoutX="14.0" layoutY="55.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" />
-         <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0" text="Select a Rule" textFill="RED" visible="false" />
+            <Button fx:id="createRuleButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false"
+                    onAction="#OnCreateRuleClick" text="Create rule"/>
+            <Button fx:id="deleteRuleButton" layoutX="14.0" layoutY="55.0" mnemonicParsing="false"
+                    onAction="#onDeleteRuleButton" text="Delete rule"/>
+            <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0"
+                   text="Select a Rule" textFill="RED" visible="false"/>
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-         <children>
-            <ListView fx:id="listView" layoutX="28.0" layoutY="14.0" prefHeight="350.0" prefWidth="357.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-         </children></AnchorPane>
+            <children>
+                <ListView fx:id="listView" layoutX="28.0" layoutY="14.0" prefHeight="350.0" prefWidth="357.0"
+                          AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                          AnchorPane.topAnchor="0.0"/>
+            </children>
+        </AnchorPane>
     </SplitPane>
 </VBox>
