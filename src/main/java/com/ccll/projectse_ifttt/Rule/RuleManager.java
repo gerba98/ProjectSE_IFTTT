@@ -1,9 +1,6 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import com.ccll.projectse_ifttt.Actions.Action;
-import com.ccll.projectse_ifttt.Actions.ActionCreator;
-import com.ccll.projectse_ifttt.Actions.DisplayMessageActionCreator;
-import com.ccll.projectse_ifttt.Actions.PlayAudioActionCreator;
+import com.ccll.projectse_ifttt.Actions.*;
 import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 import com.ccll.projectse_ifttt.Triggers.TriggerCreator;
@@ -128,7 +125,12 @@ public class RuleManager {
         ActionCreator actionCreator = switch (actionType) {
             case "play audio" -> new PlayAudioActionCreator();
             case "display message" -> new DisplayMessageActionCreator();
-            default -> throw new IllegalStateException("Unexpected value: " + actionType);
+            case "write string" -> new WriteStringActionCreator();
+            case "copy file" -> new CopyFileActionCreator();
+            case "move file" -> new MoveFileActionCreator();
+            case "remove file" -> new RemoveFileActionCreator();
+            case "execute program" -> new ExecuteProgramActionCreator();
+            default -> throw new IllegalStateException("Unsupported action type: " + actionType);
         };
         return actionCreator.createAction(actionValue);
     }

@@ -5,16 +5,14 @@ import com.ccll.projectse_ifttt.Rule.RuleManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.File;
-import java.security.cert.Extension;
 import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Objects;
@@ -27,7 +25,12 @@ import java.util.Objects;
 public class CreateRuleController {
 
     RuleManager ruleManager;
-
+    private String filePath;
+    private String selectedFilePath;
+    private String selectedDirectoryPath;
+    private String filePathToRemove;
+    private String selectedProgramPath;
+    private String programCommand;
     @FXML
     private Label labelError;
     @FXML
@@ -47,9 +50,9 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day","Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
-    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
+    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio","Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
     private IndexController indexController;
 
@@ -76,7 +79,6 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
-     *
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
@@ -296,96 +298,146 @@ public class CreateRuleController {
 
                 break;
             case "Write string":
-                label.setText("String to add");
+                label.setText("Choose a file");
 
-                TextField stringField = new TextField();
-                stringField.setPromptText("String...");
+                Button browseButton = new Button("Browse...");
+                browseButton.setLayoutX(285.0);
+                browseButton.setLayoutY(225.0);
 
-                stringField.setLayoutX(285.0);
-                stringField.setLayoutY(225);
+                browseButton.setOnAction(e -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Select a file");
+                    File selectedFile = fileChooser.showOpenDialog(browseButton.getScene().getWindow());
+                    if (selectedFile != null) {
+                        filePath = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                        // Mostra un messaggio di conferma
+                        labelError.setText("File selected: " + selectedFile.getName());
+                        labelError.setVisible(false);
+                    }
+                });
 
-                rulePane.getChildren().add(stringField);
-                actionPaneItems.add(stringField);
+                TextField stringToWriteField = new TextField();
+                stringToWriteField.setPromptText("String to write...");
+                stringToWriteField.setLayoutX(285.0);
+                stringToWriteField.setLayoutY(265.0);
 
+                rulePane.getChildren().addAll(browseButton, stringToWriteField);
+                actionPaneItems.addAll(browseButton, stringToWriteField);
                 break;
+
             case "Copy File":
-                label.setText("File to copy");
-                TextField fileCopyField = new TextField();
-                fileCopyField.setPromptText("File path...");
-
-                fileCopyField.setLayoutX(285.0);
-                fileCopyField.setLayoutY(225);
-
-                TextField destinationCopyField = new TextField();
-                destinationCopyField.setPromptText("Folder path...");
-
-                destinationCopyField.setLayoutX(450);
-                destinationCopyField.setLayoutY(225);
-
-                rulePane.getChildren().add(fileCopyField);
-                actionPaneItems.add(fileCopyField);
-
-                rulePane.getChildren().add(destinationCopyField);
-                actionPaneItems.add(destinationCopyField);
-
+                label.setText("Select file and destination directory");
+                Button fileSelectButton = new Button("Select File...");
+                fileSelectButton.setLayoutX(285.0);
+                fileSelectButton.setLayoutY(225.0);
+                fileSelectButton.setOnAction(e -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Select a file to copy");
+                    File file = fileChooser.showOpenDialog(null);
+                    if (file != null) {
+                        selectedFilePath = file.getAbsolutePath();
+                    }
+                });
+                Button destSelectButton = new Button("Select Destination...");
+                destSelectButton.setLayoutX(285.0);
+                destSelectButton.setLayoutY(265.0);
+                destSelectButton.setOnAction(e -> {
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+                    directoryChooser.setTitle("Select destination directory");
+                    File dir = directoryChooser.showDialog(null);
+                    if (dir != null) {
+                        selectedDirectoryPath = dir.getAbsolutePath();
+                    }
+                });
+                rulePane.getChildren().addAll(fileSelectButton, destSelectButton);
+                actionPaneItems.addAll(fileSelectButton, destSelectButton);
                 break;
+
             case "Move file":
-                label.setText("File and folder path");
-                TextField fileMoveField = new TextField();
-                fileMoveField.setPromptText("File path...");
+                label.setText("Select file and destination directory");
+                Button fileSelectButton1 = new Button("Select File...");
+                fileSelectButton1.setLayoutX(285.0);
+                fileSelectButton1.setLayoutY(225.0);
+                fileSelectButton1.setOnAction(e -> {
+                    FileChooser fileChooser = new FileChooser();
+                    fileChooser.setTitle("Select a file to move");
+                    File file = fileChooser.showOpenDialog(null);
+                    if (file != null) {
+                        selectedFilePath = file.getAbsolutePath();
+                    }
+                });
 
-                fileMoveField.setLayoutX(285.0);
-                fileMoveField.setLayoutY(225);
+                Button destSelectButton1 = new Button("Select Destination...");
+                destSelectButton1.setLayoutX(285.0);
+                destSelectButton1.setLayoutY(265.0);
+                destSelectButton1.setOnAction(e -> {
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+                    directoryChooser.setTitle("Select destination directory");
+                    File dir = directoryChooser.showDialog(null);
+                    if (dir != null) {
+                        selectedDirectoryPath = dir.getAbsolutePath();
+                    }
+                });
 
-                TextField destinationMoveField = new TextField();
-                destinationMoveField.setPromptText("Folder path...");
-
-                destinationMoveField.setLayoutX(450);
-                destinationMoveField.setLayoutY(225);
-
-                rulePane.getChildren().add(fileMoveField);
-                actionPaneItems.add(fileMoveField);
-
-                rulePane.getChildren().add(destinationMoveField);
-                actionPaneItems.add(destinationMoveField);
-
+                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1);
+                actionPaneItems.addAll(fileSelectButton1, destSelectButton1);
                 break;
             case "Remove file":
-                label.setText("Specify which file to remove");
+                label.setText("Select the file to remove");
                 Button browseRemButton = new Button("Browse...");
-                TextField pathRemField = new TextField();
-                pathRemField.setLayoutX(285);
-                pathRemField.setLayoutY(225);
-                pathRemField.setFocusTraversable(false);
-                pathRemField.setEditable(false);
-                pathRemField.setDisable(false);
 
-                browseRemButton.setLayoutX(450.0);
-                browseRemButton.setLayoutY(225);
+                browseRemButton.setLayoutX(285.0);
+                browseRemButton.setLayoutY(225.0);
 
-                browseRemButton.setOnAction(e ->{
+                browseRemButton.setOnAction(e -> {
                     FileChooser removeFileChooser = new FileChooser();
-                    removeFileChooser.setTitle("File to remove...");
+                    removeFileChooser.setTitle("Select file to remove...");
 
                     Stage stage = (Stage) browseRemButton.getScene().getWindow();
                     File selectedFile = removeFileChooser.showOpenDialog(stage);
-                    pathRemField.setText(selectedFile.getPath());
+                    if (selectedFile != null) {
+                        filePathToRemove = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                    }
                 });
-                rulePane.getChildren().addAll(browseRemButton,pathRemField);
-                actionPaneItems.addAll(browseRemButton,pathRemField);
 
+                rulePane.getChildren().add(browseRemButton);
+                actionPaneItems.add(browseRemButton);
                 break;
             case "Execute Program":
                 label.setText("Choose the program to execute");
 
-                TextField executeProgramField = new TextField();
-                executeProgramField.setPromptText("Insert the application file (.exe)");
+                TextField programPathField = new TextField();
+                programPathField.setPromptText("Insert the application file (.exe)");
+                programPathField.setLayoutX(285.0);
+                programPathField.setLayoutY(225);
 
-                executeProgramField.setLayoutX(285.0);
-                executeProgramField.setLayoutY(225);
+                Button browseProgramButton = new Button("Browse...");
+                browseProgramButton.setLayoutX(450.0);
+                browseProgramButton.setLayoutY(225);
 
-                rulePane.getChildren().add(executeProgramField);
-                actionPaneItems.add(executeProgramField);
+                browseProgramButton.setOnAction(e -> {
+                    FileChooser programChooser = new FileChooser();
+                    programChooser.setTitle("Select a program to execute");
+                    File selectedFile = programChooser.showOpenDialog(browseProgramButton.getScene().getWindow());
+                    if (selectedFile != null) {
+                        selectedProgramPath = selectedFile.getAbsolutePath();
+                        programPathField.setText(selectedProgramPath);
+                    }
+                });
+
+                TextField commandField = new TextField();
+                commandField.setPromptText("Insert command...");
+                commandField.setLayoutX(285.0);
+                commandField.setLayoutY(265.0);
+
+                rulePane.getChildren().addAll(programPathField, browseProgramButton, commandField);
+                actionPaneItems.addAll(programPathField, browseProgramButton, commandField);
+
+                // Salva il comando inserito
+                commandField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    programCommand = newValue;
+                });
+
         }
     }
 
@@ -422,8 +474,7 @@ public class CreateRuleController {
         String triggerType = "";
         String actionType = "";
 
-
-
+        // Recupera il trigger
         Iterator<Object> iterator = triggerPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
@@ -435,19 +486,21 @@ public class CreateRuleController {
                     errorFlag = true;
                 }
             }
-            if(item instanceof Spinner) {
+            if (item instanceof Spinner) {
                 if (((Spinner) item).getValue().toString().length() == 1) {
                     trigger += "0" + ((Spinner) item).getValue() + ":";
                 } else {
                     trigger += ((Spinner) item).getValue() + ":";
-
                 }
-
             }
         }
 
-         //rimuove l'ultimo carattere e lo sostituisce con uno spazio
+        // Rimuove l'ultimo carattere e lo sostituisce con uno spazio
+        if (!trigger.isEmpty()) {
+            trigger = trigger.substring(0, trigger.length() - 1);
+        }
 
+        // Recupera l'azione
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
@@ -460,18 +513,38 @@ public class CreateRuleController {
                 }
             }
         }
-        if(Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
+
+        // Controlla le selezioni di trigger e azione
+        if (Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
             errorFlag = true;
         }
 
-        if(errorFlag || Objects.equals(name, "")) {
+        // Costruisce l'azione in base al tipo selezionato
+        if (Objects.equals(actionBox.getValue(), "Write string")) {
+            String stringToWrite = "";
+            for (Object item : actionPaneItems) {
+                if (item instanceof TextField) {
+                    stringToWrite = ((TextField) item).getText(); // Recupera la stringa da scrivere
+                }
+            }
+            action = filePath + ";" + stringToWrite;
+        } else if (Objects.equals(actionBox.getValue(), "Copy File")) {
+            action = selectedFilePath + ";" + selectedDirectoryPath;
+        } else if (Objects.equals(actionBox.getValue(), "Move file")) {
+            action = selectedFilePath + ";" + selectedDirectoryPath; // Passa i percorsi del file e della directory
+        } else if (Objects.equals(actionBox.getValue(), "Remove file")) {
+            action = filePathToRemove; // Utilizza il percorso del file selezionato per rimuovere
+        } else if (Objects.equals(actionBox.getValue(), "Execute Program")) {
+            action = selectedProgramPath + ";" + programCommand;
+        }
+
+
+        // Controlla se ci sono errori nell'input
+        if (errorFlag || Objects.equals(name, "")) {
             labelError.setVisible(true);
-        }else{
+        } else {
             try {
                 labelError.setVisible(false);
-                if (!trigger.isEmpty()){
-                    trigger = trigger.substring(0,trigger.length()-1);
-                }
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
                 Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
@@ -482,24 +555,13 @@ public class CreateRuleController {
                 ruleNameTxtField.clear();
                 triggerBox.setValue("");
                 actionBox.setValue("");
-            }catch (IllegalStateException e) {
+            } catch (IllegalStateException e) {
                 System.out.println(e);
                 labelError.setVisible(true);
             }
         }
-
-
-
     }
-    /**
-     * Gestore dell'evento per l'azione di click del pulsante "Cancella". Questo metodo
-     * cancella tutti gli input dell'utente e le selezioni nei campi del modulo,
-     * incluso l'azzeramento dei testi di `labelTriggerSelected` e `labelActionSelected`,
-     * la cancellazione di `ruleNameTxtField`, e il reset dei valori di `triggerBox`
-     * e `actionBox`.
-     *
-     * @param actionEvent l'evento scatenato quando il pulsante "Cancella" viene cliccato
-     */
+
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
         labelTriggerSelected.setText("");
@@ -508,6 +570,4 @@ public class CreateRuleController {
         triggerBox.setValue("");
         actionBox.setValue("");
     }
-
 }
-
