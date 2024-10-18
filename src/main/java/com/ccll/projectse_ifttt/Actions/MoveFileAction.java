@@ -65,4 +65,7 @@ public class MoveFileAction implements Action {
             return false;
         }
     }
+    public String toString() {
+        return "Spostamento file";
+    }
 }

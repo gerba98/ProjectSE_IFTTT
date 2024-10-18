@@ -92,5 +92,9 @@ public class WriteStringAction implements Action {
             alert.showAndWait();
         });
     }
+    @Override
+    public String toString() {
+        return "Scrittura su file";
+    }
 
 }

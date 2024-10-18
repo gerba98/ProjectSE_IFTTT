@@ -74,4 +74,7 @@ public class RemoveFileAction implements Action {
             alert.showAndWait();
         });
     }
+    public String toString() {
+        return "Rimozione file";
+    }
 }

@@ -68,4 +68,7 @@ public class CopyFileAction implements Action {
             alert.showAndWait();
         });
     }
+    public String toString() {
+        return "Copia di un file";
+    }
 }

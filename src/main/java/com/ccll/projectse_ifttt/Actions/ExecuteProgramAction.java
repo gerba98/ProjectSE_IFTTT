@@ -8,14 +8,14 @@ import java.io.IOException;
  * di specificare comandi arbitrari. Una volta eseguita l'azione, non verrà ripetuta.
  */
 public class ExecuteProgramAction implements Action {
-    private final String programPath; // Il percorso dell'applicazione da eseguire
+    private final String programPath; // Il percorso dell'applicazione o del file da eseguire
     private final String command; // I comandi da passare all'applicazione
     private boolean hasExecuted; // Flag per controllare se l'azione è già stata eseguita
 
     /**
      * Costruttore per inizializzare l'azione di esecuzione dell'applicazione.
      *
-     * @param programPath il percorso dell'applicazione da eseguire
+     * @param programPath il percorso dell'applicazione o del file da eseguire
      * @param command i comandi da passare all'applicazione (può essere vuoto)
      */
     public ExecuteProgramAction(String programPath, String command) {
@@ -25,7 +25,7 @@ public class ExecuteProgramAction implements Action {
     }
 
     /**
-     * Esegue l'azione di avvio dell'applicazione con i comandi specificati.
+     * Esegue l'azione di avvio dell'applicazione o di esecuzione del comando specificato.
      * Se l'azione è già stata eseguita, non verrà ripetuta.
      *
      * @return true se l'azione è stata eseguita con successo, false se è già stata eseguita o si è verificato un errore
@@ -40,17 +40,25 @@ public class ExecuteProgramAction implements Action {
             ProcessBuilder processBuilder;
             String os = System.getProperty("os.name").toLowerCase();
 
-            // Se è macOS, usa 'open -a' per le applicazioni .app
+            // Verifica se il file è un'applicazione .app
+            boolean isApp = programPath.endsWith(".app");
+
+            // Se è macOS
             if (os.contains("mac")) {
-                if (programPath.endsWith(".app")) {
-                    processBuilder = new ProcessBuilder("open", "-a", programPath);
+                if (isApp) {
+                    // Apri l'applicazione usando open -a
+                    String[] commandArray = {"open", "-a", programPath};
+                    processBuilder = new ProcessBuilder(commandArray);
                 } else {
-                    String[] commandArray = command.isEmpty() ? new String[]{programPath} : new String[]{programPath, command};
+                    // Esegui il comando arbitrario
+                    String[] commandArray = {"/bin/bash", "-c", command};
                     processBuilder = new ProcessBuilder(commandArray);
                 }
-            } else if (os.contains("win")) {
-                // Se è Windows
-                String[] commandArray = command.isEmpty() ? new String[]{programPath} : new String[]{programPath, command};
+            }
+            // Se è Windows
+            else if (os.contains("win")) {
+                // Esegui il comando arbitrario, o l'applicazione se non è un comando
+                String[] commandArray = {programPath, command};
                 processBuilder = new ProcessBuilder(commandArray);
             } else {
                 throw new UnsupportedOperationException("Operating system not supported: " + os);
@@ -67,4 +75,9 @@ public class ExecuteProgramAction implements Action {
             return false; // Ritorna false in caso di errore
         }
     }
+    @Override
+    public String toString() {
+        return "Esecuzione programma";
+    }
+
 }

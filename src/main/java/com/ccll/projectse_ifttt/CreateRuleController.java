@@ -79,6 +79,7 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
+     *
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
@@ -549,7 +550,8 @@ public class CreateRuleController {
                 actionType = actionBox.getValue();
                 Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
 
-                indexController.insertItems(newRule.toString());
+                // Aggiungi la nuova regola alla tabella nel IndexController
+                indexController.insertItems(newRule);
                 labelTriggerSelected.setText("");
                 labelActionSelected.setText("");
                 ruleNameTxtField.clear();
