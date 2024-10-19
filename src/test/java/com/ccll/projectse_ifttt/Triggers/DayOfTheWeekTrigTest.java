@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TimeOfTheWeekTrigTest {
+class DayOfTheWeekTrigTest {
 
 
     @Test
@@ -18,7 +17,7 @@ class TimeOfTheWeekTrigTest {
     public void testEvaluation() {
 
         DayOfWeek day = LocalDate.now().getDayOfWeek();
-        TimeOfTheWeekTrig dayTrigger = new TimeOfTheWeekTrig(day);
+        DayOfTheWeekTrig dayTrigger = new DayOfTheWeekTrig(day);
 
         assertTrue(dayTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno corrente corrisponde a quello specificato.");
 
@@ -39,7 +38,7 @@ class TimeOfTheWeekTrigTest {
     public void testInitialization() {
 
         DayOfWeek day = DayOfWeek.of(1);
-        TimeOfTheWeekTrig dayTrigger = new TimeOfTheWeekTrig(day);
+        DayOfTheWeekTrig dayTrigger = new DayOfTheWeekTrig(day);
 
         assertEquals(day, dayTrigger.getDayOfWeek());
     }
@@ -49,9 +48,9 @@ class TimeOfTheWeekTrigTest {
     public void testCreator() {
 
         String day = "Monday";
-        TriggerCreator TOTW = new TOTWTrigCreator();
-        Trigger trigger = TOTW.createTrigger(day);
-        assertInstanceOf(TimeOfTheWeekTrig.class, trigger);
+        TriggerCreator DOTW = new DOTWTrigCreator();
+        Trigger trigger = DOTW.createTrigger(day);
+        assertInstanceOf(DayOfTheWeekTrig.class, trigger);
     }
 
 }
