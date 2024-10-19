@@ -2,10 +2,9 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.time.LocalDate;
 import java.time.MonthDay;
-import java.time.LocalTime;
 /**
  * Rappresenta un trigger che si attiva al giorno specificato del mese.
- * Questo trigger valuta se il giorno del mese corrente corrisponde o quello specificato.
+ * Questo trigger valuta se il giorno del mese corrente corrisponde a quello specificato.
  */
 public class DayOfTheMonthTrig implements Trigger{
 

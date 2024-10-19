@@ -19,7 +19,7 @@ class DayOfTheWeekTrigTest {
         DayOfWeek day = LocalDate.now().getDayOfWeek();
         DayOfTheWeekTrig dayTrigger = new DayOfTheWeekTrig(day);
 
-        assertTrue(dayTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno corrente corrisponde a quello specificato.");
+        assertTrue(dayTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno della settimana corrente corrisponde a quello specificato.");
 
         DayOfWeek newDay = DayOfWeek.of(new Random().nextInt(7) + 1);
         if(day.equals(newDay)) {
@@ -29,7 +29,7 @@ class DayOfTheWeekTrigTest {
             }
         }
         dayTrigger.setDayOfWeek(newDay);
-        assertFalse(dayTrigger.evaluate(), "..Il trigger non dovrebbe attivarsi quando il giorno corrente non corrisponde a quello specificato.");
+        assertFalse(dayTrigger.evaluate(), "Il trigger non dovrebbe attivarsi quando il giorno della settiman corrente non corrisponde a quello specificato.");
 
     }
 

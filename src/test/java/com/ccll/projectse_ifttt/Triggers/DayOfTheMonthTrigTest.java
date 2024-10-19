@@ -13,23 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class DayOfTheMonthTrigTest {
 
     @Test
-    @DisplayName("Valutazione del trigger al giorno della settimana specificato")
+    @DisplayName("Valutazione del trigger al giorno del mese specificato")
     public void testEvaluation() {
         LocalDate dayLocal = LocalDate.now();
         MonthDay dayMonth = MonthDay.from(dayLocal);
         DayOfTheMonthTrig dayMonthTrigger = new DayOfTheMonthTrig(dayMonth);
 
-        assertTrue(dayMonthTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno corrente corrisponde a quello specificato.");
+        assertTrue(dayMonthTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno del mese corrente corrisponde a quello specificato.");
 
         dayLocal = dayLocal.plusDays(1);
         MonthDay newDayMonth = MonthDay.from(dayLocal);
         dayMonthTrigger.setDayOfMonth(newDayMonth);
-        assertFalse(dayMonthTrigger.evaluate(), "..Il trigger non dovrebbe attivarsi quando il giorno corrente non corrisponde a quello specificato.");
+        assertFalse(dayMonthTrigger.evaluate(), "Il trigger non dovrebbe attivarsi quando il giorno del mese corrente non corrisponde a quello specificato.");
 
     }
 
     @Test
-    @DisplayName("Inizializzazione di TimeOfTheWeekTrig con il giorno della settimana specificato")
+    @DisplayName("Inizializzazione di DayOfTheMonthTrig con il giorno del mese specificato")
     public void testInitialization() {
         LocalDate dayLocal = LocalDate.now();
         MonthDay dayMonth = MonthDay.from(dayLocal);
@@ -39,7 +39,7 @@ class DayOfTheMonthTrigTest {
     }
 
     @Test
-    @DisplayName("Creazione di TimeOfTheWeekTrig tramite TOTWTrigCreator")
+    @DisplayName("Creazione di DayOfTheMonthTrig tramite DOTMTrigCreator")
     public void testCreator() {
 
         String day = "2024-10-19";
