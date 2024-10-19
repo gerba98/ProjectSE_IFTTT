@@ -100,7 +100,7 @@ public class RuleManager {
      * @param ruleName     Il nome della regola da creare
      * @return La nuova regola creata con i parametri forniti
      */
-    public Rule createRule(String triggerType, String triggerValue, String actionType, String actionValue, String ruleName) {
+    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue) {
         Trigger trigger = createTrigger(triggerType, triggerValue);
         Action action = createAction(actionType, actionValue);
 
@@ -128,6 +128,7 @@ public class RuleManager {
             case "display message" -> new DisplayMessageActionCreator();
             default -> throw new IllegalStateException("Unexpected value: " + actionType);
         };
+        System.out.println(actionValue);
         return actionCreator.createAction(actionValue);
     }
 

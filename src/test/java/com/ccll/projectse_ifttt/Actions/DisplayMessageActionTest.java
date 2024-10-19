@@ -18,7 +18,7 @@ public class DisplayMessageActionTest {
     @DisplayName("Inizializzazione di DisplayMessageAction")
     public void testInitialization() {
         assertNotNull(displayMessage);
-        assertEquals("Visualizza messaggio: " + message, displayMessage.toString());
+        assertEquals("Display message;" + message, displayMessage.toString());
     }
 
     @Test
@@ -28,7 +28,7 @@ public class DisplayMessageActionTest {
         Action displayMessageAction = creator.createAction(message);
         assertNotNull(displayMessageAction);
         assertTrue(displayMessageAction instanceof DisplayMessageAction);
-        assertEquals("Visualizza messaggio: " + message, displayMessageAction.toString());
+        assertEquals("Display message;" + message, displayMessageAction.toString());
     }
 
     @Test

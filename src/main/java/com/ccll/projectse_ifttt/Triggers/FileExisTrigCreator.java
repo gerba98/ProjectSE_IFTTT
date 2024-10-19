@@ -10,7 +10,11 @@ public class FileExisTrigCreator extends TriggerCreator {
     @Override
     public Trigger createTrigger(String path) {
         String[] parts = path.split(" ");
-        return new FileExistenceTrig(parts[0]+"\\"+parts[1]);
+        if (parts.length==2){
+            return new FileExistenceTrig(parts[0]+"\\"+parts[1]);
+        }else{
+            return new FileExistenceTrig(parts[0]);
+        }
     }
 
     @Override

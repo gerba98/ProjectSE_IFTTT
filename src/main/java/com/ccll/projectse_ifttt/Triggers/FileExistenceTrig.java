@@ -5,6 +5,7 @@ import java.io.File;
 public class FileExistenceTrig implements Trigger {
     private String filePath;
 
+
     /**
      * Costruisce un FileDimensionTrig con la dimensione specificata e un file da controllare.
      *
@@ -53,6 +54,6 @@ public class FileExistenceTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Trigger -> esistenza file " + filePath;
+        return "File existence;"+filePath;
     }
 }

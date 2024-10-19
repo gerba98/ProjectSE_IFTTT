@@ -68,6 +68,6 @@ public class DisplayMessageAction implements Action {
      */
     @Override
     public String toString() {
-        return "Visualizza messaggio: " + message;
+        return "Display message;" + message;
     }
 }

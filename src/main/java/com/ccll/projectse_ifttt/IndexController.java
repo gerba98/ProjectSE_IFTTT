@@ -1,6 +1,7 @@
 package com.ccll.projectse_ifttt;
 
 import com.ccll.projectse_ifttt.Rule.RuleManager;
+import com.ccll.projectse_ifttt.Rule.RulePersistence;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -45,6 +46,8 @@ public class IndexController {
     @FXML
     private ObservableList<String> rulesList = FXCollections.observableArrayList();
 
+    private RulePersistence rulePers;
+
 
     /**
      * Inizializza il ListView con gli elementi dalla lista osservabile.
@@ -55,26 +58,35 @@ public class IndexController {
      */
     @FXML
     public void initialize() {
+        rulePers = new RulePersistence();
+        initRules();
         listView.setItems(rulesList);
     }
 
     /**
      * Inserisce un elemento nella lista osservabile e aggiorna il ListView.
      *
-     * @param name Il nome dell'elemento da inserire nella lista.
+     * @param rule L'elemento da inserire nella lista.
      */
     @FXML
-    public void insertItems(String name) {
-        rulesList.add(name);
+    public void insertItems(String rule) {
+        rulesList.add(rule);
+        rulePers.saveRules(rulesList);
         listView.setItems(rulesList);
     }
-
     /**
-     * Disabilita il pulsante "Crea Regola".
+     * Inizializza la lista delle regole caricando da file e crea gli oggetti regola.
      *
-     * Questo metodo imposta la proprietà disable del pulsante "Crea Regola" su true,
-     * impedendo all'utente di interagire con esso.
+     * il formato del csv è -> 0 Rule, 1 Name, 2 trigger, 3 triggerType, 4 trigger value,5 action, 6 action type, 7 action value
      */
+    public void initRules(){
+        rulesList = rulePers.loadRules();
+        RuleManager ruleManager = RuleManager.getInstance();
+        for (String string:rulesList){
+            String[] parts = string.split(";");
+            ruleManager.createRule(parts[1],parts[3],parts[4],parts[6],parts[7]);
+        }
+    }
 
 
     /**
@@ -119,6 +131,7 @@ public class IndexController {
         int selectedIndex = listView.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             ruleManager.removeRule(selectedIndex);
+            rulePers.deleteRules(selectedIndex);
             listView.getItems().remove(selectedIndex);
             errorLabel.setVisible(false);
         } else {

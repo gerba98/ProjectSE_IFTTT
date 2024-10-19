@@ -1,0 +1,4 @@
+Rule;rwg;trigger;Time of the day;19:21; action;Display message; grw
+Rule;5768k3;trigger;File dimension;C:\Users\camil\AppData\Roaming\Microsoft\Windows\Network Shortcuts\AllArtificial.pdf-2-GB;action;Display message;75i
+Rule;rwgbrw;trigger;File dimension;C:\Users\camil\AppData\Roaming\Microsoft\Windows\Network Shortcuts\AllArtificial.pdf-2-GB;action;Play audio;C:\Users\camil\Music\Abel_Pittaro_Kalangas_HARD_BASS_NO_COPYRIGHT_.hd.mp3
+Rule;qegfa;trigger;File dimension;C:\Users\camil\AppData\Roaming\Microsoft\Windows\Network Shortcuts\AllArtificial.pdf-2-MB;action;Play audio;C:\Users\camil\Music\Abel_Pittaro_Kalangas_HARD_BASS_NO_COPYRIGHT_.hd (mp3cut.net).mp3

@@ -532,7 +532,7 @@ public class CreateRuleController {
                 }
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
-                Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
+                Rule newRule = ruleManager.createRule(name,triggerType, trigger, actionType, action);
 
                 indexController.insertItems(newRule.toString());
                 labelTriggerSelected.setText("");

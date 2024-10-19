@@ -58,14 +58,14 @@ class RuleManagerTest {
     @Test
     @DisplayName("Verifica creazione regola")
     void testCreateRule() {
-        Rule resultRule1 = testRuleManager.createRule("time of the day", "12:00", "display message", "Hello World", "Regola Test 1");
+        Rule resultRule1 = testRuleManager.createRule("Regola Test 1", "time of the day", "12:00", "display message", "Hello World" );
 
         assertNotNull(resultRule1, "La regola creata non dovrebbe essere null");
         assertEquals("Regola Test 1", resultRule1.getName(), "Il nome della regola dovrebbe corrispondere");
         assertInstanceOf(Trigger.class, resultRule1.getTrigger(), "Il trigger dovrebbe essere un'istanza di Trigger");
         assertInstanceOf(Action.class, resultRule1.getAction(), "L'azione dovrebbe essere un'istanza di Action");
 
-        Rule resultRule2 = testRuleManager.createRule("time of the day", "15:30", "play audio", "/Users/Desktop/cat.mp3", "Regola Test 2");
+        Rule resultRule2 = testRuleManager.createRule("Regola Test 2","time of the day", "15:30", "play audio", "/Users/Desktop/cat.mp3");
 
         assertNotNull(resultRule2, "La regola creata non dovrebbe essere null");
         assertEquals("Regola Test 2", resultRule2.getName(), "Il nome della regola dovrebbe corrispondere");

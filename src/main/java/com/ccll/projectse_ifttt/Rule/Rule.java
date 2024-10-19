@@ -100,9 +100,8 @@ public class Rule {
     // to string composed of trigger and action tostring
     @Override
     public String toString() {
-        return "Rule{" +
-                "trigger=" + trigger +
-                ", action=" + action +
-                '}';
+        return "Rule;" + name +
+                ";trigger;" + trigger +
+                ";action;" + action;
     }
 }
