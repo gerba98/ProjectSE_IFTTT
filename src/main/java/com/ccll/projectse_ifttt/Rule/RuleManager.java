@@ -5,6 +5,7 @@ import com.ccll.projectse_ifttt.Actions.ActionCreator;
 import com.ccll.projectse_ifttt.Actions.DisplayMessageActionCreator;
 import com.ccll.projectse_ifttt.Actions.PlayAudioActionCreator;
 import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
+import com.ccll.projectse_ifttt.Triggers.TOTWTrigCreator;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 import com.ccll.projectse_ifttt.Triggers.TriggerCreator;
 import javafx.collections.FXCollections;
@@ -147,6 +148,7 @@ public class RuleManager {
         triggerType = triggerType.toLowerCase();
         TriggerCreator triggerCreator = switch (triggerType) {
             case "time of the day" -> new TOTDTrigCreator();
+            case "day of the week" -> new TOTWTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

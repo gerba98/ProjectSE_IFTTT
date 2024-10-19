@@ -47,7 +47,7 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
     final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
@@ -443,6 +443,14 @@ public class CreateRuleController {
 
                 }
 
+            }
+            if (item instanceof ComboBox<?>){
+                if(!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+                    errorFlag = false;
+                    trigger += ((ComboBox<?>) item).getValue() + " ";
+                }else{
+                    errorFlag = true;
+                }
             }
         }
 
