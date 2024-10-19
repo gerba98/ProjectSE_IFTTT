@@ -16,12 +16,12 @@ public class ExecuteProgramAction implements Action {
      * Costruttore per inizializzare l'azione di esecuzione dell'applicazione.
      *
      * @param programPath il percorso dell'applicazione o del file da eseguire
-     * @param command i comandi da passare all'applicazione (può essere vuoto)
+     * @param command i comandi da passare all'applicazione (può essere vuoto o nullo)
      */
     public ExecuteProgramAction(String programPath, String command) {
         this.programPath = programPath;
         this.command = command;
-        this.hasExecuted = false; // Inizialmente, l'azione non è stata eseguita
+        this.hasExecuted = false; // Inizialmente l'azione non è stata eseguita
     }
 
     /**
@@ -33,7 +33,7 @@ public class ExecuteProgramAction implements Action {
     @Override
     public boolean execute() {
         if (hasExecuted) {
-            return false; // Se l'azione è già stata eseguita, non fare nulla
+            return false; // Se l'azione è già stata eseguita non fare nulla
         }
 
         try {
@@ -57,9 +57,13 @@ public class ExecuteProgramAction implements Action {
             }
             // Se è Windows
             else if (os.contains("win")) {
-                // Esegui il comando arbitrario, o l'applicazione se non è un comando
-                String[] commandArray = {programPath, command};
-                processBuilder = new ProcessBuilder(commandArray);
+                // Se il comando è nullo o vuoto, esegui solo l'applicazione
+                if (command == null || command.trim().isEmpty()) {
+                    processBuilder = new ProcessBuilder(programPath); // Solo l'applicazione
+                } else {
+                    // Esegui l'applicazione con il comando
+                    processBuilder = new ProcessBuilder(programPath, command);
+                }
             } else {
                 throw new UnsupportedOperationException("Operating system not supported: " + os);
             }
@@ -75,9 +79,8 @@ public class ExecuteProgramAction implements Action {
             return false; // Ritorna false in caso di errore
         }
     }
-    @Override
-    public String toString() {
-        return "Esecuzione programma";
-    }
 
+    public String toString() {
+        return "Esecuzione Programma";
+    }
 }

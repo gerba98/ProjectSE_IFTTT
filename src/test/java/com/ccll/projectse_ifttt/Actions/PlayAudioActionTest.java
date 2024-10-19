@@ -1,40 +1,66 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import static org.junit.Assert.*;
+import javafx.embed.swing.JFXPanel;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import static org.junit.Assert.*;
 
 public class PlayAudioActionTest {
 
-    @Test
-    @DisplayName("Creazione di PlayAudioAction tramite PlayAudioActionCreator")
-    public void createAction() {
+    private Path tempAudioFile;  // Il file audio temporaneo
+    private Action playAudioAction;  // L'azione da testare
+
+    static {
+        // Inizializzazione del toolkit JavaFX
+        new JFXPanel();
+    }
+
+    @Before
+    public void setUp() throws Exception {
+        // Creazione di un file audio temporaneo per il test
+        tempAudioFile = Files.createTempFile("testAudio", ".mp3");
+
+        // Assicurati che ci sia un file fittizio che MediaPlayer possa riconoscere
+        Files.write(tempAudioFile, "Test Audio File".getBytes());
+
+        // Inizializza l'ActionCreator per creare l'azione di riproduzione audio
         ActionCreator creator = new PlayAudioActionCreator();
-        Action action = creator.createAction("/Users/camillamurati/Desktop/cat.mp3");
-        assertNotNull(action);
-        assertTrue(action instanceof PlayAudioAction);
+        playAudioAction = creator.createAction(tempAudioFile.toString());
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        // Elimina il file audio temporaneo
+        Files.deleteIfExists(tempAudioFile);
     }
 
     @Test
-    @DisplayName("Creazione di PlayAudioAction con percorso valido")
-    public void createWithValidPath() {
-        String stringFilePath = "/Users/camillamurati/Desktop/cat.mp3";
-        ActionCreator creator = new PlayAudioActionCreator();
-        Action action = creator.createAction(stringFilePath);
-        assertNotNull(action);
-        assertTrue(action instanceof PlayAudioAction);
-        Path filePath = Paths.get(stringFilePath);
-        assertEquals(filePath, ((PlayAudioAction) action).getAudioFilePath());
+    public void testPlayAudioActionSuccess() {
+        // Verifica che il file audio esista
+        assertTrue("Il file audio dovrebbe esistere", Files.exists(tempAudioFile));
+
+        // Esegue l'azione di riproduzione
+        boolean result = playAudioAction.execute();
+
+        // Verifica che l'azione sia stata eseguita con successo
+        assertTrue("L'azione dovrebbe essere eseguita con successo", result);
     }
 
     @Test
-    @DisplayName("Creazione di PlayAudioAction con percorso non valido")
-    public void createWithInvalidPath() {
-        ActionCreator creator = new PlayAudioActionCreator();
-        Action action = creator.createAction("invalid/path/file.mp3");
-        assertNotNull(action);
-        assertTrue(action instanceof PlayAudioAction);
+    public void testPlayAudioActionFileDoesNotExist() throws Exception {
+        // Elimina il file audio temporaneo per simulare un file mancante
+        Files.deleteIfExists(tempAudioFile);
+
+        // Esegue l'azione di riproduzione
+        boolean result = playAudioAction.execute();
+
+        // Verifica che l'azione fallisca poiché il file non esiste
+        assertFalse("L'azione dovrebbe fallire perché il file non esiste", result);
     }
+
 }

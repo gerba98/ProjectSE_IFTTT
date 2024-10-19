@@ -1,48 +1,45 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
-import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.DisplayName;
+
 import static org.junit.Assert.*;
 
 public class DisplayMessageActionTest {
 
-    private String message = "Messaggio di test";
-    DisplayMessageAction displayMessage = new DisplayMessageAction(message);
+    private Action displayMessageAction; // L'azione da testare
 
-    @Test
-    @DisplayName("Inizializzazione di DisplayMessageAction")
-    public void testInitialization() {
-        assertNotNull(displayMessage);
-        assertEquals("Visualizza messaggio: " + message, displayMessage.toString());
+    static {
+        // Inizializzazione del toolkit JavaFX
+        new JFXPanel();
     }
 
-    @Test
-    @DisplayName("Creazione di DisplayMessageAction tramite DisplayMessageActionCreator")
-    public void testCreator() {
+    @Before
+    public void setUp() {
+        // Inizializza l'ActionCreator per creare l'azione di visualizzazione del messaggio
         ActionCreator creator = new DisplayMessageActionCreator();
-        Action displayMessageAction = creator.createAction(message);
-        assertNotNull(displayMessageAction);
-        assertTrue(displayMessageAction instanceof DisplayMessageAction);
-        assertEquals("Visualizza messaggio: " + message, displayMessageAction.toString());
+        displayMessageAction = creator.createAction("Questo è un messaggio di test.");
     }
 
     @Test
-    @DisplayName("Esecuzione dell'azione DisplayMessageAction")
-    public void testExecute() {
-        try {
-            CompletableFuture<Void> future = new CompletableFuture<>();
+    public void testDisplayMessageActionSuccess() {
+        // Esegue l'azione di visualizzazione del messaggio
+        boolean result = displayMessageAction.execute();
 
-            Platform.runLater(() -> {
-                displayMessage.execute();
-                future.complete(null);
-            });
-
-            future.get(5, TimeUnit.SECONDS);
-        } catch (Exception e) {
-            System.out.println("Errore durante il test testExecute " + e.getStackTrace());
-        }
+        // Verifica che l'azione sia stata eseguita con successo
+        assertTrue("L'azione dovrebbe essere eseguita con successo", result);
     }
+
+    @Test
+    public void testDisplayMessageActionAlreadyExecuted() {
+        // Esegue l'azione di visualizzazione una prima volta
+        boolean firstRun = displayMessageAction.execute();
+        assertTrue("La prima esecuzione dovrebbe avere successo", firstRun);
+
+        // Esegue nuovamente l'azione, che non dovrebbe essere eseguita poiché è già stata eseguita
+        boolean secondRun = displayMessageAction.execute();
+        assertFalse("La seconda esecuzione dovrebbe fallire poiché è già stata eseguita", secondRun);
+    }
+
 }
