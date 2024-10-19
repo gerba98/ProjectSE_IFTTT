@@ -148,6 +148,7 @@ public class RuleManager {
             case "day of the week" -> new DOTWTrigCreator();
             case "day of the month" -> new DOTMTrigCreator();
             case "date" -> new SDTrigCreator();
+            case "status program" ->new EPTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

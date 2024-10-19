@@ -47,9 +47,9 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week", "Day of the month", "Date");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week", "Day of the month", "Date", "Status program");//,"Day of the week","Day of the month","Date","File existence","File dimension","Status program");
     @FXML
-    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio");//,"Write string","Copy File","Move file","Remove file","Execute Program");
+    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio", "Remove file");//,"Write string","Copy File","Move file","Remove file","Execute Program");
     @FXML
     private IndexController indexController;
 
@@ -221,17 +221,58 @@ public class CreateRuleController {
 
                 break;
             case "Status program":
-                label.setText("Insert the status program");
+                label.setText("");
 
-                TextField statusProgramField = new TextField();
-                statusProgramField.setPromptText("Insert the status program");
-                
-                statusProgramField.setLayoutX(285.0);
-                statusProgramField.setLayoutY(142.0);
-                statusProgramField.setPrefWidth(250);
+                Label commandLabel = new Label();
+                commandLabel.setText("Command");
+                TextField commandField = new TextField();
 
-                rulePane.getChildren().add(statusProgramField);
-                triggerPaneItems.add(statusProgramField);
+                Button programBrowse = new Button("Browse...");
+                TextField programField = new TextField();
+
+                Label outputLabel = new Label();
+                outputLabel.setText("Output");
+                TextField outputField = new TextField();
+                outputField.setPromptText("Insert desired output");
+
+                commandLabel.setLayoutX(285.0);
+                commandLabel.setLayoutY(125.0);
+
+                commandField.setLayoutX(285.0);
+                commandField.setLayoutY(142.0);
+                commandField.setPrefWidth(50);
+
+                programField.setLayoutX(350.0);
+                programField.setLayoutY(142.0);
+
+                programBrowse.setLayoutX(350.0);
+                programBrowse.setLayoutY(115.0);
+
+                outputLabel.setLayoutX(500.0);
+                outputLabel.setLayoutY(125.0);
+
+                outputField.setLayoutX(500.0);
+                outputField.setLayoutY(142.0);
+                outputField.setPrefWidth(130);
+
+                programBrowse.setOnAction(e ->{
+                    FileChooser programFile = new FileChooser();
+                    programFile.setTitle("File to remove...");
+
+                    Stage stage = (Stage) programBrowse.getScene().getWindow();
+                    File selectedFile = programFile.showOpenDialog(stage);
+                    programField.setText(selectedFile.getPath());
+                });
+
+
+                //rulePane.getChildren().add(statusProgramField);
+                rulePane.getChildren().add(commandLabel);
+                rulePane.getChildren().add(commandField);
+                rulePane.getChildren().add(programBrowse);
+                rulePane.getChildren().add(programField);
+                rulePane.getChildren().add(outputLabel);
+                rulePane.getChildren().add(outputField);
+                triggerPaneItems.addAll(commandField, programField, outputField,commandLabel, outputLabel, programBrowse);
         }
     }
 
@@ -430,8 +471,16 @@ public class CreateRuleController {
             if (item instanceof TextField) {
                 if (!((TextField) item).getText().isEmpty()) {
                     errorFlag = false;
-                    trigger += ((TextField) item).getText() + " ";
-                } else {
+                    if(Objects.equals(triggerBox.getValue(), "Status program")){
+                        trigger += ((TextField) item).getText() + "-";
+                    }else{
+                        trigger += ((TextField) item).getText() + " ";
+                    }
+                }else if(((TextField) item).getText().isEmpty() && Objects.equals(triggerBox.getValue(), "Status program")){
+
+                    trigger += " " +"-";
+
+                }else{
                     errorFlag = true;
                 }
             }
