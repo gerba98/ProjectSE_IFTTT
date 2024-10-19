@@ -4,6 +4,8 @@ import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+
 import java.nio.file.*;
 import static org.junit.Assert.*;
 
@@ -33,6 +35,7 @@ public class MoveFileActionTest {
     }
 
     @Test
+    @DisplayName("Test spostamento file con successo")
     public void testMoveFileActionSuccess() throws Exception {
         String sourcePath = Paths.get(tempDirSource.toString(), fileName).toString();
         String destinationPath = tempDirDestination.toString();
@@ -49,6 +52,7 @@ public class MoveFileActionTest {
     }
 
     @Test
+    @DisplayName("Test esecuzione non ripetibile dell'azione di spostamento")
     public void testMoveFileActionAlreadyExecuted() throws Exception {
         String sourcePath = Paths.get(tempDirSource.toString(), fileName).toString();
         String destinationPath = tempDirDestination.toString();
@@ -56,6 +60,7 @@ public class MoveFileActionTest {
         ActionCreator creator = new MoveFileActionCreator();
         Action moveFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
+        // Prima esecuzione dovrebbe avere successo
         assertTrue("First execution should succeed", moveFileAction.execute());
 
         // Seconda esecuzione dovrebbe fallire

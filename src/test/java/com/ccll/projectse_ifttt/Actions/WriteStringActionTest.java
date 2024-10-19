@@ -4,6 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import java.nio.file.*;
 
@@ -31,8 +32,8 @@ public class WriteStringActionTest {
     }
 
     @Test
+    @DisplayName("Test scrittura stringa in file esistente con successo")
     public void testWriteStringActionSuccess() throws Exception {
-
         ActionCreator creator = new WriteStringActionCreator();
         Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
@@ -45,6 +46,7 @@ public class WriteStringActionTest {
     }
 
     @Test
+    @DisplayName("Test fallimento scrittura stringa in file inesistente")
     public void testWriteStringActionFileDoesNotExist() throws Exception {
         // Elimina il file prima del test
         Files.deleteIfExists(tempFile);
@@ -52,16 +54,15 @@ public class WriteStringActionTest {
         ActionCreator creator = new WriteStringActionCreator();
         Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
-
         // Esegue l'azione di scrittura
         assertFalse("The action should fail if the file does not exist", writeStringAction.execute());
     }
 
     @Test
+    @DisplayName("Test scrittura stringa non ripetuta dopo esecuzione iniziale")
     public void testWriteStringActionAlreadyExecuted() throws Exception {
         ActionCreator creator = new WriteStringActionCreator();
         Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
-
 
         // Prima esecuzione dovrebbe riuscire
         assertTrue("First execution should succeed", writeStringAction.execute());

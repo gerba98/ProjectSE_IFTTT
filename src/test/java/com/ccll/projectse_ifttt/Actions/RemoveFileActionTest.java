@@ -4,7 +4,10 @@ import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import java.nio.file.*;
+import org.junit.jupiter.api.DisplayName;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.Assert.*;
 
@@ -29,6 +32,7 @@ public class RemoveFileActionTest {
     }
 
     @Test
+    @DisplayName("Test successo rimozione file esistente")
     public void testRemoveFileActionSuccess() throws Exception {
         ActionCreator creator = new RemoveFileActionCreator();
         Action removeFileAction = creator.createAction(tempFile.toString());
@@ -41,6 +45,7 @@ public class RemoveFileActionTest {
     }
 
     @Test
+    @DisplayName("Test fallimento rimozione file inesistente")
     public void testRemoveFileActionFileDoesNotExist() throws Exception {
         // Elimina il file prima del test
         Files.deleteIfExists(tempFile);
@@ -53,6 +58,7 @@ public class RemoveFileActionTest {
     }
 
     @Test
+    @DisplayName("Test rimozione file eseguita una sola volta")
     public void testRemoveFileActionAlreadyExecuted() throws Exception {
         ActionCreator creator = new RemoveFileActionCreator();
         Action removeFileAction = creator.createAction(tempFile.toString());

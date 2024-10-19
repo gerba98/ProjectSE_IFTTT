@@ -2,6 +2,8 @@ package com.ccll.projectse_ifttt.Actions;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+
 import static org.junit.Assert.*;
 
 public class ExecuteProgramActionTest {
@@ -23,6 +25,7 @@ public class ExecuteProgramActionTest {
 
 
     @Test
+    @DisplayName("Test esecuzione programma valida")
     public void testExecuteProgramActionSuccess() {
         // Crea l'azione utilizzando il comando valido per il sistema operativo
         ActionCreator creator = new ExecuteProgramActionCreator();
@@ -33,6 +36,7 @@ public class ExecuteProgramActionTest {
     }
 
     @Test
+    @DisplayName("Test che il programma non si esegue una seconda volta")
     public void testExecuteProgramActionNotRepeated() {
         // Creazione di un'azione valida per il sistema operativo corrente
         ActionCreator creator = new ExecuteProgramActionCreator();
@@ -46,6 +50,7 @@ public class ExecuteProgramActionTest {
     }
 
     @Test
+    @DisplayName("Test esecuzione fallita con comando non valido")
     public void testExecuteProgramActionFailure() {
         // Fornire un comando o un percorso di programma non valido
         ActionCreator creator = new ExecuteProgramActionCreator();

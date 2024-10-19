@@ -4,6 +4,7 @@ import javafx.embed.swing.JFXPanel;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,6 +41,7 @@ public class PlayAudioActionTest {
     }
 
     @Test
+    @DisplayName("Test successo riproduzione file audio esistente")
     public void testPlayAudioActionSuccess() {
         // Verifica che il file audio esista
         assertTrue("Il file audio dovrebbe esistere", Files.exists(tempAudioFile));
@@ -52,6 +54,7 @@ public class PlayAudioActionTest {
     }
 
     @Test
+    @DisplayName("Test fallimento riproduzione file audio mancante")
     public void testPlayAudioActionFileDoesNotExist() throws Exception {
         // Elimina il file audio temporaneo per simulare un file mancante
         Files.deleteIfExists(tempAudioFile);
@@ -62,5 +65,4 @@ public class PlayAudioActionTest {
         // Verifica che l'azione fallisca poiché il file non esiste
         assertFalse("L'azione dovrebbe fallire perché il file non esiste", result);
     }
-
 }
