@@ -1,60 +1,90 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 /**
- * Rappresenta un trigger che si attiva a un'ora specifica del giorno.
- * Questo trigger valuta se l'ora corrente corrisponde o supera l'ora specificata.
+ * Rappresenta un trigger che si attiva in un orario specifico del giorno.
+ * Questo trigger valuta se l'ora corrente corrisponde all'ora specificata.
  */
 public class TimeOfTheDayTrig implements Trigger {
     private LocalTime time;
+    private final String type = "Time";  // Tipo del trigger
+    private boolean evaluation = false;  // Memorizza il risultato della valutazione
+    private boolean changed = false;     // Tiene traccia se il risultato della valutazione è cambiato
 
     /**
-     * Costruisce un TimeOfTheDayTrig con l'ora specificata.
-     *
-     * @param time l'ora specifica per cui questo trigger deve attivarsi.
+     * Costruttore per inizializzare TimeOfTheDayTrig con il LocalTime specificato.
+     * @param time l'orario specifico in cui questo trigger dovrebbe attivarsi.
      */
     public TimeOfTheDayTrig(LocalTime time) {
         this.time = time;
     }
 
     /**
-     * Restituisce l'ora specifica per questo trigger.
-     *
-     * @return l'ora alla quale questo trigger si attiva.
+     * Getter per ottenere l'orario specifico.
+     * @return l'orario in cui si attiva questo trigger.
      */
     public LocalTime getTime() {
-        return time;
+        return this.time;
     }
 
     /**
-     * Imposta una nuova ora specifica per questo trigger.
-     *
-     * @param time la nuova ora alla quale questo trigger deve attivarsi.
+     * Setter per aggiornare l'orario specifico.
+     * @param time il nuovo orario in cui questo trigger dovrebbe attivarsi.
      */
     public void setTime(LocalTime time) {
         this.time = time.withSecond(0).withNano(0);
     }
 
     /**
-     * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se l'ora corrente è uguale all'ora specificata.
-     *
-     * @return true se il trigger è attivo, false altrimenti.
+     * Valuta se la condizione del trigger è verificata.
+     * Questo trigger si attiva se l'ora corrente corrisponde all'ora specificata.
+     * @return true se lo stato della valutazione è cambiato, altrimenti false.
      */
     @Override
     public boolean evaluate() {
-        LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);
-        return currentTime.equals(time);  //
+        LocalTime now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
+        boolean newEvaluation = time.equals(now);
+        if (newEvaluation && !evaluation) {
+            changed = true;
+            evaluation = true;
+        } else {
+            changed = false;
+            evaluation = newEvaluation;
+        }
+        return changed;
     }
 
     /**
-     * Restituisce una rappresentazione stringa del trigger.
-     *
-     * @return una stringa che indica l'ora alla quale il trigger si attiva.
+     * Restituisce la valutazione se c'è stato un cambiamento.
+     * @return true se la valutazione è vera e c'è stato un cambiamento, altrimenti false.
+     */
+    @Override
+    public boolean returnEvaluation() {
+        if (changed && evaluation) {
+            changed = false; // Reimposta changed dopo aver riconosciuto il cambiamento
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Reimposta lo stato della valutazione.
+     */
+    @Override
+    public void reset() {
+        evaluation = false;
+        changed = false;
+    }
+
+    /**
+     * Restituisce una rappresentazione in stringa del trigger.
+     * @return una stringa che indica quando si attiva il trigger.
      */
     @Override
     public String toString() {
-        return "Trigger attivato a: " + time;
+        return "Trigger attivato alle: " + time;
     }
 }

@@ -51,8 +51,9 @@ class RuleTest {
     }
 
     // Implementazione di test per Trigger
-    private class TestTrigger implements Trigger {
+    static class TestTrigger implements Trigger {
         private boolean shouldTrigger;
+        private boolean lastEvaluation = false; // Questo campo potrebbe servire per memorizzare il risultato dell'ultima valutazione
 
         public TestTrigger(boolean shouldTrigger) {
             this.shouldTrigger = shouldTrigger;
@@ -60,11 +61,30 @@ class RuleTest {
 
         @Override
         public boolean evaluate() {
+            lastEvaluation = shouldTrigger; // Memorizza il risultato dell'ultima valutazione
             return shouldTrigger;
+        }
+
+        @Override
+        public void reset() {
+            // Implementa qui la logica di reset del trigger, se necessaria
+            shouldTrigger = false;  // Reimposta il trigger a un valore di default
+            lastEvaluation = false; // Puoi anche resettare l'ultimo risultato di valutazione
+        }
+
+        @Override
+        public boolean returnEvaluation() {
+            // Ritorna il risultato dell'ultima valutazione
+            return lastEvaluation;
         }
 
         public void setShouldTrigger(boolean shouldTrigger) {
             this.shouldTrigger = shouldTrigger;
+        }
+
+        @Override
+        public String toString() {
+            return "TestTrigger{shouldTrigger=" + shouldTrigger + '}';
         }
     }
 

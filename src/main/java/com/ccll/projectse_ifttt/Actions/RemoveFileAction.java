@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 public class RemoveFileAction implements Action {
     private static final Logger logger = Logger.getLogger(RemoveFileAction.class.getName());
     private final String filePath;
-    private boolean executed; // Flag per gestire l'esecuzione dell'azione
 
     /**
      * Costruttore della classe RemoveFileAction.
@@ -24,25 +23,18 @@ public class RemoveFileAction implements Action {
      */
     public RemoveFileAction(String filePath) {
         this.filePath = filePath;
-        this.executed = false; // Inizialmente, l'azione non è stata eseguita
     }
 
     /**
      * Esegue l'azione di rimozione del file.
-     * Se l'azione è già stata completata, non verrà eseguita nuovamente.
      *
      * @return true se il file è stato rimosso con successo, false altrimenti.
      */
     @Override
     public boolean execute() {
-        if (executed) {
-            return false; // L'azione è già stata eseguita, non fare nulla
-        }
-
         File file = new File(filePath);
         if (file.exists()) {
             boolean deleted = file.delete();
-            executed = true; // Imposta il flag a true dopo l'esecuzione
             if (deleted) {
                 logger.info("File rimosso con successo: " + filePath);
                 showAlert("Successo", "File rimosso con successo: " + filePath);
@@ -74,6 +66,13 @@ public class RemoveFileAction implements Action {
             alert.showAndWait();
         });
     }
+
+    /**
+     * Restituisce una rappresentazione in formato stringa di questa azione.
+     *
+     * @return Una stringa che descrive l'azione.
+     */
+    @Override
     public String toString() {
         return "Rimozione file";
     }

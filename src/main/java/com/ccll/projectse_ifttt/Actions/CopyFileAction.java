@@ -17,7 +17,6 @@ import java.nio.file.StandardCopyOption;
 public class CopyFileAction implements Action {
     private String sourcePath;      // Percorso del file sorgente
     private String destinationPath; // Percorso della directory di destinazione
-    private boolean alertShown;     // Flag per controllare se l'alert è già stato mostrato
 
     /**
      * Costruttore per creare un'istanza di CopyFileAction.
@@ -28,7 +27,6 @@ public class CopyFileAction implements Action {
     public CopyFileAction(String sourcePath, String destinationPath) {
         this.sourcePath = sourcePath;
         this.destinationPath = destinationPath;
-        this.alertShown = false; // Inizializza il flag a false
     }
 
     /**
@@ -43,15 +41,12 @@ public class CopyFileAction implements Action {
                     Paths.get(destinationPath, new File(sourcePath).getName()),
                     StandardCopyOption.REPLACE_EXISTING);
 
-            // Mostra l'alert di successo solo se non è già stato mostrato
-            if (!alertShown) {
-                showSuccessAlert();
-                alertShown = true; // Imposta il flag a true dopo aver mostrato l'alert
-            }
+            // Mostra l'alert di successo ogni volta che la copia è riuscita
+            showSuccessAlert();
 
             return true; // Copia riuscita
         } catch (IOException e) {
-            System.out.println("Error copying file: " + e.getMessage());
+            System.out.println("Errore nella copia del file: " + e.getMessage());
             return false; // Errore durante la copia
         }
     }
@@ -68,6 +63,7 @@ public class CopyFileAction implements Action {
             alert.showAndWait();
         });
     }
+
     public String toString() {
         return "Copia di un file";
     }

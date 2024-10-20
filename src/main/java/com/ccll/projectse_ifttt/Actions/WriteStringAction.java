@@ -13,21 +13,19 @@ import java.nio.file.StandardOpenOption;
 /**
  * La classe {@code WriteStringAction} implementa l'interfaccia {@code Action}
  * e rappresenta un'azione per scrivere una stringa alla fine di un file di testo.
- * Questa azione controlla se il file specificato esiste prima di tentare di
+ * Questa azione verifica se il file specificato esiste prima di tentare di
  * scrivere nel file. Se il file non esiste, l'azione restituisce {@code false}.
- * Una volta eseguita con successo, l'azione non può essere eseguita nuovamente.
  */
 public class WriteStringAction implements Action {
 
     private final String filePath;
     private final String contentToWrite;
-    private boolean executed = false; // Flag per tracciare se l'azione è già stata eseguita
 
     /**
      * Crea un'istanza di {@code WriteStringAction} con il percorso del file e
      * il contenuto da scrivere.
      *
-     * @param filePath      il percorso del file in cui scrivere
+     * @param filePath il percorso del file in cui scrivere
      * @param contentToWrite il contenuto da scrivere nel file
      */
     public WriteStringAction(String filePath, String contentToWrite) {
@@ -36,8 +34,7 @@ public class WriteStringAction implements Action {
     }
 
     /**
-     * Esegue l'azione di scrittura nel file. Se l'azione è stata già eseguita,
-     * restituisce {@code false}.
+     * Esegue l'azione di scrittura nel file.
      *
      * Se il file specificato non esiste, l'azione non verrà eseguita e
      * verrà restituito {@code false}. In caso di errore durante la scrittura,
@@ -48,32 +45,25 @@ public class WriteStringAction implements Action {
      */
     @Override
     public boolean execute() {
-        if (executed) {
-            return false;
+        Path path = Paths.get(filePath);
+
+        // Verifica se il file esiste
+        if (!Files.exists(path)) {
+            System.err.println("Il file non esiste: " + path.toString());
+            return false; // Se il file non esiste, restituisci false
         }
 
-        try {
-            Path path = Paths.get(filePath);
+        // Scrivi nel file
+        try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+            writer.write(contentToWrite);
+            writer.newLine();
 
-            // Verifica se il file esiste
-            if (!Files.exists(path)) {
-                System.err.println("File does not exist: " + path.toString());
-                return false; // Se il file non esiste, restituisci false
-            }
+            // Mostra l'alert di successo
+            showSuccessAlert();
+            return true;
 
-            // Scrivi nel file
-            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
-                writer.write(contentToWrite);
-                writer.newLine();
-                executed = true;
-
-                // Mostra l'alert di successo
-                showSuccessAlert();
-
-                return true;
-            }
         } catch (IOException e) {
-            System.err.println("Error writing to file: " + e.getMessage());
+            System.err.println("Errore durante la scrittura nel file: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
@@ -82,7 +72,6 @@ public class WriteStringAction implements Action {
     /**
      * Mostra un alert per informare l'utente che l'operazione è avvenuta con successo.
      */
-
     private void showSuccessAlert() {
         Platform.runLater(() -> {
             Alert alert = new Alert(AlertType.INFORMATION);
@@ -92,9 +81,9 @@ public class WriteStringAction implements Action {
             alert.showAndWait();
         });
     }
+
     @Override
     public String toString() {
         return "Scrittura su file";
     }
-
 }

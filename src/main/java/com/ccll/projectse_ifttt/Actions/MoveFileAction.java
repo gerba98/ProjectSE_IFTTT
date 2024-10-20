@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class MoveFileAction implements Action {
     private final String sourceFilePath;
     private final String destinationDirectoryPath;
-    private boolean isCompleted = false; // Flag per controllare se l'azione è stata completata
     private static final Logger logger = Logger.getLogger(MoveFileAction.class.getName());
 
     /**
@@ -33,23 +32,22 @@ public class MoveFileAction implements Action {
 
     /**
      * Esegue l'azione di spostamento del file.
-     * Se l'azione è già stata completata, non verrà eseguita nuovamente.
      *
      * @return true se il file è stato spostato con successo, false altrimenti.
      */
     @Override
     public boolean execute() {
-        if (isCompleted) {
-            return false; // L'azione è già stata eseguita
-        }
-
         File sourceFile = new File(sourceFilePath);
         File destinationFile = new File(destinationDirectoryPath, sourceFile.getName());
 
+        if (!sourceFile.exists()) {
+            logger.log(Level.SEVERE, "Il file sorgente non esiste: {0}", sourceFilePath);
+            return false; // Il file sorgente non esiste
+        }
+
         try {
             Files.move(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            logger.log(Level.INFO, "File moved from {0} to {1}", new Object[]{sourceFilePath, destinationFile.getPath()});
-            isCompleted = true; // Imposta il flag su true dopo il completamento dell'azione
+            logger.log(Level.INFO, "File spostato da {0} a {1}", new Object[]{sourceFilePath, destinationFile.getPath()});
 
             // Mostra l'alert di successo
             Platform.runLater(() -> {
@@ -61,10 +59,11 @@ public class MoveFileAction implements Action {
             });
             return true;
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error moving file", e);
+            logger.log(Level.SEVERE, "Errore durante lo spostamento del file", e);
             return false;
         }
     }
+
     public String toString() {
         return "Spostamento file";
     }

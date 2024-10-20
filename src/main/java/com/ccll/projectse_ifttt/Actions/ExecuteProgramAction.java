@@ -5,12 +5,11 @@ import java.io.IOException;
 /**
  * Rappresenta un'azione per eseguire un'applicazione esterna con argomenti specificati.
  * Questa classe supporta l'esecuzione di applicazioni su macOS e Windows e permette
- * di specificare comandi arbitrari. Una volta eseguita l'azione, non verrà ripetuta.
+ * di specificare comandi arbitrari.
  */
 public class ExecuteProgramAction implements Action {
     private final String programPath; // Il percorso dell'applicazione o del file da eseguire
     private final String command; // I comandi da passare all'applicazione
-    private boolean hasExecuted; // Flag per controllare se l'azione è già stata eseguita
 
     /**
      * Costruttore per inizializzare l'azione di esecuzione dell'applicazione.
@@ -21,21 +20,15 @@ public class ExecuteProgramAction implements Action {
     public ExecuteProgramAction(String programPath, String command) {
         this.programPath = programPath;
         this.command = command;
-        this.hasExecuted = false; // Inizialmente l'azione non è stata eseguita
     }
 
     /**
      * Esegue l'azione di avvio dell'applicazione o di esecuzione del comando specificato.
-     * Se l'azione è già stata eseguita, non verrà ripetuta.
      *
-     * @return true se l'azione è stata eseguita con successo, false se è già stata eseguita o si è verificato un errore
+     * @return true se l'azione è stata eseguita con successo, false se si è verificato un errore
      */
     @Override
     public boolean execute() {
-        if (hasExecuted) {
-            return false; // Se l'azione è già stata eseguita non fare nulla
-        }
-
         try {
             ProcessBuilder processBuilder;
             String os = System.getProperty("os.name").toLowerCase();
@@ -65,14 +58,13 @@ public class ExecuteProgramAction implements Action {
                     processBuilder = new ProcessBuilder(programPath, command);
                 }
             } else {
-                throw new UnsupportedOperationException("Operating system not supported: " + os);
+                throw new UnsupportedOperationException("Sistema operativo non supportato: " + os);
             }
 
             processBuilder.inheritIO(); // Mostra l'output del programma nella console
             Process process = processBuilder.start();
 
             int exitCode = process.waitFor();
-            hasExecuted = true; // Imposta il flag a true dopo l'esecuzione
             return exitCode == 0; // Ritorna true se il programma è stato eseguito con successo
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
