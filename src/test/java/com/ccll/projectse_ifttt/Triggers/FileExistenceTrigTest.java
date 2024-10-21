@@ -1,6 +1,5 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import org.junit.After;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +9,8 @@ import java.io.IOException;
 
 public class FileExistenceTrigTest {
 
-    private static final String EXISTING_FILE_PATH = "C:\\Users\\camil\\Desktop\\prova.txt";
+    private static final String EXISTING_FILE_PATH = System.getProperty("java.io.tmpdir") + "/prova.txt";
+
     private static final String NON_EXISTING_FILE_PATH = "C:\\Users\\camil\\Desktop\\non_existent_file.txt";
 
     private FileExistenceTrig trigger;

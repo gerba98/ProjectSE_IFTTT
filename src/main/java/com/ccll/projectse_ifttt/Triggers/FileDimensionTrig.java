@@ -6,6 +6,7 @@ public class FileDimensionTrig implements Trigger {
     private long dimension;
     private String filePath;
     private String unitDim;
+    private boolean lastEvaluation = false;
 
     /**
      * Costruisce un FileDimensionTrig con la dimensione specificata e un file da controllare.
@@ -39,7 +40,7 @@ public class FileDimensionTrig implements Trigger {
     }
 
     /**
-     * Restituisce la il percorso del file controllato da questo trigger.
+     * Restituisce il percorso del file controllato da questo trigger.
      *
      * @return il percorso del file che deve essere controllato.
      */
@@ -56,7 +57,6 @@ public class FileDimensionTrig implements Trigger {
         this.filePath = filePath;
     }
 
-
     /**
      * Restituisce l'unità di misura della dimensione del file controllato da questo trigger.
      *
@@ -67,7 +67,7 @@ public class FileDimensionTrig implements Trigger {
     }
 
     /**
-     * Imposta il percorso del file da controllare per questo trigger.
+     * Imposta l'unità di misura associata alla dimensione del file che deve essere controllato.
      *
      * @param unitDim l'unità di misura associata alla dimensione del file che deve essere controllato.
      */
@@ -83,22 +83,38 @@ public class FileDimensionTrig implements Trigger {
      */
     @Override
     public boolean evaluate() {
-        long dim=0;
+        long dim = 0;
         switch (unitDim) {
-            case "B" -> {
-            }
+            case "B" -> dim = dimension;
             case "KB" -> dim = dimension * 1024;
             case "MB" -> dim = dimension * 1048576;
             case "GB" -> dim = dimension * 1073741824;
         }
-        ;
 
         File file = new File(filePath);
+        boolean evaluation = false;
+
         if (file.exists() && file.isFile()) {
             long fileSize = file.length();
-            return file.length()>=dim;
+            boolean newEvaluation = fileSize >= dim;
+
+            // Il trigger si attiva solo quando la condizione passa da false a true
+            if (newEvaluation && !lastEvaluation) {
+                evaluation = true;
+            }
+
+            lastEvaluation = newEvaluation;
         }
-        return false;
+
+        return evaluation;
+    }
+
+    /**
+     * Reimposta lo stato della valutazione.
+     */
+    @Override
+    public void reset() {
+        lastEvaluation = false;
     }
 
     /**
@@ -108,6 +124,6 @@ public class FileDimensionTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "File dimension;"+filePath+"-"+dimension +"-"+ unitDim;
+        return "File dimension; " + filePath + " - " + dimension + " - " + unitDim;
     }
 }

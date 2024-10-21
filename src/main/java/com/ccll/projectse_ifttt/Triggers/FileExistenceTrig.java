@@ -4,10 +4,10 @@ import java.io.File;
 
 public class FileExistenceTrig implements Trigger {
     private String filePath;
-
+    private boolean lastEvaluation = false; // Per tracciare lo stato dell'ultima valutazione
 
     /**
-     * Costruisce un FileDimensionTrig con la dimensione specificata e un file da controllare.
+     * Costruisce un FileExistenceTrig con il percorso specificato e un file da controllare.
      *
      * @param filePath è il percorso del file da controllare
      */
@@ -16,7 +16,7 @@ public class FileExistenceTrig implements Trigger {
     }
 
     /**
-     * Restituisce la il percorso del file controllato da questo trigger.
+     * Restituisce il percorso del file controllato da questo trigger.
      *
      * @return il percorso del file che deve essere controllato.
      */
@@ -33,27 +33,42 @@ public class FileExistenceTrig implements Trigger {
         this.filePath = filePath;
     }
 
-
-
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se il file esiste.
+     * Questo trigger si attiva se il file inizia ad esistere.
      *
-     * @return true se il trigger è attivo, false altrimenti.
+     * @return true se il trigger si attiva (quando il file comincia a esistere), false altrimenti.
      */
     @Override
     public boolean evaluate() {
         File file = new File(filePath);
-        return file.exists();
+        boolean newEvaluation = file.exists();  // Valutazione corrente
+
+        boolean evaluation = false;
+        // Il trigger si attiva solo se il file esiste ora, ma non esisteva prima
+        if (newEvaluation && !lastEvaluation) {
+            evaluation = true;
+        }
+
+        lastEvaluation = newEvaluation;  // Aggiorna lo stato della valutazione
+        return evaluation;
+    }
+
+    /**
+     * Reimposta lo stato della valutazione.
+     */
+    @Override
+    public void reset() {
+        lastEvaluation = false;
     }
 
     /**
      * Restituisce una rappresentazione stringa del trigger.
      *
-     * @return una stringa che indica quando la dimensione è stata raggiunta e quindi il trigger che si attiva.
+     * @return una stringa che rappresenta lo stato del trigger di esistenza del file.
      */
     @Override
     public String toString() {
-        return "File existence;"+filePath;
+        return "File existence; " + filePath;
     }
 }

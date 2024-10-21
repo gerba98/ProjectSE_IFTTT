@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FileDimensionTrigTest {
 
-    private static final String TEST_FILE_PATH = "C:/Users/camil/Desktop/prova.txt"; // Percorso di test per il file
+    private static final String TEST_FILE_PATH = System.getProperty("java.io.tmpdir") + "/prova.txt";
+    // Percorso di test per il file
 
     @BeforeEach
     void setUp() {
