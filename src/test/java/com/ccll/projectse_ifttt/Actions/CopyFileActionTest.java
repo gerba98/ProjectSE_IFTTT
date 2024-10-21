@@ -6,14 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CopyFileActionTest {
     private Path tempDir;
-    private String sourceFileName = "testSourceFile.txt";
-    private String destinationFileName = "testDestinationFile.txt";
+    private final String sourceFileName = "testSourceFile.txt";
+    private final String destinationFileName = "testDestinationFile.txt";
 
     static {
         // Inizializzazione del toolkit JavaFX

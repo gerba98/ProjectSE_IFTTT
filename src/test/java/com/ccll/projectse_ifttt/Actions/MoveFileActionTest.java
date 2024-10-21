@@ -6,13 +6,17 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
-import java.nio.file.*;
-import static org.junit.Assert.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class MoveFileActionTest {
     private Path tempDirSource;
     private Path tempDirDestination;
-    private String fileName = "testFile.txt";
+    private final String fileName = "testFile.txt";
 
     static {
         // Inizializza JavaFX Toolkit per gestire gli alert

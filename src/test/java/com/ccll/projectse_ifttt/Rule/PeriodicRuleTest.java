@@ -2,7 +2,10 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
 import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
@@ -29,7 +32,7 @@ class PeriodicRuleTest {
     void testCase1() {
         TriggerTestUtils trigger = new TriggerTestUtils(false);
         ActionTestUtils action = new ActionTestUtils();
-        Rule periodicRule = new PeriodicRule("test",trigger,action, "0:0:1");
+        Rule periodicRule = new PeriodicRule("test", trigger, action, "0:0:1");
 
         testRuleManager.addRule(periodicRule);
         waitCheckRule();
@@ -59,7 +62,7 @@ class PeriodicRuleTest {
     void testCase2() {
         TriggerTestUtils trigger = new TriggerTestUtils(false);
         ActionTestUtils action = new ActionTestUtils();
-        Rule periodicRule = new PeriodicRule("test",trigger,action, "0:0:1");
+        Rule periodicRule = new PeriodicRule("test", trigger, action, "0:0:1");
 
         testRuleManager.addRule(periodicRule);
         waitCheckRule();
@@ -91,13 +94,12 @@ class PeriodicRuleTest {
     }
 
 
-
     @Test
     @DisplayName("CASO 3: Regola attiva -> trigger si verifica -> azione eseguita -> regola disattivata -> utente riattiva la regola")
     void testCase3() {
         TriggerTestUtils trigger = new TriggerTestUtils(false);
         ActionTestUtils action = new ActionTestUtils();
-        Rule periodicRule = new PeriodicRule("test",trigger,action, "0:0:1");
+        Rule periodicRule = new PeriodicRule("test", trigger, action, "0:0:1");
 
         testRuleManager.addRule(periodicRule);
         waitCheckRule();

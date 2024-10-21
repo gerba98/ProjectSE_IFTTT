@@ -55,7 +55,7 @@ public class RuleManager {
                 ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
-            if (!ruleChecker.getRunning()){
+            if (!ruleChecker.getRunning()) {
                 ruleChecker.start();
             }
 
@@ -97,7 +97,7 @@ public class RuleManager {
      * @param actionValue  Il valore associato all'azione da eseguire
      * @return La nuova regola creata con i parametri forniti
      */
-    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue){
+    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue) {
         Trigger trigger = createTrigger(triggerType, triggerValue);
         Action action = createAction(actionType, actionValue);
         Rule newRule = new Rule(ruleName, trigger, action);
@@ -122,12 +122,12 @@ public class RuleManager {
      *                     (case-insensitive)
      * @return La nuova regola creata con i parametri forniti
      */
-    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue, String ruleType){
+    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue, String ruleType) {
 
         Trigger trigger = createTrigger(triggerType, triggerValue);
         Action action = createAction(actionType, actionValue);
         String[] ruleInfo = ruleType.split("-");
-        Rule newRule = switch (ruleInfo[0].toLowerCase()){
+        Rule newRule = switch (ruleInfo[0].toLowerCase()) {
             case "rule" -> new Rule(ruleName, trigger, action);
             case "singlerule" -> new SingleRule(ruleName, trigger, action);
             case "periodicrule" -> new PeriodicRule(ruleName, trigger, action, ruleInfo[1]);
@@ -177,7 +177,7 @@ public class RuleManager {
             case "day of the week" -> new DOTWTrigCreator();
             case "day of the month" -> new DOTMTrigCreator();
             case "date" -> new SDTrigCreator();
-            case "status program" ->new EPTrigCreator();
+            case "status program" -> new EPTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

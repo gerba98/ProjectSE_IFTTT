@@ -63,6 +63,7 @@ public class PeriodicRule extends Rule {
 
     /**
      * Aggiorna lo stato della regola ed esegue il metodo evaluateTrigger definito nella classe Rule
+     *
      * @return il risultato del metodo evaluateTrigger definito nella classe Rule
      */
     @Override
@@ -108,7 +109,7 @@ public class PeriodicRule extends Rule {
      *
      * @return La data e l'ora corrente più il periodo
      */
-    private  LocalDateTime getCurrentDateTime() {
+    private LocalDateTime getCurrentDateTime() {
         return LocalDateTime.now().withSecond(0).withNano(0);
     }
 

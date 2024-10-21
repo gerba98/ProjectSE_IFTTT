@@ -6,13 +6,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class WriteStringActionTest {
     private Path tempFile;
-    private String contentToWrite = "Test content";
+    private final String contentToWrite = "Test content";
 
     static {
         // Inizializza JavaFX Toolkit per gestire gli alert

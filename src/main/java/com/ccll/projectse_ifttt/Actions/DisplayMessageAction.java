@@ -9,8 +9,10 @@ import javafx.scene.control.Alert;
  */
 public class DisplayMessageAction implements Action {
 
-    /** Il messaggio da visualizzare nella finestra di dialogo. */
-    private String message;
+    /**
+     * Il messaggio da visualizzare nella finestra di dialogo.
+     */
+    private final String message;
 
     /**
      * Costruttore della classe {@code DisplayMessageAction}.

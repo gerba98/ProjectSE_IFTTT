@@ -15,7 +15,7 @@ public class ExecuteProgramAction implements Action {
      * Costruttore per inizializzare l'azione di esecuzione dell'applicazione.
      *
      * @param programPath il percorso dell'applicazione o del file da eseguire
-     * @param command i comandi da passare all'applicazione (può essere vuoto o nullo)
+     * @param command     i comandi da passare all'applicazione (può essere vuoto o nullo)
      */
     public ExecuteProgramAction(String programPath, String command) {
         this.programPath = programPath;

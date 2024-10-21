@@ -101,10 +101,11 @@ public class Rule {
     /**
      * Imposta lo stato della regola.
      * Se lo stato viene settato a true il trigger viene resettato.
+     *
      * @param state Il nuovo stato da impostare
      */
     public void setState(boolean state) {
-        if(state){
+        if (state) {
             trigger.reset();
         }
         this.state = state;

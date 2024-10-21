@@ -16,13 +16,15 @@ public class DOTMTrigCreator extends TriggerCreator {
      * @return un nuovo oggetto {Trigger} che si attiva al giorno del mese specificato.
      */
     @Override
-    public Trigger createTrigger(String triggerValue){
+    public Trigger createTrigger(String triggerValue) {
         String[] list = triggerValue.split("-");
         MonthDay dayOfMonth = MonthDay.of(Integer.parseInt(list[1]), Integer.parseInt(list[2]));
         return new DayOfTheMonthTrig(dayOfMonth);
     }
 
     @Override
-    public String getType(){return "day of the month";}
+    public String getType() {
+        return "day of the month";
+    }
 
 }

@@ -13,7 +13,6 @@ public class CheckRule {
     private final RuleManager ruleManager;
 
 
-
     private Boolean isRunning;
     private ScheduledExecutorService scheduler;
 
@@ -31,6 +30,7 @@ public class CheckRule {
 
     /**
      * Getter per ottenere lo status dell'oggetto CheckerRule
+     *
      * @return la variabile booleana isRunning
      */
     public Boolean getRunning() {

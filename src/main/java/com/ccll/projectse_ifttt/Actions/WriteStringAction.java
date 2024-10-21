@@ -3,6 +3,7 @@ package com.ccll.projectse_ifttt.Actions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +26,7 @@ public class WriteStringAction implements Action {
      * Crea un'istanza di {@code WriteStringAction} con il percorso del file e
      * il contenuto da scrivere.
      *
-     * @param filePath il percorso del file in cui scrivere
+     * @param filePath       il percorso del file in cui scrivere
      * @param contentToWrite il contenuto da scrivere nel file
      */
     public WriteStringAction(String filePath, String contentToWrite) {
@@ -40,7 +41,7 @@ public class WriteStringAction implements Action {
      * viene stampato un messaggio di errore.
      *
      * @return {@code true} se la scrittura è avvenuta con successo,
-     *         {@code false} altrimenti
+     * {@code false} altrimenti
      */
     @Override
     public boolean execute() {

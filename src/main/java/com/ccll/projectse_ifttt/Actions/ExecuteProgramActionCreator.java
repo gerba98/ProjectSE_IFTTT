@@ -16,7 +16,7 @@ public class ExecuteProgramActionCreator extends ActionCreator {
      *                    "programPath;command".
      * @return un'istanza di ExecuteProgramAction configurata con il percorso e i comandi forniti.
      * @throws IllegalArgumentException se il valore dell'azione non è valido
-     *                                   (non contiene esattamente due parti).
+     *                                  (non contiene esattamente due parti).
      */
     @Override
     public Action createAction(String actionValue) {

@@ -12,6 +12,7 @@ module com.ccll.projectse_ifttt {
     requires javafx.media;
     requires java.logging;
     requires java.desktop;
+    requires javafx.swing;
 
     opens com.ccll.projectse_ifttt to javafx.fxml;
     opens com.ccll.projectse_ifttt.Rule to javafx.base;

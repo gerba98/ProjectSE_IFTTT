@@ -3,10 +3,8 @@ package com.ccll.projectse_ifttt.Triggers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.MonthDay;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -34,7 +34,7 @@ class SpecifiedDateTrigTest {
     @DisplayName("Creazione di SpecifiedDateTrigger tramite SDTrigCreator")
     public void testCreator() {
         String date = "2024-10-19";
-        TriggerCreator SD= new SDTrigCreator();
+        TriggerCreator SD = new SDTrigCreator();
         Trigger trigger = SD.createTrigger(date);
         assertInstanceOf(SpecifiedDateTrig.class, trigger);
     }

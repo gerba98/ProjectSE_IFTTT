@@ -2,33 +2,41 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.time.LocalDate;
 import java.time.MonthDay;
+
 /**
  * Rappresenta un trigger che si attiva al giorno specificato del mese.
  * Questo trigger valuta se il giorno del mese corrente corrisponde a quello specificato.
  */
-public class DayOfTheMonthTrig implements Trigger{
+public class DayOfTheMonthTrig implements Trigger {
     boolean lastEvaluation = false;
     MonthDay dayOfMonth;
+
     /**
      * Costruisce un DayOfTheMonthTrig con con il giorno del mese specificato.
      *
      * @param dayOfMonth il giorno del mese specificato per cui questo trigger deve attivarsi.
      */
-    public DayOfTheMonthTrig(MonthDay dayOfMonth){
+    public DayOfTheMonthTrig(MonthDay dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
     }
+
     /**
      * Restituisce il giorno del mese specificato per questo trigger.
      *
      * @return il giorno del mese alla quale questo trigger si attiva.
      */
-    public MonthDay getDayOfMonth(){return dayOfMonth;}
+    public MonthDay getDayOfMonth() {
+        return dayOfMonth;
+    }
+
     /**
      * Imposta un nuovo giorno del mese specificato per questo trigger.
      *
      * @param dayOfMonth il nuovo giorno del mese alla quale questo trigger deve attivarsi.
      */
-    public void setDayOfMonth(MonthDay dayOfMonth){this.dayOfMonth = dayOfMonth;}
+    public void setDayOfMonth(MonthDay dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
@@ -39,12 +47,12 @@ public class DayOfTheMonthTrig implements Trigger{
     @Override
     public boolean evaluate() {
         boolean evaluation = false;
-        LocalDate todayInt =  LocalDate.now();
+        LocalDate todayInt = LocalDate.now();
         MonthDay today = MonthDay.of(todayInt.getMonth(), todayInt.getDayOfMonth());
 
         boolean newEvaluation = dayOfMonth.getDayOfMonth() == today.getDayOfMonth();
 
-        if(!lastEvaluation && newEvaluation){
+        if (!lastEvaluation && newEvaluation) {
             evaluation = true;
         }
 
@@ -53,17 +61,20 @@ public class DayOfTheMonthTrig implements Trigger{
 
 
     }
+
     /**
      * Restituisce una rappresentazione stringa del trigger.
      *
      * @return una stringa che indica il giorno del mese  alla quale il trigger si attiva.
      */
     @Override
-    public String toString() {return "Trigger attivato a: " + dayOfMonth.getDayOfMonth();}
+    public String toString() {
+        return "Trigger attivato a: " + dayOfMonth.getDayOfMonth();
+    }
 
 
     @Override
-    public void reset(){
+    public void reset() {
         lastEvaluation = false;
     }
 }

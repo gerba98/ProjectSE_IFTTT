@@ -1,7 +1,7 @@
 package com.ccll.projectse_ifttt.TestUtilsClasses;
 
 public class TestUtils {
-    public static void waitCheckRule(){
+    public static void waitCheckRule() {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -9,7 +9,7 @@ public class TestUtils {
         }
     }
 
-    public static void waitCheckRule(int ms){
+    public static void waitCheckRule(int ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {

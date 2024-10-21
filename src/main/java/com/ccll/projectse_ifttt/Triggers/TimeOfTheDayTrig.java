@@ -1,7 +1,6 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -9,12 +8,13 @@ import java.time.temporal.ChronoUnit;
  * Questo trigger valuta se l'ora corrente corrisponde all'ora specificata.
  */
 public class TimeOfTheDayTrig implements Trigger {
-    boolean lastEvaluation = false;
+
     private LocalTime time;
     boolean LastEvaluation = false;//
 
     /**
      * Costruttore per inizializzare TimeOfTheDayTrig con il LocalTime specificato.
+     *
      * @param time l'orario specifico in cui questo trigger dovrebbe attivarsi.
      */
     public TimeOfTheDayTrig(LocalTime time) {
@@ -23,6 +23,7 @@ public class TimeOfTheDayTrig implements Trigger {
 
     /**
      * Getter per ottenere l'orario specifico.
+     *
      * @return l'orario in cui si attiva questo trigger.
      */
     public LocalTime getTime() {
@@ -31,6 +32,7 @@ public class TimeOfTheDayTrig implements Trigger {
 
     /**
      * Setter per aggiornare l'orario specifico.
+     *
      * @param time il nuovo orario in cui questo trigger dovrebbe attivarsi.
      */
     public void setTime(LocalTime time) {
@@ -40,6 +42,7 @@ public class TimeOfTheDayTrig implements Trigger {
     /**
      * Valuta se la condizione del trigger è verificata.
      * Questo trigger si attiva se l'ora corrente corrisponde all'ora specificata.
+     *
      * @return true se lo stato della valutazione è cambiato, altrimenti false.
      */
 
@@ -67,6 +70,7 @@ public class TimeOfTheDayTrig implements Trigger {
 
     /**
      * Restituisce una rappresentazione in stringa del trigger.
+     *
      * @return una stringa che indica quando si attiva il trigger.
      */
     @Override
@@ -74,8 +78,5 @@ public class TimeOfTheDayTrig implements Trigger {
         return "Trigger attivato alle;" + time;
     }
 
-    @Override
-    public void reset(){
-        lastEvaluation = false;
-    }
+
 }

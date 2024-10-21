@@ -16,10 +16,10 @@ public class WriteStringActionCreator extends ActionCreator {
      * @param actionValue il valore dell'azione che contiene il percorso del file
      *                    e la stringa da scrivere, separati da ';'
      * @return una nuova istanza di {@code WriteStringAction} con il percorso del file
-     *         e la stringa da scrivere
+     * e la stringa da scrivere
      * @throws IllegalArgumentException se {@code actionValue} non contiene
-     *                                   un separatore ';' oppure se il percorso del file
-     *                                   o la stringa da scrivere non sono forniti
+     *                                  un separatore ';' oppure se il percorso del file
+     *                                  o la stringa da scrivere non sono forniti
      */
     @Override
     public Action createAction(String actionValue) {

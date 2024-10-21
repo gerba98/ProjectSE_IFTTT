@@ -14,10 +14,7 @@ public class TriggerTestUtils implements Trigger {
 
     @Override
     public boolean evaluate() {
-        boolean evaluation = false;
-        if(!lastEvaluation && shouldTrigger) {
-            evaluation = true;
-        }
+        boolean evaluation = !lastEvaluation && shouldTrigger;
         lastEvaluation = shouldTrigger;
         return evaluation;
     }

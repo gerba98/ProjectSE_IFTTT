@@ -3,6 +3,7 @@ package com.ccll.projectse_ifttt.Actions;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,7 +23,7 @@ public class MoveFileAction implements Action {
     /**
      * Costruttore della classe MoveFileAction.
      *
-     * @param sourceFilePath          Il percorso del file sorgente da spostare.
+     * @param sourceFilePath           Il percorso del file sorgente da spostare.
      * @param destinationDirectoryPath Il percorso della directory di destinazione.
      */
     public MoveFileAction(String sourceFilePath, String destinationDirectoryPath) {

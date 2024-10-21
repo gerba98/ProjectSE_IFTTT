@@ -43,7 +43,7 @@ public class IndexController {
     @FXML
     private TableColumn<Rule, String> actionColumn;
 
-    private ObservableList<Rule> rulesList = FXCollections.observableArrayList();
+    private final ObservableList<Rule> rulesList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -65,7 +65,7 @@ public class IndexController {
         errorLabel.setVisible(false);
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("create-rule.fxml"));
-            Parent root1 = (Parent) fxmlLoader.load();
+            Parent root1 = fxmlLoader.load();
 
             CreateRuleController secondViewController = fxmlLoader.getController();
             secondViewController.setFXMLDocumentController(this);

@@ -22,7 +22,7 @@ class DayOfTheWeekTrigTest {
         assertTrue(dayTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando il giorno della settimana corrente corrisponde a quello specificato.");
 
         DayOfWeek newDay = DayOfWeek.of(new Random().nextInt(7) + 1);
-        if(day.equals(newDay)) {
+        if (day.equals(newDay)) {
             while (day.equals(newDay)) {
                 newDay = DayOfWeek.of(new Random().nextInt(7) + 1);
                 dayTrigger.setDayOfWeek(newDay);

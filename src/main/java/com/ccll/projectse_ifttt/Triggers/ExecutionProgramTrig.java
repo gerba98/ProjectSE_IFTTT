@@ -2,6 +2,7 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,7 +13,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ExecutionProgramTrig implements Trigger {
     boolean isThreadRunning = false;
     boolean lastEvaluation = false;
+    AtomicBoolean evaluation = new AtomicBoolean(false);
+    AtomicInteger exitCode = new AtomicInteger();
+    private CompletableFuture<Integer> runningProcess = null;
     String userInfo;
+
     /**
      * Costruisce un ExecutionProgramTrig con comando e programma specificati e output desiderato.
      *
@@ -21,12 +26,15 @@ public class ExecutionProgramTrig implements Trigger {
     public ExecutionProgramTrig(String userInfo) {
         this.userInfo = userInfo;
     }
+
     /**
      * Restituisce comando, programma e output desiderato per cui il trigger deve attivarsi.
      *
      * @return il programma specificato dall'utente.
      */
-    public String getUserInfo() {return userInfo;}
+    public String getUserInfo() {
+        return userInfo;
+    }
 
 
     /**
@@ -34,7 +42,9 @@ public class ExecutionProgramTrig implements Trigger {
      *
      * @param userInfo il nuovo comando per il trigger.
      */
-    public void setUserInfo(String userInfo) {this.userInfo = userInfo;}
+    public void setUserInfo(String userInfo) {
+        this.userInfo = userInfo;
+    }
 
 
     /**
@@ -45,62 +55,75 @@ public class ExecutionProgramTrig implements Trigger {
      */
     @Override
     public boolean evaluate() {
-        AtomicBoolean evaluation = new AtomicBoolean(false);
-        AtomicInteger exitCode = new AtomicInteger();
-        synchronized (this) {
-            if (!isThreadRunning) {
-                Thread myThread = new Thread(() -> {
 
-                    String command = this.userInfo.split("-")[0];
-                    String program = this.userInfo.split("-")[1];
+        String output = this.userInfo.split("-")[2];
+        if (runningProcess == null) {
+            // Start a new process if there isn't one running
+            startNewProcess(); // Return false immediately as the process just started
+        }
 
-                    try {
-                        ProcessBuilder pb;
-                        if (Objects.equals(command, " ")) {
-                            pb = new ProcessBuilder(program);
-                        } else {
-                            pb = new ProcessBuilder(command, program);
-                        }
-                        pb.redirectErrorStream(true);
+        // Check if the process has completed
+        if (runningProcess.isDone()) {
+            try {
+                int exitCode = runningProcess.get();
+                boolean newEvaluation = (String.valueOf(exitCode).equals(output));
 
-                        Process p = pb.start();
-                        exitCode.set(p.waitFor());
-                        System.out.println(exitCode.get());
-
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
-
-                String output = this.userInfo.split("-")[2];
-                boolean newEvaluation = Objects.equals(String.valueOf(exitCode.get()), output);
-
-                if (!lastEvaluation && newEvaluation) {
-                    evaluation.set(true);
+                if (newEvaluation && !lastEvaluation) {
+                    lastEvaluation = true;
+                    runningProcess = null; // Reset for next evaluation
+                    return true;
                 }
 
                 lastEvaluation = newEvaluation;
-                isThreadRunning = true;
-                myThread.setDaemon(true);
-                myThread.start();
+                runningProcess = null; // Reset for next evaluation
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
         }
-        return evaluation.get();
+        return false; // Process is still running or evaluation didn't change
     }
+
+    private void startNewProcess() {
+        String command = this.userInfo.split("-")[0];
+        String program = this.userInfo.split("-")[1];
+        ProcessBuilder processBuilder;
+        if (Objects.equals(command, " ")) {
+            processBuilder = new ProcessBuilder(program);
+        } else {
+            processBuilder = new ProcessBuilder(command, program);
+        }
+
+        runningProcess = CompletableFuture.supplyAsync(() -> {
+            try {
+                Process process = processBuilder.start();
+                return process.waitFor();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+                return -1;
+            }
+        });
+    }
+
+
     /**
      * Restituisce una rappresentazione stringa del trigger.
      *
      * @return una stringa che indica l'output e programma specificati.
      */
     @Override
-    public String toString(){return "Trigger attivato a: " + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];}
+    public String toString() {
+        return "Trigger attivato a: " + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];
+    }
 
     @Override
-    public void reset(){
+    public void reset() {
+        evaluation = new AtomicBoolean(false);
+        exitCode = new AtomicInteger();
         lastEvaluation = false;
         isThreadRunning = false;
+        if (runningProcess != null && !runningProcess.isDone()) {
+            runningProcess.cancel(true);
+        }
+        runningProcess = null;
     }
 }

@@ -13,7 +13,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.security.cert.Extension;
 import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Objects;
@@ -51,9 +50,9 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day","Day of the week","Day of the month","Date","File existence","File dimension","Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week", "Day of the month", "Date", "File existence", "File dimension", "Status program");
     @FXML
-    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message","Play Audio","Write string","Copy File","Move file","Remove file","Execute Program");
+    final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message", "Play Audio", "Write string", "Copy File", "Move file", "Remove file", "Execute Program");
     @FXML
     private IndexController indexController;
 
@@ -62,7 +61,6 @@ public class CreateRuleController {
 
     @FXML
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
-
 
 
     /**
@@ -80,20 +78,20 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
-     *
+     * <p>
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
      */
     @FXML
-    public void initialize(){
+    public void initialize() {
         ruleManager = RuleManager.getInstance();
         triggerBox.setItems(triggersList);
         actionBox.setItems(actionsList);
 
         triggerBox.setOnAction(e -> {
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
-            if(!triggerPaneItems.isEmpty()) {
+            if (!triggerPaneItems.isEmpty()) {
                 Iterator<Object> iterator = triggerPaneItems.iterator();
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
@@ -106,8 +104,7 @@ public class CreateRuleController {
 
         actionBox.setOnAction(e -> {
             String selectedItem = actionBox.getSelectionModel().getSelectedItem();
-            if(!actionPaneItems.isEmpty())
-            {
+            if (!actionPaneItems.isEmpty()) {
                 Iterator<Object> iterator = actionPaneItems.iterator();
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
@@ -119,17 +116,17 @@ public class CreateRuleController {
         });
 
     }
+
     /**
      * Crea un elemento trigger all'interno del rule pane basato sul testo fornito.
      *
      * @param label l'etichetta da aggiornare con la descrizione specifica del trigger
-     * @param text il tipo di trigger da creare; i valori validi sono "Ora del giorno",
-     *             "Giorno della settimana", "Giorno del mese", "Data", "Esistenza file",
-     *             "Dimensione file" e "Stato programma"
+     * @param text  il tipo di trigger da creare; i valori validi sono "Ora del giorno",
+     *              "Giorno della settimana", "Giorno del mese", "Data", "Esistenza file",
+     *              "Dimensione file" e "Stato programma"
      */
     @FXML
-    private void createTriggerItem(Label label, String text)
-    {
+    private void createTriggerItem(Label label, String text) {
 
         switch (text) {
             case "Time of the Day":
@@ -150,8 +147,8 @@ public class CreateRuleController {
                 minuteSpinner.setLayoutY(142.0);
 
 
-                rulePane.getChildren().addAll(hourSpinner,minuteSpinner);
-                triggerPaneItems.addAll(hourSpinner,minuteSpinner);
+                rulePane.getChildren().addAll(hourSpinner, minuteSpinner);
+                triggerPaneItems.addAll(hourSpinner, minuteSpinner);
 
 
                 break;
@@ -159,7 +156,7 @@ public class CreateRuleController {
                 label.setText("Day of the week (Monday, etc..)");
 
                 ComboBox<String> dayOfWeek = new ComboBox<String>();
-                ObservableList<String> week = FXCollections.observableArrayList("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday");
+                ObservableList<String> week = FXCollections.observableArrayList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
                 dayOfWeek.setItems(week);
 
                 dayOfWeek.setLayoutX(285.0);
@@ -209,7 +206,7 @@ public class CreateRuleController {
                 TextField fileDimensionField = new TextField();
                 ComboBox<String> unit = new ComboBox<String>();
 
-                ObservableList<String> unitList = FXCollections.observableArrayList("B","KB","MB","GB");
+                ObservableList<String> unitList = FXCollections.observableArrayList("B", "KB", "MB", "GB");
                 unit.setItems(unitList);
 
                 fileDimensionField.setPromptText("Insert a file dimension");
@@ -220,8 +217,8 @@ public class CreateRuleController {
                 unit.setLayoutX(400.0);
                 unit.setLayoutY(142.0);
 
-                rulePane.getChildren().addAll(fileDimensionField,unit);
-                triggerPaneItems.addAll(fileDimensionField,unit);
+                rulePane.getChildren().addAll(fileDimensionField, unit);
+                triggerPaneItems.addAll(fileDimensionField, unit);
 
                 break;
             case "Status program":
@@ -259,7 +256,7 @@ public class CreateRuleController {
                 outputField.setLayoutY(142.0);
                 outputField.setPrefWidth(130);
 
-                programBrowse.setOnAction(e ->{
+                programBrowse.setOnAction(e -> {
                     FileChooser programFile = new FileChooser();
                     programFile.setTitle("File to remove...");
 
@@ -276,24 +273,23 @@ public class CreateRuleController {
                 rulePane.getChildren().add(programField);
                 rulePane.getChildren().add(outputLabel);
                 rulePane.getChildren().add(outputField);
-                triggerPaneItems.addAll(commandField, programField, outputField,commandLabel, outputLabel, programBrowse);
+                triggerPaneItems.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
         }
     }
 
     /**
      * Crea un elemento azione all'interno del rule pane basato sul testo fornito.
-     *
+     * <p>
      * A seconda del valore del parametro `text`, questo metodo aggiorna l'etichetta `label`
      * e crea i campi di input o i pulsanti appropriati richiesti per l'azione specificata.
      *
      * @param label l'etichetta da aggiornare con la descrizione specifica dell'azione
-     * @param text il tipo di azione da creare; i valori validi sono "Visualizza messaggio",
-     *             "Riproduci audio", "Scrivi stringa", "Copia file", "Sposta file",
-     *             "Rimuovi file" e "Esegui programma"
+     * @param text  il tipo di azione da creare; i valori validi sono "Visualizza messaggio",
+     *              "Riproduci audio", "Scrivi stringa", "Copia file", "Sposta file",
+     *              "Rimuovi file" e "Esegui programma"
      */
     @FXML
-    private void createActionItem(Label label, String text)
-    {
+    private void createActionItem(Label label, String text) {
 
 
         switch (text) {
@@ -313,7 +309,7 @@ public class CreateRuleController {
             case "Play Audio":
                 label.setText("Audio to reproduce");
 
-                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files","*.mp3","*.aac");
+                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files", "*.mp3", "*.aac");
                 Button browseAudioButton = new Button("Browse...");
 
                 TextField pathAudioField = new TextField();
@@ -326,7 +322,7 @@ public class CreateRuleController {
                 browseAudioButton.setLayoutX(450.0);
                 browseAudioButton.setLayoutY(225);
 
-                browseAudioButton.setOnAction(e ->{
+                browseAudioButton.setOnAction(e -> {
                     FileChooser playFileChooser = new FileChooser();
                     playFileChooser.setTitle("File audio...");
                     playFileChooser.getExtensionFilters().add(audio);
@@ -336,8 +332,8 @@ public class CreateRuleController {
                     pathAudioField.setText(selectedFile.getPath());
                 });
 
-                rulePane.getChildren().addAll(browseAudioButton,pathAudioField);
-                actionPaneItems.addAll(browseAudioButton,pathAudioField);
+                rulePane.getChildren().addAll(browseAudioButton, pathAudioField);
+                actionPaneItems.addAll(browseAudioButton, pathAudioField);
 
                 break;
             case "Write string":
@@ -489,17 +485,17 @@ public class CreateRuleController {
      * l'input dell'utente da vari campi di testo e controlli nell'interfaccia grafica,
      * valida l'input, costruisce una nuova regola usando i dati raccolti e la aggiunge
      * all'istanza di RuleManager.
-     *
+     * <p>
      * Il metodo esegue i seguenti passaggi:
      * 1. Recupera il nome della regola dal `ruleNameTxtField`.
      * 2. Itera attraverso `triggerPaneItems` per costruire la stringa del trigger basata
-     *    sull'input dell'utente dai diversi controlli (TextField, Spinner).
+     * sull'input dell'utente dai diversi controlli (TextField, Spinner).
      * 3. Itera attraverso `actionPaneItems` per costruire la stringa dell'azione basata
-     *    sull'input dell'utente da TextField.
+     * sull'input dell'utente da TextField.
      * 4. Controlla i valori selezionati per `triggerBox` e `actionBox` e valida gli input
-     *    dell'utente.
+     * dell'utente.
      * 5. Se l'input è valido, crea una nuova regola e aggiorna l'interfaccia grafica
-     *    di conseguenza.
+     * di conseguenza.
      * 6. Mostra messaggi di errore se l'input non è valido.
      *
      * @param actionEvent l'evento scatenato quando il pulsante "Crea" viene cliccato
@@ -524,16 +520,16 @@ public class CreateRuleController {
             if (item instanceof TextField) {
                 if (!((TextField) item).getText().isEmpty()) {
                     errorFlag = false;
-                    if(Objects.equals(triggerBox.getValue(), "Status program")){
+                    if (Objects.equals(triggerBox.getValue(), "Status program")) {
                         trigger += ((TextField) item).getText() + "-";
-                    }else{
+                    } else {
                         trigger += ((TextField) item).getText() + " ";
                     }
-                }else if(((TextField) item).getText().isEmpty() && Objects.equals(triggerBox.getValue(), "Status program")){
+                } else if (((TextField) item).getText().isEmpty() && Objects.equals(triggerBox.getValue(), "Status program")) {
 
-                    trigger += " " +"-";
+                    trigger += " " + "-";
 
-                }else{
+                } else {
                     errorFlag = true;
                 }
             }
@@ -546,19 +542,19 @@ public class CreateRuleController {
                 }
 
             }
-            if (item instanceof ComboBox<?>){
-                if(!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+            if (item instanceof ComboBox<?>) {
+                if (!((ComboBox<?>) item).getValue().toString().isEmpty()) {
                     errorFlag = false;
                     trigger += ((ComboBox<?>) item).getValue() + " ";
-                }else{
+                } else {
                     errorFlag = true;
                 }
             }
-            if(item instanceof DatePicker){
-                if(!((DatePicker) item).getValue().toString().isEmpty()) {
+            if (item instanceof DatePicker) {
+                if (!((DatePicker) item).getValue().toString().isEmpty()) {
                     errorFlag = false;
                     trigger += ((DatePicker) item).getValue() + " ";
-                }else{
+                } else {
                     errorFlag = true;
                 }
             }
@@ -629,7 +625,6 @@ public class CreateRuleController {
                 labelError.setVisible(true);
             }
         }
-
 
 
     }

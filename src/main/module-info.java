@@ -13,6 +13,7 @@ module com.ccll.projectse_ifttt {
     requires java.logging;
     requires java.desktop;
 
+
     opens com.ccll.projectse_ifttt to javafx.fxml;
     exports com.ccll.projectse_ifttt;
 }

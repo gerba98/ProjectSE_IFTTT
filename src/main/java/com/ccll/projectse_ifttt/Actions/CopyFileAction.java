@@ -15,8 +15,8 @@ import java.nio.file.StandardCopyOption;
  * Questa classe consente di copiare un file da un percorso sorgente a una directory di destinazione.
  */
 public class CopyFileAction implements Action {
-    private String sourcePath;      // Percorso del file sorgente
-    private String destinationPath; // Percorso della directory di destinazione
+    private final String sourcePath;      // Percorso del file sorgente
+    private final String destinationPath; // Percorso della directory di destinazione
 
     /**
      * Costruttore per creare un'istanza di CopyFileAction.
