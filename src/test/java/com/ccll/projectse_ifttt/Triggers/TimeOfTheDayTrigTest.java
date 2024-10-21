@@ -1,41 +1,56 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
+
+import static org.junit.Assert.*;
 
 public class TimeOfTheDayTrigTest {
 
-    @Test
-    @DisplayName("Valutazione del trigger all'ora specificata")
-    public void testEvaluation() {
-        LocalTime time = LocalTime.now().withSecond(0).withNano(0);
-        TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(time);
+    private TimeOfTheDayTrig timeOfTheDayTrig;
 
-        assertTrue(timeTrigger.evaluate(), "Il trigger dovrebbe attivarsi quando l'ora corrente corrisponde all'ora specificata.");
-
-        timeTrigger.setTime(time.minusMinutes(1));
-
-        assertFalse(timeTrigger.evaluate(), "Il trigger non dovrebbe attivarsi quando l'ora corrente non corrisponde all'ora specificata.");
+    @Before
+    public void setUp() {
+        // Inizializza il trigger con l'orario corrente
+        LocalTime targetTime = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
+        timeOfTheDayTrig = new TimeOfTheDayTrig(targetTime);
     }
 
     @Test
-    @DisplayName("Inizializzazione di TimeOfTheDayTrig con l'ora specificata")
-    public void testInitialization() {
+    public void testTimeOfTheDayTrigEvaluation() {
+        // Verifica che il trigger si attivi esattamente all'orario corrente
+        assertTrue("Il trigger dovrebbe attivarsi all'ora corrente.", timeOfTheDayTrig.evaluate());
+
+        // Aspetta un minuto per garantire che l'ora sia cambiata
+        timeOfTheDayTrig.setTime(LocalTime.now().minusMinutes(1));
+
+        // Verifica che il trigger non si attivi ora che l'orario è cambiato
+        assertFalse("Il trigger non dovrebbe attivarsi dopo che l'orario è cambiato.", timeOfTheDayTrig.evaluate());
+    }
+
+    @Test
+    public void testTOTDTrigCreator() {
+        // Creazione di un'istanza di TOTDTrigCreator con un orario specifico
         LocalTime time = LocalTime.of(12, 30);
-        TimeOfTheDayTrig timeTrigger = new TimeOfTheDayTrig(time);
+        TOTDTrigCreator totdTrigCreator = new TOTDTrigCreator();
 
-        assertEquals(time, timeTrigger.getTime());
+        // Creazione del trigger usando il creator
+        Trigger trigger = totdTrigCreator.createTrigger(time.toString());
+
+        // Verifica che il metodo "createTrigger()" di TOTDTrigCreator restituisca un TimeOfTheDayTrig
+        assertTrue(trigger instanceof TimeOfTheDayTrig);
     }
 
     @Test
-    @DisplayName("Creazione di TimeOfTheDayTrig tramite TOTDTrigCreator")
-    public void testCreator() {
-        String time = "12:30";
-        TriggerCreator TOTD = new TOTDTrigCreator();
-        Trigger trigger = TOTD.createTrigger(time);
-        assertInstanceOf(TimeOfTheDayTrig.class, trigger);
-    }
+    public void testTimeOfTheDayTrigInitialization() {
+        // Creazione del trigger con un orario specifico
+        LocalTime time = LocalTime.of(12, 30);
+        TimeOfTheDayTrig timeOfTheDayTrig = new TimeOfTheDayTrig(time);
 
+        // Verifica che l'orario sia stato inizializzato correttamente
+        assertEquals(time, timeOfTheDayTrig.getTime());
+    }
 }
