@@ -10,8 +10,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class TimeOfTheDayTrig implements Trigger {
     private LocalTime time;
-    private final String type = "Time";  // Tipo del trigger
-    private boolean evaluation = false;  // Memorizza il risultato della valutazione
+    private boolean evaluation = false;  // Memorizza il risultato dell'ultima valutazione del trigger, true se il trigger è stato attivato
     private boolean changed = false;     // Tiene traccia se il risultato della valutazione è cambiato
 
     /**
