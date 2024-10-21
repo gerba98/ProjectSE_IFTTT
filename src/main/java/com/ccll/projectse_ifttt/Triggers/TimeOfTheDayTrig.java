@@ -74,8 +74,4 @@ public class TimeOfTheDayTrig implements Trigger {
         return "Trigger attivato alle;" + time;
     }
 
-    @Override
-    public void reset(){
-        lastEvaluation = false;
-    }
 }
