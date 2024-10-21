@@ -7,6 +7,7 @@ import java.time.LocalTime;
  * Questo trigger valuta se l'ora corrente corrisponde o supera l'ora specificata.
  */
 public class TimeOfTheDayTrig implements Trigger {
+    boolean lastEvaluation = false;
     private LocalTime time;
 
     /**
@@ -56,5 +57,10 @@ public class TimeOfTheDayTrig implements Trigger {
     @Override
     public String toString() {
         return "Trigger attivato a: " + time;
+    }
+
+    @Override
+    public void reset(){
+        lastEvaluation = false;
     }
 }

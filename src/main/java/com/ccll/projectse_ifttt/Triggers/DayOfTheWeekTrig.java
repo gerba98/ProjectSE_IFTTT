@@ -7,6 +7,7 @@ import java.time.LocalDate;
  * Questo trigger valuta se il giorno della settimana corrente corrisponde o supera il giorno specificato.
  */
 public class DayOfTheWeekTrig implements Trigger{
+    boolean lastEvaluation = false;
     DayOfWeek dayOfWeek;
 
     /**
@@ -36,8 +37,18 @@ public class DayOfTheWeekTrig implements Trigger{
      */
     @Override
     public boolean evaluate(){
+        boolean evaluation = false;
         DayOfWeek today = LocalDate.now().getDayOfWeek();
-        return today.equals(dayOfWeek);
+
+        boolean newEvaluation = today.equals(dayOfWeek);
+
+        if(!lastEvaluation && newEvaluation){
+            evaluation = true;
+        }
+
+        lastEvaluation = newEvaluation;
+        return evaluation;
+
     }
     /**
      * Restituisce una rappresentazione stringa del trigger.
@@ -47,4 +58,8 @@ public class DayOfTheWeekTrig implements Trigger{
     @Override
     public String toString(){return "Trigger attivato a: " + dayOfWeek;}
 
+    @Override
+    public void reset(){
+        lastEvaluation = false;
+    }
 }

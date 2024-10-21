@@ -7,6 +7,7 @@ import java.time.LocalDate;
  */
 public class SpecifiedDateTrig implements Trigger {
 
+    boolean lastEvaluation = false;
     LocalDate date;
     /**
      * Costruisce un SpecifiedDataTrig con con la data specificata.
@@ -34,10 +35,17 @@ public class SpecifiedDateTrig implements Trigger {
      */
     @Override
     public boolean evaluate(){
-
+        boolean evaluation = false;
         LocalDate today = LocalDate.now();
-        return date.equals(today);
 
+        boolean newEvaluation = date.equals(today);
+
+        if(!lastEvaluation && newEvaluation){
+            evaluation = true;
+        }
+
+        lastEvaluation = newEvaluation;
+        return evaluation;
     }
     /**
      * Restituisce una rappresentazione stringa del trigger.
@@ -47,4 +55,8 @@ public class SpecifiedDateTrig implements Trigger {
     @Override
     public String toString() {return "Trigger attivato a: " +date;}
 
+    @Override
+    public void reset(){
+        lastEvaluation = false;
+    }
 }

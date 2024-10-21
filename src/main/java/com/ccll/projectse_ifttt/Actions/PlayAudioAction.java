@@ -60,10 +60,10 @@ public class PlayAudioAction implements Action {
      */
     @Override
     public boolean execute() {
-        if (isStopped) {
-            // Se l'audio è stato fermato, non eseguire l'azione
-            return false;
-        }
+//        if (isStopped) {
+//            // Se l'audio è stato fermato, non eseguire l'azione
+//            return false;
+//        }
 
         if (isPlaying) {
             // Se la musica è già in riproduzione, non riprodurre di nuovo e non mostrare un altro alert

@@ -10,6 +10,7 @@ import java.util.Objects;
  * Questo trigger valuta se l'output restituito dal programma corrisponde con quello specificato.
  */
 public class ExecutionProgramTrig implements Trigger {
+    boolean lastEvaluation = false;
     String userInfo;
     /**
      * Costruisce un ExecutionProgramTrig con comando e programma specificati e output desiderato.
@@ -43,6 +44,7 @@ public class ExecutionProgramTrig implements Trigger {
      */
     @Override
     public boolean evaluate() {
+        boolean evaluation = false;
         String command = this.userInfo.split("-")[0];
         String program = this.userInfo.split("-")[1];
         String output = this.userInfo.split("-")[2];
@@ -58,11 +60,20 @@ public class ExecutionProgramTrig implements Trigger {
 
             Process p = pb.start();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            return Objects.equals(reader.readLine(), output);
+            int exitCode = p.waitFor();
+            boolean newEvaluation = Objects.equals(String.valueOf(exitCode), output);
+
+            if(!lastEvaluation && newEvaluation){
+                evaluation = true;
+            }
+
+            lastEvaluation = newEvaluation;
+            return evaluation;
 
         }catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return false;
 
@@ -75,4 +86,8 @@ public class ExecutionProgramTrig implements Trigger {
     @Override
     public String toString(){return "Trigger attivato a: " + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];}
 
+    @Override
+    public void reset(){
+        lastEvaluation = false;
+    }
 }

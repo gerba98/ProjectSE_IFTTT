@@ -7,7 +7,7 @@ import java.time.MonthDay;
  * Questo trigger valuta se il giorno del mese corrente corrisponde a quello specificato.
  */
 public class DayOfTheMonthTrig implements Trigger{
-
+    boolean lastEvaluation = false;
     MonthDay dayOfMonth;
     /**
      * Costruisce un DayOfTheMonthTrig con con il giorno del mese specificato.
@@ -38,9 +38,20 @@ public class DayOfTheMonthTrig implements Trigger{
      */
     @Override
     public boolean evaluate() {
+        boolean evaluation = false;
         LocalDate todayInt =  LocalDate.now();
         MonthDay today = MonthDay.of(todayInt.getMonth(), todayInt.getDayOfMonth());
-        return dayOfMonth.getDayOfMonth() == today.getDayOfMonth();
+
+        boolean newEvaluation = dayOfMonth.getDayOfMonth() == today.getDayOfMonth();
+
+        if(!lastEvaluation && newEvaluation){
+            evaluation = true;
+        }
+
+        lastEvaluation = newEvaluation;
+        return evaluation;
+
+
     }
     /**
      * Restituisce una rappresentazione stringa del trigger.
@@ -49,4 +60,10 @@ public class DayOfTheMonthTrig implements Trigger{
      */
     @Override
     public String toString() {return "Trigger attivato a: " + dayOfMonth.getDayOfMonth();}
+
+
+    @Override
+    public void reset(){
+        lastEvaluation = false;
+    }
 }
