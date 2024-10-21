@@ -1,9 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.*;
-import com.ccll.projectse_ifttt.Triggers.TOTDTrigCreator;
-import com.ccll.projectse_ifttt.Triggers.Trigger;
-import com.ccll.projectse_ifttt.Triggers.TriggerCreator;
+import com.ccll.projectse_ifttt.Triggers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -60,6 +58,7 @@ public class RuleManager {
             if (!ruleChecker.getRunning()){
                 ruleChecker.start();
             }
+
         }
     }
 
@@ -86,6 +85,7 @@ public class RuleManager {
     public ObservableList<Rule> getRules() {
         return rules;
     }
+
 
     /**
      * Crea una nuova Rule basata sui parametri forniti.
@@ -174,6 +174,10 @@ public class RuleManager {
     private Trigger createTrigger(String triggerType, String triggerValue) {
         TriggerCreator triggerCreator = switch (triggerType.toLowerCase()) {
             case "time of the day" -> new TOTDTrigCreator();
+            case "day of the week" -> new DOTWTrigCreator();
+            case "day of the month" -> new DOTMTrigCreator();
+            case "date" -> new SDTrigCreator();
+            case "status program" ->new EPTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

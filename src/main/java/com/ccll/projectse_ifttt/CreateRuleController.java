@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.security.cert.Extension;
 import java.time.LocalTime;
 import java.util.Iterator;
 import java.util.Objects;
@@ -224,17 +225,58 @@ public class CreateRuleController {
 
                 break;
             case "Status program":
-                label.setText("Insert the status program");
+                label.setText("");
 
-                TextField statusProgramField = new TextField();
-                statusProgramField.setPromptText("Insert the status program");
-                
-                statusProgramField.setLayoutX(285.0);
-                statusProgramField.setLayoutY(142.0);
-                statusProgramField.setPrefWidth(250);
+                Label commandLabel = new Label();
+                commandLabel.setText("Command");
+                TextField commandField = new TextField();
 
-                rulePane.getChildren().add(statusProgramField);
-                triggerPaneItems.add(statusProgramField);
+                Button programBrowse = new Button("Browse...");
+                TextField programField = new TextField();
+
+                Label outputLabel = new Label();
+                outputLabel.setText("Output");
+                TextField outputField = new TextField();
+                outputField.setPromptText("Insert desired output");
+
+                commandLabel.setLayoutX(285.0);
+                commandLabel.setLayoutY(125.0);
+
+                commandField.setLayoutX(285.0);
+                commandField.setLayoutY(142.0);
+                commandField.setPrefWidth(50);
+
+                programField.setLayoutX(350.0);
+                programField.setLayoutY(142.0);
+
+                programBrowse.setLayoutX(350.0);
+                programBrowse.setLayoutY(115.0);
+
+                outputLabel.setLayoutX(500.0);
+                outputLabel.setLayoutY(125.0);
+
+                outputField.setLayoutX(500.0);
+                outputField.setLayoutY(142.0);
+                outputField.setPrefWidth(130);
+
+                programBrowse.setOnAction(e ->{
+                    FileChooser programFile = new FileChooser();
+                    programFile.setTitle("File to remove...");
+
+                    Stage stage = (Stage) programBrowse.getScene().getWindow();
+                    File selectedFile = programFile.showOpenDialog(stage);
+                    programField.setText(selectedFile.getPath());
+                });
+
+
+                //rulePane.getChildren().add(statusProgramField);
+                rulePane.getChildren().add(commandLabel);
+                rulePane.getChildren().add(commandField);
+                rulePane.getChildren().add(programBrowse);
+                rulePane.getChildren().add(programField);
+                rulePane.getChildren().add(outputLabel);
+                rulePane.getChildren().add(outputField);
+                triggerPaneItems.addAll(commandField, programField, outputField,commandLabel, outputLabel, programBrowse);
         }
     }
 
@@ -482,8 +524,16 @@ public class CreateRuleController {
             if (item instanceof TextField) {
                 if (!((TextField) item).getText().isEmpty()) {
                     errorFlag = false;
-                    trigger += ((TextField) item).getText() + " ";
-                } else {
+                    if(Objects.equals(triggerBox.getValue(), "Status program")){
+                        trigger += ((TextField) item).getText() + "-";
+                    }else{
+                        trigger += ((TextField) item).getText() + " ";
+                    }
+                }else if(((TextField) item).getText().isEmpty() && Objects.equals(triggerBox.getValue(), "Status program")){
+
+                    trigger += " " +"-";
+
+                }else{
                     errorFlag = true;
                 }
             }
@@ -492,6 +542,24 @@ public class CreateRuleController {
                     trigger += "0" + ((Spinner) item).getValue() + ":";
                 } else {
                     trigger += ((Spinner) item).getValue() + ":";
+
+                }
+
+            }
+            if (item instanceof ComboBox<?>){
+                if(!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+                    errorFlag = false;
+                    trigger += ((ComboBox<?>) item).getValue() + " ";
+                }else{
+                    errorFlag = true;
+                }
+            }
+            if(item instanceof DatePicker){
+                if(!((DatePicker) item).getValue().toString().isEmpty()) {
+                    errorFlag = false;
+                    trigger += ((DatePicker) item).getValue() + " ";
+                }else{
+                    errorFlag = true;
                 }
             }
         }
@@ -501,7 +569,6 @@ public class CreateRuleController {
             trigger = trigger.substring(0, trigger.length() - 1);
         }
 
-        // Recupera l'azione
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
             Object item = iterator.next();
@@ -562,6 +629,9 @@ public class CreateRuleController {
                 labelError.setVisible(true);
             }
         }
+
+
+
     }
 
     @FXML
@@ -572,4 +642,6 @@ public class CreateRuleController {
         triggerBox.setValue("");
         actionBox.setValue("");
     }
+
 }
+

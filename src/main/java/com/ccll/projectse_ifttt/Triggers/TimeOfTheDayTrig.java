@@ -9,6 +9,7 @@ import java.time.temporal.ChronoUnit;
  * Questo trigger valuta se l'ora corrente corrisponde all'ora specificata.
  */
 public class TimeOfTheDayTrig implements Trigger {
+    boolean lastEvaluation = false;
     private LocalTime time;
     boolean LastEvaluation = false;//
 
@@ -71,5 +72,10 @@ public class TimeOfTheDayTrig implements Trigger {
     @Override
     public String toString() {
         return "Trigger attivato alle;" + time;
+    }
+
+    @Override
+    public void reset(){
+        lastEvaluation = false;
     }
 }
