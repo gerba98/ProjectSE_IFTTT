@@ -548,7 +548,7 @@ public class CreateRuleController {
                 labelError.setVisible(false);
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
-                Rule newRule = ruleManager.createRule(triggerType, trigger, actionType, action, name);
+                Rule newRule = ruleManager.createRule(name, triggerType, trigger, actionType, action);
 
                 // Aggiungi la nuova regola alla tabella nel IndexController
                 indexController.insertItems(newRule);

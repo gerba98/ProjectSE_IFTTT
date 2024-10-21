@@ -1,7 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import com.ccll.projectse_ifttt.Triggers.Trigger;
 import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.Triggers.Trigger;
 
 
 /**
@@ -12,23 +12,29 @@ public class Rule {
     private Trigger trigger;
     private Action action;
     private String name;
+    private boolean state;
+    private int numberOfExecutions;
 
     /**
      * Costruttore della classe Rule.
      * Crea una nuova istanza di Rule dato il trigger, l'azione e il nome specificati.
+     * lo stato della regola è inizializzato a true
+     * Il numero di esecuzioni della regola è inizializzato a 0
      *
+     * @param name    Il nome della regola
      * @param trigger Il trigger della regola
-     * @param action L'azione della regola
-     * @param name Il nome della regola
+     * @param action  L'azione della regola
      */
-    public Rule(Trigger trigger, Action action, String name) {
+    public Rule(String name, Trigger trigger, Action action) {
         this.trigger = trigger;
         this.action = action;
         this.name = name;
+        this.state = true;
+        this.numberOfExecutions = 0;
     }
 
     /**
-     * Restituisce il trigger associato alla regola.
+     * Restituisce il trigger associato alla regola
      *
      * @return Il trigger della regola
      */
@@ -50,6 +56,7 @@ public class Rule {
      *
      * @return L'azione della regola
      */
+
     public Action getAction() {
         return action;
     }
@@ -81,14 +88,65 @@ public class Rule {
         this.name = name;
     }
 
+
+    /**
+     * Restituisce lo stato della regola.
+     *
+     * @return True se la regola è attiva, False altrimenti
+     */
+    public boolean isState() {
+        return state;
+    }
+
+    /**
+     * Imposta lo stato della regola.
+     *
+     * @param state Il nuovo stato da impostare
+     */
+    public void setState(boolean state) {
+        this.state = state;
+    }
+
+    /**
+     * Restituisce il tipo della regola.
+     *
+     * @return Il tipo della regola
+     */
+    public String getType() {
+        return "Rule";
+    }
+
+    /**
+     * Valuta il trigger associato alla regola se lo stato della regola è attivo.
+     * Questo metodo viene chiamato nel metodo run della classe CheckRule.
+     *
+     * @return True se il trigger è attivato, False altrimenti
+     */
+    public boolean evaluateTrigger() {
+        if (state) {
+            return trigger.evaluate();
+        }
+        return false;
+    }
+
+
+    /**
+     * Restituisce il numero di volte che l'azione associata alla regola è stata eseguita.
+     *
+     * @return Il numero di esecuzioni dell'azione
+     */
+    public int getNumberOfExecutions() {
+        return numberOfExecutions;
+    }
+
+
     /**
      * Esegue l'azione associata alla regola.
      * Questo metodo viene chiamato nel metodo run della classe CheckRule quando il metodo evaluate del Trigger restituisce True.
      */
-    // this method execute action
     public void executeAction() {
         action.execute();
-
+        numberOfExecutions++;
     }
 
     /**
@@ -97,7 +155,6 @@ public class Rule {
      *
      * @return Una stringa che descrive la regola
      */
-    // to string composed of trigger and action tostring
     @Override
     public String toString() {
         return "Rule{" +
