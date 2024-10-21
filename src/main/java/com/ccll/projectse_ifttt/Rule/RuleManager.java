@@ -60,6 +60,9 @@ public class RuleManager {
                 ruleChecker = new CheckRule();
                 ruleChecker.start();
             }
+            if (!ruleChecker.getRunning()){
+                ruleChecker.start();
+            }
         }
     }
 
@@ -87,41 +90,68 @@ public class RuleManager {
         return rules;
     }
 
-
     /**
-     * Crea una nuova regola basata sui parametri forniti.
+     * Crea una nuova Rule basata sui parametri forniti.
      *
+     * @param ruleName     Il nome della regola da creare
      * @param triggerType  Il tipo di trigger per la regola
      * @param triggerValue Il valore del trigger per la regola
      * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger
-     * @param actionValue  Il valore dell'azione da eseguire
-     * @param ruleName     Il nome della regola da creare
+     * @param actionValue  Il valore associato all'azione da eseguire
      * @return La nuova regola creata con i parametri forniti
      */
-    public Rule createRule(String triggerType, String triggerValue, String actionType, String actionValue, String ruleName) {
+    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue){
         Trigger trigger = createTrigger(triggerType, triggerValue);
         Action action = createAction(actionType, actionValue);
-
-        Rule newRule = new Rule(trigger, action, ruleName);
+        Rule newRule = new Rule(ruleName, trigger, action);
         addRule(newRule);
+        return newRule;
+    }
 
+    /**
+     * Crea una nuova Rule basata sui parametri forniti e sul tipo specificato.
+     *
+     * @param ruleName     Il nome della regola da creare
+     * @param triggerType  Il tipo di trigger per la regola
+     * @param triggerValue Il valore del trigger per la regola
+     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger
+     * @param actionValue  Il valore associato all'azione da eseguire
+     * @param ruleType     Il tipo di regola che deve essere create:
+     *                     "PeriodicRule-gg:hh:mm" per creare una PeriodicRule.
+     *                     (gg:hh:mm è il periodo durante il quale la regola deve rimanere disattivata espresso in giorni:ore:minuti)
+     *                     "SingleRule" per creare una SingleRule
+     *                     "Rule" per creare una Rule
+     *                     Se questo parametro non viene specificato verrà creata una Rule.
+     *                     (case-insensitive)
+     * @return La nuova regola creata con i parametri forniti
+     */
+    public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue, String ruleType){
+
+        Trigger trigger = createTrigger(triggerType, triggerValue);
+        Action action = createAction(actionType, actionValue);
+        String[] ruleInfo = ruleType.split("-");
+        Rule newRule = switch (ruleInfo[0].toLowerCase()){
+            case "rule" -> new Rule(ruleName, trigger, action);
+            case "singlerule" -> new SingleRule(ruleName, trigger, action);
+            case "periodicrule" -> new PeriodicRule(ruleName, trigger, action, ruleInfo[1]);
+            default -> throw new IllegalStateException("Unexpected value: " + ruleType);
+        };
+        addRule(newRule);
         return newRule;
     }
 
     /**
      * Crea un'azione basata sul tipo e valore specificati.
      *
-     * @param actionType Il tipo di azione da creare. Deve essere una stringa non nulla.
-     *                   I valori supportati sono "play audio" e "display message" (case-insensitive).
-     * @param actionValue Il valore associato all'azione. Il significato dipende dal tipo di azione:
-     *                    - Per "play audio": il percorso del file audio da riprodurre.
-     *                    - Per "display message": il messaggio da visualizzare.
+     * @param actionType  Il tipo di azione da creare. Deve essere una stringa non nulla.
+     *                    I valori supportati sono "play audio" e "display message" (case-insensitive).
+     * @param actionValue Il valore associato all'azione. Il significato dipende dal tipo di azione.
+     *                    Es. Per "play audio": il percorso del file audio da riprodurre.
      * @return Un'istanza di Action creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di azione non supportato.
      */
     private Action createAction(String actionType, String actionValue) {
-        actionType = actionType.toLowerCase();
-        ActionCreator actionCreator = switch (actionType) {
+        ActionCreator actionCreator = switch (actionType.toLowerCase()) {
             case "play audio" -> new PlayAudioActionCreator();
             case "display message" -> new DisplayMessageActionCreator();
             default -> throw new IllegalStateException("Unexpected value: " + actionType);
@@ -132,16 +162,15 @@ public class RuleManager {
     /**
      * Crea un trigger basato sul tipo e valore specificati.
      *
-     * @param triggerType Il tipo di trigger da creare. Deve essere una stringa non nulla.
-     *                    Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
-     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger:
-     *                     - Per "time of the day": l'orario in formato stringa (es. "14:30").
+     * @param triggerType  Il tipo di trigger da creare. Deve essere una stringa non nulla.
+     *                     Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
+     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger.
+     *                     Es. Per "time of the day": l'orario in formato stringa (es. "14:30").
      * @return Un'istanza di Trigger creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di trigger non supportato.
      */
     private Trigger createTrigger(String triggerType, String triggerValue) {
-        triggerType = triggerType.toLowerCase();
-        TriggerCreator triggerCreator = switch (triggerType) {
+        TriggerCreator triggerCreator = switch (triggerType.toLowerCase()) {
             case "time of the day" -> new TOTDTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
