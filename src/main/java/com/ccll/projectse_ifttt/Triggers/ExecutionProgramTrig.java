@@ -1,15 +1,16 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Rappresenta un trigger che si attiva ad un valore specifico ritornato da un programma specifico.
  * Questo trigger valuta se l'output restituito dal programma corrisponde con quello specificato.
  */
 public class ExecutionProgramTrig implements Trigger {
+    boolean isThreadRunning = false;
     boolean lastEvaluation = false;
     String userInfo;
     /**
@@ -44,39 +45,50 @@ public class ExecutionProgramTrig implements Trigger {
      */
     @Override
     public boolean evaluate() {
-        boolean evaluation = false;
-        String command = this.userInfo.split("-")[0];
-        String program = this.userInfo.split("-")[1];
-        String output = this.userInfo.split("-")[2];
+        AtomicBoolean evaluation = new AtomicBoolean(false);
+        AtomicInteger exitCode = new AtomicInteger();
+        synchronized (this) {
+            if (!isThreadRunning) {
+                Thread myThread = new Thread(() -> {
 
-        try{
-            ProcessBuilder pb;
-            if(Objects.equals(command, " ")){
-                pb = new ProcessBuilder(program);
-            }else{
-                pb = new ProcessBuilder(command, program);
+                    String command = this.userInfo.split("-")[0];
+                    String program = this.userInfo.split("-")[1];
+
+                    try {
+                        ProcessBuilder pb;
+                        if (Objects.equals(command, " ")) {
+                            pb = new ProcessBuilder(program);
+                        } else {
+                            pb = new ProcessBuilder(command, program);
+                        }
+                        pb.redirectErrorStream(true);
+
+                        Process p = pb.start();
+                        exitCode.set(p.waitFor());
+                        System.out.println(exitCode.get());
+
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                String output = this.userInfo.split("-")[2];
+                boolean newEvaluation = Objects.equals(String.valueOf(exitCode.get()), output);
+
+                if (!lastEvaluation && newEvaluation) {
+                    evaluation.set(true);
+                }
+
+                lastEvaluation = newEvaluation;
+                isThreadRunning = true;
+                myThread.setDaemon(true);
+                myThread.start();
             }
-            pb.redirectErrorStream(true);
 
-            Process p = pb.start();
-
-            int exitCode = p.waitFor();
-            boolean newEvaluation = Objects.equals(String.valueOf(exitCode), output);
-
-            if(!lastEvaluation && newEvaluation){
-                evaluation = true;
-            }
-
-            lastEvaluation = newEvaluation;
-            return evaluation;
-
-        }catch (IOException e){
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
-        return false;
-
+        return evaluation.get();
     }
     /**
      * Restituisce una rappresentazione stringa del trigger.
@@ -89,5 +101,6 @@ public class ExecutionProgramTrig implements Trigger {
     @Override
     public void reset(){
         lastEvaluation = false;
+        isThreadRunning = false;
     }
 }
