@@ -12,6 +12,5 @@ public interface Trigger {
      * @return true se la condizione del trigger è soddisfatta, false altrimenti.
      */
     boolean evaluate();
-    boolean returnEvaluation();
     void reset();
 }

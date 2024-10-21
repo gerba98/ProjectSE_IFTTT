@@ -44,29 +44,24 @@ public class TimeOfTheDayTrig implements Trigger {
      */
     @Override
     public boolean evaluate() {
+        // 1. Ottiene l'ora corrente e tronca i secondi e i nanosecondi, considerando solo ore e minuti.
         LocalTime now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
-        boolean newEvaluation = time.equals(now);
-        if (newEvaluation && !evaluation) {
-            changed = true;
-            evaluation = true;
-        } else {
-            changed = false;
-            evaluation = newEvaluation;
-        }
-        return changed;
-    }
 
-    /**
-     * Restituisce la valutazione se c'è stato un cambiamento.
-     * @return true se la valutazione è vera e c'è stato un cambiamento, altrimenti false.
-     */
-    @Override
-    public boolean returnEvaluation() {
-        if (changed && evaluation) {
-            changed = false; // Reimposta changed dopo aver riconosciuto il cambiamento
-            return true;
+        // 2. Confronta l'orario troncato con l'orario specificato nel trigger.
+        boolean newEvaluation = time.equals(now);
+
+        // 3. Valuta se l'orario corrente è uguale all'orario specificato e se l'ultimo stato di valutazione era falso.
+        if (newEvaluation && !evaluation) {
+            evaluation = true;   // Aggiorna lo stato di valutazione a vero.
+            changed = true;      // Imposta changed a vero, indicando che lo stato di valutazione è cambiato.
+            return true;         // Ritorna vero, indicando che il trigger è attivato.
+        } else if (!newEvaluation) {
+            evaluation = false;  // Aggiorna lo stato di valutazione a falso se l'orario corrente non corrisponde.
         }
-        return false;
+
+        // 4. Imposta changed a falso se l'orario corrente non corrisponde all'orario specificato.
+        changed = false;
+        return false;           // Ritorna falso, indicando che il trigger non è attivato.
     }
 
     /**
