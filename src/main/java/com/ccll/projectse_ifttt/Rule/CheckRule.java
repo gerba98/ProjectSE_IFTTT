@@ -37,13 +37,6 @@ public class CheckRule {
         return isRunning;
     }
 
-    /**
-     * Getter per ottenere lo status dell'oggetto CheckerRule
-     * @return la variabile booleana isRunning
-     */
-    public Boolean getRunning() {
-        return isRunning;
-    }
 
     /**
      * Avvia il thread che controlla periodicamente le regole gestite da RuleManager.

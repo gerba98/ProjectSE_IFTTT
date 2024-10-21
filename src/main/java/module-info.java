@@ -14,5 +14,6 @@ module com.ccll.projectse_ifttt {
     requires java.desktop;
 
     opens com.ccll.projectse_ifttt to javafx.fxml;
+    opens com.ccll.projectse_ifttt.Rule to javafx.base;
     exports com.ccll.projectse_ifttt;
 }
