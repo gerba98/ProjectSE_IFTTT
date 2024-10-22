@@ -63,6 +63,7 @@ public class CreateRuleController {
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
 
 
+
     /**
      * Imposta l'istanza di IndexController per questo CreateRuleController.
      *
@@ -78,7 +79,7 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
-     * <p>
+     *
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
@@ -189,36 +190,97 @@ public class CreateRuleController {
 
                 break;
             case "File existence":
-                label.setText("Insert a file path");
-                TextField fileExistenceField = new TextField();
+                label.setText("Directory path");
+                Button browseDirButton = new Button("Browse...");
 
-                fileExistenceField.setLayoutX(285.0);
-                fileExistenceField.setLayoutY(142.0);
+                TextField pathFolderField = new TextField();
 
-                fileExistenceField.setPrefWidth(250);
+                pathFolderField.setPromptText("Directory path");
+                pathFolderField.setPrefWidth(100);
+                pathFolderField.setLayoutX(285);
+                pathFolderField.setLayoutY(142.0);
+                pathFolderField.setFocusTraversable(false);
+                pathFolderField.setEditable(false);
+                pathFolderField.setDisable(false);
 
-                rulePane.getChildren().add(fileExistenceField);
-                triggerPaneItems.add(fileExistenceField);
+                Label slashLabel = new Label("\\");
+                slashLabel.setLayoutX(393);
+                slashLabel.setLayoutY(145);
+
+                Label fileNameLab = new Label("Write the file name");
+                fileNameLab.setLayoutX(405);
+                fileNameLab.setLayoutY(125);
+
+                TextField fileNameField = new TextField();
+                fileNameField.setPromptText("Write file name");
+                fileNameField.setPrefWidth(100);
+                fileNameField.setLayoutX(405);
+                fileNameField.setLayoutY(142.0);
+
+                browseDirButton.setLayoutX(515);
+                browseDirButton.setLayoutY(142.0);
+
+                browseDirButton.setOnAction(e -> {
+                    DirectoryChooser checkDirChooser = new DirectoryChooser();
+                    checkDirChooser.setTitle("Choose directory...");
+
+                    Stage stage = (Stage) browseDirButton.getScene().getWindow();
+                    File selectedFile = checkDirChooser.showDialog(stage);
+                    pathFolderField.setText(selectedFile.getPath());
+                });
+
+                rulePane.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,slashLabel,fileNameLab);
+                triggerPaneItems.addAll(pathFolderField,fileNameField,browseDirButton,slashLabel,fileNameLab);
 
                 break;
             case "File dimension":
-                label.setText("Insert a file dimension and specify the unit");
-                TextField fileDimensionField = new TextField();
+                label.setText("Insert file dimension");
+                Spinner<Integer> fileDimensionSpinner = new Spinner<Integer>(1, 1024,1);
                 ComboBox<String> unit = new ComboBox<String>();
 
                 ObservableList<String> unitList = FXCollections.observableArrayList("B", "KB", "MB", "GB");
                 unit.setItems(unitList);
+                unit.setValue("KB");
 
-                fileDimensionField.setPromptText("Insert a file dimension");
-                fileDimensionField.setLayoutX(285.0);
-                fileDimensionField.setLayoutY(142.0);
-                fileDimensionField.setPrefWidth(100);
+                fileDimensionSpinner.setPromptText("Insert dimension");
+                fileDimensionSpinner.setEditable(true);
+                fileDimensionSpinner.setLayoutX(285.0);
+                fileDimensionSpinner.setLayoutY(142.0);
+                fileDimensionSpinner.setPrefWidth(100);
 
                 unit.setLayoutX(400.0);
                 unit.setLayoutY(142.0);
 
-                rulePane.getChildren().addAll(fileDimensionField, unit);
-                triggerPaneItems.addAll(fileDimensionField, unit);
+                Label labFile = new Label("File path");
+                labFile.setLayoutX(485);
+                labFile.setLayoutY(125);
+
+                FileChooser.ExtensionFilter files = new FileChooser.ExtensionFilter("Files", "*.*");
+                Button browseFileButton = new Button("Browse...");
+
+                TextField pathFileField = new TextField();
+                pathFileField.setPrefWidth(50);
+                pathFileField.setLayoutX(485);
+                pathFileField.setLayoutY(142.0);
+                pathFileField.setFocusTraversable(false);
+                pathFileField.setEditable(false);
+                pathFileField.setDisable(false);
+
+                browseFileButton.setLayoutX(550.0);
+                browseFileButton.setLayoutY(142.0);
+
+                browseFileButton.setOnAction(e -> {
+                    FileChooser checkFileDimChooser = new FileChooser();
+                    checkFileDimChooser.setTitle("File...");
+                    checkFileDimChooser.getExtensionFilters().add(files);
+
+                    Stage stage = (Stage) browseFileButton.getScene().getWindow();
+                    File selectedFile = checkFileDimChooser.showOpenDialog(stage);
+                    pathFileField.setText(selectedFile.getPath());
+                });
+
+                rulePane.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                triggerPaneItems.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
 
                 break;
             case "Status program":
@@ -279,7 +341,7 @@ public class CreateRuleController {
 
     /**
      * Crea un elemento azione all'interno del rule pane basato sul testo fornito.
-     * <p>
+     *
      * A seconda del valore del parametro `text`, questo metodo aggiorna l'etichetta `label`
      * e crea i campi di input o i pulsanti appropriati richiesti per l'azione specificata.
      *
@@ -629,6 +691,16 @@ public class CreateRuleController {
 
     }
 
+
+    /**
+     * Gestore dell'evento per l'azione di click del pulsante "Cancella". Questo metodo
+     * cancella tutti gli input dell'utente e le selezioni nei campi del modulo,
+     * incluso l'azzeramento dei testi di `labelTriggerSelected` e `labelActionSelected`,
+     * la cancellazione di `ruleNameTxtField`, e il reset dei valori di `triggerBox`
+     * e `actionBox`.
+     *
+     * @param actionEvent l'evento scatenato quando il pulsante "Cancella" viene cliccato
+     */
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
         labelTriggerSelected.setText("");
