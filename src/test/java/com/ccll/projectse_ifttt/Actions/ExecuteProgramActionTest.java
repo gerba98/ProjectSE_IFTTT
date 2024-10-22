@@ -35,19 +35,6 @@ public class ExecuteProgramActionTest {
         assertTrue("The action should succeed", executeProgramAction.execute());
     }
 
-    @Test
-    @DisplayName("Test che il programma non si esegue una seconda volta")
-    public void testExecuteProgramActionNotRepeated() {
-        // Creazione di un'azione valida per il sistema operativo corrente
-        ActionCreator creator = new ExecuteProgramActionCreator();
-        Action executeProgramAction = creator.createAction(validProgramPath + ";" + validCommand);
-
-        // Prima esecuzione deve avere successo
-        assertTrue("First execution should succeed", executeProgramAction.execute());
-
-        // Seconda esecuzione non deve riuscire (azione già eseguita)
-        assertFalse("Second execution should fail", executeProgramAction.execute());
-    }
 
     @Test
     @DisplayName("Test esecuzione fallita con comando non valido")

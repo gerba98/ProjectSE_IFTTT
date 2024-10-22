@@ -34,15 +34,6 @@ public class PlayAudioAction implements Action {
     }
 
     /**
-     * Restituisce il percorso del file audio associato a questa azione.
-     *
-     * @return Il percorso del file audio.
-     */
-    public Path getAudioFilePath() {
-        return audioFilePath;
-    }
-
-    /**
      * Esegue l'azione di riproduzione del file audio.
      *
      * @return true se l'audio viene riprodotto correttamente, false in caso di errore.
@@ -117,6 +108,6 @@ public class PlayAudioAction implements Action {
      */
     @Override
     public String toString() {
-        return "Riproduci audio: " + audioFilePath.getFileName();
+        return "Riproduci audio" + audioFilePath.getFileName();
     }
 }

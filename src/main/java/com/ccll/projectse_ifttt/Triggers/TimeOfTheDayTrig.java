@@ -10,8 +10,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class TimeOfTheDayTrig implements Trigger {
     private LocalTime time;
-    private boolean evaluation = false;  // Memorizza il risultato dell'ultima valutazione del trigger, true se il trigger è stato attivato
-    private boolean changed = false;     // Tiene traccia se il risultato della valutazione è cambiato
+    boolean LastEvaluation = false;//
 
     /**
      * Costruttore per inizializzare TimeOfTheDayTrig con il LocalTime specificato.
@@ -42,26 +41,19 @@ public class TimeOfTheDayTrig implements Trigger {
      * Questo trigger si attiva se l'ora corrente corrisponde all'ora specificata.
      * @return true se lo stato della valutazione è cambiato, altrimenti false.
      */
+
     @Override
     public boolean evaluate() {
-        // 1. Ottiene l'ora corrente e tronca i secondi e i nanosecondi, considerando solo ore e minuti.
+        boolean evaluation = false;
         LocalTime now = LocalTime.now().truncatedTo(ChronoUnit.MINUTES);
 
-        // 2. Confronta l'orario troncato con l'orario specificato nel trigger.
         boolean newEvaluation = time.equals(now);
 
-        // 3. Valuta se l'orario corrente è uguale all'orario specificato e se l'ultimo stato di valutazione era falso.
-        if (newEvaluation && !evaluation) {
-            evaluation = true;   // Aggiorna lo stato di valutazione a vero.
-            changed = true;      // Imposta changed a vero, indicando che lo stato di valutazione è cambiato.
-            return true;         // Ritorna vero, indicando che il trigger è attivato.
-        } else if (!newEvaluation) {
-            evaluation = false;  // Aggiorna lo stato di valutazione a falso se l'orario corrente non corrisponde.
+        if (newEvaluation && !LastEvaluation) {
+            evaluation = true;
         }
-
-        // 4. Imposta changed a falso se l'orario corrente non corrisponde all'orario specificato.
-        changed = false;
-        return false;           // Ritorna falso, indicando che il trigger non è attivato.
+        LastEvaluation = newEvaluation;
+        return evaluation;
     }
 
     /**
@@ -69,8 +61,7 @@ public class TimeOfTheDayTrig implements Trigger {
      */
     @Override
     public void reset() {
-        evaluation = false;
-        changed = false;
+        LastEvaluation = false;
     }
 
     /**
@@ -79,6 +70,6 @@ public class TimeOfTheDayTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Trigger attivato alle: " + time;
+        return "Trigger attivato alle;" + time;
     }
 }

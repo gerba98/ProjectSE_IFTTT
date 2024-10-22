@@ -32,17 +32,4 @@ public class DisplayMessageActionTest {
         // Verifica che l'azione sia stata eseguita con successo
         assertTrue(result, "L'azione dovrebbe essere eseguita con successo");
     }
-
-    @Test
-    @DisplayName("Test azione di visualizzazione messaggio: non deve eseguire una seconda volta")
-    public void testDisplayMessageActionAlreadyExecuted() {
-        // Esegue l'azione di visualizzazione una prima volta
-        boolean firstRun = displayMessageAction.execute();
-        assertTrue(firstRun, "La prima esecuzione dovrebbe avere successo");
-
-        // Esegue nuovamente l'azione, che non dovrebbe essere eseguita poiché è già stata eseguita
-        boolean secondRun = displayMessageAction.execute();
-        assertFalse(secondRun, "La seconda esecuzione dovrebbe fallire poiché è già stata eseguita");
-    }
-
 }

@@ -35,7 +35,6 @@ public class WriteStringAction implements Action {
 
     /**
      * Esegue l'azione di scrittura nel file.
-     *
      * Se il file specificato non esiste, l'azione non verrà eseguita e
      * verrà restituito {@code false}. In caso di errore durante la scrittura,
      * viene stampato un messaggio di errore.
@@ -49,7 +48,6 @@ public class WriteStringAction implements Action {
 
         // Verifica se il file esiste
         if (!Files.exists(path)) {
-            System.err.println("Il file non esiste: " + path.toString());
             return false; // Se il file non esiste, restituisci false
         }
 

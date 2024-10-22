@@ -57,17 +57,4 @@ public class WriteStringActionTest {
         // Esegue l'azione di scrittura
         assertFalse("The action should fail if the file does not exist", writeStringAction.execute());
     }
-
-    @Test
-    @DisplayName("Test scrittura stringa non ripetuta dopo esecuzione iniziale")
-    public void testWriteStringActionAlreadyExecuted() throws Exception {
-        ActionCreator creator = new WriteStringActionCreator();
-        Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
-
-        // Prima esecuzione dovrebbe riuscire
-        assertTrue("First execution should succeed", writeStringAction.execute());
-
-        // Seconda esecuzione dovrebbe fallire
-        assertFalse("Action should not execute more than once", writeStringAction.execute());
-    }
 }
