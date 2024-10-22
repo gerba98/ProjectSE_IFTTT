@@ -8,8 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Questa classe rappresenta un'azione per spostare un file da una directory di origine a una directory di destinazione.
@@ -18,7 +16,6 @@ import java.util.logging.Logger;
 public class MoveFileAction implements Action {
     private final String sourceFilePath;
     private final String destinationDirectoryPath;
-    private static final Logger logger = Logger.getLogger(MoveFileAction.class.getName());
 
     /**
      * Costruttore della classe MoveFileAction.
@@ -42,13 +39,11 @@ public class MoveFileAction implements Action {
         File destinationFile = new File(destinationDirectoryPath, sourceFile.getName());
 
         if (!sourceFile.exists()) {
-            logger.log(Level.SEVERE, "Il file sorgente non esiste: {0}", sourceFilePath);
             return false; // Il file sorgente non esiste
         }
 
         try {
             Files.move(sourceFile.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-            logger.log(Level.INFO, "File spostato da {0} a {1}", new Object[]{sourceFilePath, destinationFile.getPath()});
 
             // Mostra l'alert di successo
             Platform.runLater(() -> {
@@ -60,7 +55,6 @@ public class MoveFileAction implements Action {
             });
             return true;
         } catch (IOException e) {
-            logger.log(Level.SEVERE, "Errore durante lo spostamento del file", e);
             return false;
         }
     }

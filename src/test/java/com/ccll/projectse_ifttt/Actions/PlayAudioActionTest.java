@@ -48,7 +48,7 @@ public class PlayAudioActionTest {
     @DisplayName("Test successo riproduzione file audio esistente")
     public void testPlayAudioActionSuccess() {
         // Verifica che il file audio esista
-        assertTrue("Il file audio dovrebbe esistere", Files.exists(audioFilePath));
+        assertTrue(Files.exists(audioFilePath));
 
         // Esegui l'azione nel thread JavaFX
         Platform.runLater(() -> {
@@ -56,7 +56,7 @@ public class PlayAudioActionTest {
             boolean result = playAudioAction.execute();
 
             // Verifica che l'azione sia stata eseguita con successo
-            assertTrue("L'azione dovrebbe essere eseguita con successo", result);
+            assertTrue(result);
         });
     }
 
@@ -76,7 +76,7 @@ public class PlayAudioActionTest {
             boolean result = playAudioActionMissing.execute();
 
             // Verifica che l'azione fallisca poiché il file non esiste
-            assertFalse("L'azione dovrebbe fallire perché il file non esiste", result);
+            assertFalse(result);
         });
     }
 }

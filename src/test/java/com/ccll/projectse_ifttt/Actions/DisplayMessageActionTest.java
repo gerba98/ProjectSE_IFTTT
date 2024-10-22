@@ -30,6 +30,6 @@ public class DisplayMessageActionTest {
         boolean result = displayMessageAction.execute();
 
         // Verifica che l'azione sia stata eseguita con successo
-        assertTrue(result, "L'azione dovrebbe essere eseguita con successo");
+        assertTrue(result);
     }
 }

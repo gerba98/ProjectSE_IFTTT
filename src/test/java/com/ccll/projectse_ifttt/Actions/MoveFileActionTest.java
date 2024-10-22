@@ -28,7 +28,6 @@ public class MoveFileActionTest {
         tempDirSource = Files.createTempDirectory("testDirSource");
         tempDirDestination = Files.createTempDirectory("testDirDestination");
         Files.createFile(Paths.get(tempDirSource.toString(), fileName));
-        System.out.println("File creato nel percorso: " + tempDirSource.toString());
     }
 
     @After
@@ -45,17 +44,17 @@ public class MoveFileActionTest {
         String destinationPath = tempDirDestination.toString();
 
         // Verifica che il file sorgente esista prima dell'azione
-        assertTrue("Il file sorgente dovrebbe esistere prima dello spostamento", Files.exists(Paths.get(sourcePath)));
+        assertTrue(Files.exists(Paths.get(sourcePath)));
 
         ActionCreator creator = new MoveFileActionCreator();
         Action moveFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
         // Esegue l'azione di spostamento
-        assertTrue("The action should succeed", moveFileAction.execute());
+        assertTrue(moveFileAction.execute());
 
         // Verifica che il file sia stato spostato correttamente
-        assertFalse("Source file should not exist after move", Files.exists(Paths.get(sourcePath)));
-        assertTrue("Destination file should exist after move", Files.exists(Paths.get(destinationPath, fileName)));
+        assertFalse(Files.exists(Paths.get(sourcePath)));
+        assertTrue(Files.exists(Paths.get(destinationPath, fileName)));
     }
 
     @Test
@@ -68,14 +67,14 @@ public class MoveFileActionTest {
         Action moveFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
         // Prima esecuzione dovrebbe avere successo
-        assertTrue("First execution should succeed", moveFileAction.execute());
+        assertTrue(moveFileAction.execute());
 
         // Verifica che il file sia stato spostato correttamente
-        assertFalse("Source file should not exist after move", Files.exists(Paths.get(sourcePath)));
-        assertTrue("Destination file should exist after move", Files.exists(Paths.get(destinationPath, fileName)));
+        assertFalse(Files.exists(Paths.get(sourcePath)));
+        assertTrue(Files.exists(Paths.get(destinationPath, fileName)));
 
         // Seconda esecuzione dovrebbe fallire perché il file è già stato spostato
-        assertFalse("Action should not execute more than once", moveFileAction.execute());
+        assertFalse(moveFileAction.execute());
     }
 
 }
