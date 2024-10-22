@@ -5,6 +5,7 @@ import com.ccll.projectse_ifttt.Triggers.Trigger;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -13,7 +14,7 @@ import java.time.temporal.ChronoUnit;
  */
 public class PeriodicRule extends Rule {
     private final Duration period;
-    private LocalDateTime endPeriod;
+    private Duration endPeriod;
 
     /**
      * Costruttore della classe PeriodicRule.
@@ -81,7 +82,7 @@ public class PeriodicRule extends Rule {
     public void executeAction() {
         super.executeAction();
         super.setState(false);
-        endPeriod = getCurrentDateTime().plus(period);
+        endPeriod = period.minus(1, ChronoUnit.SECONDS);
     }
 
     /**
@@ -98,8 +99,14 @@ public class PeriodicRule extends Rule {
         if (super.isState() && endPeriod != null) {
             endPeriod = null;
         }
-        if (!super.isState() && endPeriod != null && endPeriod.isEqual(getCurrentDateTime())) {
-            super.setState(true);
+        if (!super.isState() && endPeriod != null){
+            System.out.println(endPeriod.toString());
+            if(endPeriod == Duration.ZERO) {
+                super.setState(true);
+            }else {
+                endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
+            }
+
         }
     }
 
