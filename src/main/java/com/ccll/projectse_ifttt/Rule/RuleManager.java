@@ -178,6 +178,8 @@ public class RuleManager {
             case "day of the month" -> new DOTMTrigCreator();
             case "date" -> new SDTrigCreator();
             case "status program" -> new EPTrigCreator();
+            case "file dimension" -> new FileDimTrigCreator();
+            case "file existence" -> new FileExisTrigCreator();
             default -> throw new IllegalStateException("Unexpected value: " + triggerType);
         };
         return triggerCreator.createTrigger(triggerValue);

@@ -63,7 +63,6 @@ public class CreateRuleController {
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
 
 
-
     /**
      * Imposta l'istanza di IndexController per questo CreateRuleController.
      *
@@ -79,7 +78,7 @@ public class CreateRuleController {
      * Inizializza il CreateRuleController configurando l'istanza di RuleManager,
      * popolando triggerBox e actionBox con i relativi elementi, e configurando
      * i gestori di eventi per le azioni di selezione di triggerBox e actionBox.
-     *
+     * <p>
      * Al cambio di selezione in triggerBox o actionBox, questo metodo cancella gli
      * elementi correnti in triggerPaneItems o actionPaneItems rispettivamente,
      * li rimuove da rulePane e poi aggiunge un nuovo elemento in base alla selezione.
@@ -341,7 +340,7 @@ public class CreateRuleController {
 
     /**
      * Crea un elemento azione all'interno del rule pane basato sul testo fornito.
-     *
+     * <p>
      * A seconda del valore del parametro `text`, questo metodo aggiorna l'etichetta `label`
      * e crea i campi di input o i pulsanti appropriati richiesti per l'azione specificata.
      *
@@ -611,6 +610,9 @@ public class CreateRuleController {
                 } else {
                     errorFlag = true;
                 }
+                if (item instanceof ComboBox) {
+                    trigger += ((ComboBox) item).getValue() + ":";
+                }
             }
             if (item instanceof DatePicker) {
                 if (!((DatePicker) item).getValue().toString().isEmpty()) {
@@ -622,10 +624,6 @@ public class CreateRuleController {
             }
         }
 
-        // Rimuove l'ultimo carattere e lo sostituisce con uno spazio
-        if (!trigger.isEmpty()) {
-            trigger = trigger.substring(0, trigger.length() - 1);
-        }
 
         iterator = actionPaneItems.iterator();
         while (iterator.hasNext()) {
@@ -641,9 +639,6 @@ public class CreateRuleController {
         }
 
         // Controlla le selezioni di trigger e azione
-        if (Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
-            errorFlag = true;
-        }
 
         // Costruisce l'azione in base al tipo selezionato
         if (Objects.equals(actionBox.getValue(), "Write string")) {
@@ -666,14 +661,21 @@ public class CreateRuleController {
 
 
         // Controlla se ci sono errori nell'input
+        if (Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
+            errorFlag = true;
+        }
+
         if (errorFlag || Objects.equals(name, "")) {
             labelError.setVisible(true);
         } else {
             try {
                 labelError.setVisible(false);
+                if (!trigger.isEmpty()) {
+                    trigger = trigger.substring(0, trigger.length() - 1);
+                }
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
-                Rule newRule = ruleManager.createRule(name, triggerType, trigger, actionType, action);
+                Rule newRule = ruleManager.createRule(name,triggerType, trigger, actionType, action);
 
                 // Aggiungi la nuova regola alla tabella nel IndexController
                 indexController.insertItems(newRule);
@@ -691,16 +693,6 @@ public class CreateRuleController {
 
     }
 
-
-    /**
-     * Gestore dell'evento per l'azione di click del pulsante "Cancella". Questo metodo
-     * cancella tutti gli input dell'utente e le selezioni nei campi del modulo,
-     * incluso l'azzeramento dei testi di `labelTriggerSelected` e `labelActionSelected`,
-     * la cancellazione di `ruleNameTxtField`, e il reset dei valori di `triggerBox`
-     * e `actionBox`.
-     *
-     * @param actionEvent l'evento scatenato quando il pulsante "Cancella" viene cliccato
-     */
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
         labelTriggerSelected.setText("");

@@ -1,7 +1,9 @@
+
 package com.ccll.projectse_ifttt;
 
 import com.ccll.projectse_ifttt.Rule.Rule;
 import com.ccll.projectse_ifttt.Rule.RuleManager;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -34,6 +36,12 @@ public class IndexController {
     private Button deleteRuleButton;
 
     @FXML
+    private Button activateButton;
+
+    @FXML
+    private Button deactivateButton;
+
+    @FXML
     private TableView<Rule> rulesTable;
 
     @FXML
@@ -42,6 +50,10 @@ public class IndexController {
     private TableColumn<Rule, String> triggerColumn;
     @FXML
     private TableColumn<Rule, String> actionColumn;
+    @FXML
+    private TableColumn<Rule, String> stateColumn;
+    @FXML
+    private TableColumn<Rule, String> typeColumn;  // Colonna per la tipologia della regola
 
     private final ObservableList<Rule> rulesList = FXCollections.observableArrayList();
 
@@ -50,15 +62,21 @@ public class IndexController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         triggerColumn.setCellValueFactory(new PropertyValueFactory<>("trigger"));
         actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+        stateColumn.setCellValueFactory(cellData -> {
+            boolean state = cellData.getValue().isState();  // Metodo isState() che ritorna boolean
+            return new SimpleStringProperty(state ? "Active" : "Inactive");
+        });
+        typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));  // Aggiunto per la colonna "Tipologia"
 
         // Imposta la larghezza delle colonne
         nameColumn.setPrefWidth(180);
         triggerColumn.setPrefWidth(180);
         actionColumn.setPrefWidth(180);
+        stateColumn.setPrefWidth(100);
+        typeColumn.setPrefWidth(120);  // Imposta la larghezza della colonna "Tipologia"
 
         rulesTable.setItems(rulesList);
     }
-
 
     @FXML
     public void OnCreateRuleClick() {
@@ -93,6 +111,31 @@ public class IndexController {
             errorLabel.setVisible(true);
         }
     }
+
+    @FXML
+    public void onActivateButtonClick(ActionEvent actionEvent) {
+        Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
+        if (selectedRule != null) {
+            selectedRule.setState(true);  // Imposta lo stato su true (Active)
+            rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+            errorLabel.setVisible(false);
+        } else {
+            errorLabel.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void onDeactivateButtonClick(ActionEvent actionEvent) {
+        Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
+        if (selectedRule != null) {
+            selectedRule.setState(false);  // Imposta lo stato su false (Inactive)
+            rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+            errorLabel.setVisible(false);
+        } else {
+            errorLabel.setVisible(true);
+        }
+    }
+
 
     public void insertItems(Rule rule) {
         rulesList.add(rule);
