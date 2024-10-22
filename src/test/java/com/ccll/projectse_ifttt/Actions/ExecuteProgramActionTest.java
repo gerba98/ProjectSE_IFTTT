@@ -33,7 +33,7 @@ public class ExecuteProgramActionTest {
         Action executeProgramAction = creator.createAction(validProgramPath + ";" + validCommand);
 
         // Verifica che l'azione venga eseguita correttamente
-        assertTrue("The action should succeed", executeProgramAction.execute());
+        assertTrue(executeProgramAction.execute());
     }
 
 
@@ -45,6 +45,6 @@ public class ExecuteProgramActionTest {
         Action executeProgramAction = creator.createAction("/path/to/nowhere;" + "invalidCommand");
 
         // Verifica che l'esecuzione fallisca
-        assertFalse("Execution with invalid command should fail", executeProgramAction.execute());
+        assertFalse(executeProgramAction.execute());
     }
 }

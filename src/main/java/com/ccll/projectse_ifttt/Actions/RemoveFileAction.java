@@ -5,7 +5,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.io.File;
-import java.util.logging.Logger;
 
 /**
  * Questa classe rappresenta l'azione di rimuovere un file.
@@ -13,7 +12,6 @@ import java.util.logging.Logger;
  * la rimozione di un file specificato.
  */
 public class RemoveFileAction implements Action {
-    private static final Logger logger = Logger.getLogger(RemoveFileAction.class.getName());
     private final String filePath;
 
     /**
@@ -33,23 +31,26 @@ public class RemoveFileAction implements Action {
     @Override
     public boolean execute() {
         File file = new File(filePath);
+
+        // Verifica se il file esiste
         if (file.exists()) {
             boolean deleted = file.delete();
+
+            // Se il file è stato cancellato con successo, restituisci true
             if (deleted) {
-                logger.info("File rimosso con successo: " + filePath);
-                showAlert("Successo", "File rimosso con successo: " + filePath);
                 return true;
             } else {
-                logger.warning("Impossibile rimuovere il file: " + filePath);
-                showAlert("Errore", "Impossibile rimuovere il file: " + filePath);
+                // Il file non è stato cancellato per qualche motivo
+                showAlert("Errore", "Impossibile eliminare il file: " + filePath);
                 return false;
             }
         } else {
-            logger.warning("Il file non esiste: " + filePath);
+            // Il file non esiste
             showAlert("Errore", "Il file non esiste: " + filePath);
             return false;
         }
     }
+
 
     /**
      * Mostra un alert con un titolo e un messaggio specificati.

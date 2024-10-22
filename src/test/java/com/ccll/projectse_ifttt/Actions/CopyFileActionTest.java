@@ -44,7 +44,7 @@ public class CopyFileActionTest {
         ActionCreator creator = new CopyFileActionCreator();
         Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
-        assertTrue(copyFileAction.execute(), "Il file dovrebbe essere copiato con successo");
-        assertTrue(Files.exists(Paths.get(destinationPath, sourceFileName)), "Il file di destinazione dovrebbe esistere dopo la copia");
+        assertTrue(copyFileAction.execute());
+        assertTrue(Files.exists(Paths.get(destinationPath, sourceFileName)));
     }
 }

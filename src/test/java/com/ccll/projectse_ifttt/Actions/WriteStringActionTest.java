@@ -40,11 +40,11 @@ public class WriteStringActionTest {
         Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
         // Esegue l'azione di scrittura
-        assertTrue("The action should succeed", writeStringAction.execute());
+        assertTrue(writeStringAction.execute());
 
         // Verifica che il contenuto sia stato scritto correttamente
         String writtenContent = Files.readString(tempFile);
-        assertTrue("The content should match", writtenContent.contains(contentToWrite));
+        assertTrue(writtenContent.contains(contentToWrite));
     }
 
     @Test
@@ -57,6 +57,6 @@ public class WriteStringActionTest {
         Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
         // Esegue l'azione di scrittura
-        assertFalse("The action should fail if the file does not exist", writeStringAction.execute());
+        assertFalse(writeStringAction.execute());
     }
 }
