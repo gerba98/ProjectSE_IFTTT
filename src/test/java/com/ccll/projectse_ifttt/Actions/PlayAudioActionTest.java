@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class PlayAudioActionTest {
 
@@ -29,7 +30,7 @@ public class PlayAudioActionTest {
     public void setUp() throws Exception {
         // Carica il file audio dalle risorse
         URL audioFileUrl = getClass().getResource("/com/ccll/projectse_ifttt/cat.mp3");
-        assertNotNull("Il file audio non è stato trovato nelle risorse", audioFileUrl);
+        assertNotNull(audioFileUrl, "Il file audio non è stato trovato nelle risorse");
 
         // Ottieni il percorso del file audio
         audioFilePath = Paths.get(audioFileUrl.toURI());

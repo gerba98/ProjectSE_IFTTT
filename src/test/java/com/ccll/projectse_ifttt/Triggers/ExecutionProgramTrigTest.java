@@ -4,86 +4,62 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExecutionProgramTrigTest {
-//    @Test
-//    @DisplayName("Verifica attivazione del trigger quando l'output del programma corrisponde al valore atteso")
-//    void testEvaluationWithMatchingOutput() {
-//        // Creiamo un trigger con un programma che restituisce un codice di uscita 0 (successo)
-//        ExecutionProgramTrig trigger = new ExecutionProgramTrig("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-1");
-//
-//        // Verifichiamo che il trigger si attivi correttamente
-//        Assertions.assertTrue(trigger.evaluate(), "Il trigger dovrebbe attivarsi quando l'output corrisponde al valore atteso");
-//    }
-//
-//    @Test
-//    @DisplayName("Verifica mancata attivazione del trigger quando l'output del programma non corrisponde al valore atteso")
-//    void testEvaluationWithNonMatchingOutput() {
-//        // Creiamo un trigger con un programma che restituisce un codice di uscita 1 (errore)
-//        ExecutionProgramTrig trigger = new ExecutionProgramTrig("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-0");
-//
-//        // Verifichiamo che il trigger non si attivi
-//        Assertions.assertFalse(trigger.evaluate(), "Il trigger non dovrebbe attivarsi quando l'output non corrisponde al valore atteso");
-//    }
-//
-//    @Test
-//    @DisplayName("Verifica reset del trigger dopo l'attivazione")
-//    void testResetAfterActivation() {
-//        // Creiamo un trigger con un programma che restituisce un codice di uscita 0 (successo)
-//        ExecutionProgramTrig trigger = new ExecutionProgramTrig("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-1");
-//
-//        // Verifichiamo che il trigger si attivi correttamente
-//        Assertions.assertTrue(trigger.evaluate(), "Il trigger dovrebbe attivarsi quando l'output corrisponde al valore atteso");
-//
-//        // Resettiamo il trigger
-//        trigger.reset();
-//
-//        // Verifichiamo che il trigger non sia più attivo
-//        Assertions.assertFalse(trigger.evaluate(), "Il trigger non dovrebbe più essere attivo dopo il reset");
-//    }
-//
-//    @Test
-//    @DisplayName("Verifica aggiornamento del comando e del programma del trigger")
-//    void testUpdateCommandAndProgram() {
-//        // Creiamo un trigger con un programma che restituisce un codice di uscita 0 (successo)
-//        ExecutionProgramTrig trigger = new ExecutionProgramTrig("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-1");
-//
-//        // Verifichiamo che il trigger si attivi correttamente
-//        Assertions.assertTrue(trigger.evaluate(), "Il trigger dovrebbe attivarsi quando l'output corrisponde al valore atteso");
-//
-//        // Aggiorniamo il comando e il programma del trigger
-//        trigger.setUserInfo(" -C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\dist\\file.exe-1");
-//
-//        // Verifichiamo che il trigger si attivi con il nuovo comando e programma
-//        Assertions.assertTrue(trigger.evaluate(), "Il trigger dovrebbe attivarsi con il nuovo comando e programma");
-//    }
-//
-//    @Test
-//    @DisplayName("Verifica attivazione del trigger con un programma senza argomenti")
-//    void testEvaluationWithProgramWithoutArguments() {
-//        // Creiamo un trigger con un programma che non richiede argomenti
-//        ExecutionProgramTrig trigger = new ExecutionProgramTrig("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-1");
-//
-//        // Verifichiamo che il trigger si attivi correttamente
-//        Assertions.assertTrue(trigger.evaluate(), "Il trigger dovrebbe attivarsi quando l'output corrisponde al valore atteso");
-//    }
+
     @Test
     @DisplayName("Valutazione del trigger all'output del programma specificato")
     public void testEvaluation() {
-        String userInfo = "py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-1";
+        String resourcePath = getClass().getResource("/com/ccll/projectse_ifttt/programs/file.py").getPath();
+        // Se usi Windows, rimuovi il carattere iniziale '/' se presente
+        if (resourcePath.startsWith("/") && System.getProperty("os.name").toLowerCase().contains("windows")) {
+            resourcePath = resourcePath.substring(1);
+        }
+
+        String userInfo = "py-" + resourcePath + "-1";
         ExecutionProgramTrig executionProgramTrig = new ExecutionProgramTrig(userInfo);
 
-        assertTrue(executionProgramTrig.evaluate(), "Il trigger dovrebbe attivarsi quando l'output del programma specificato è uguale a quello desiderato");
+        // Prima chiamata per avviare il processo
+        executionProgramTrig.evaluate();
 
-        executionProgramTrig.setUserInfo("py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-0");
+        // Polling con timeout
+        long startTime = System.currentTimeMillis();
+        long timeout = 5000; // 5 secondi di timeout
+        boolean result = false;
+
+        while (System.currentTimeMillis() - startTime < timeout) {
+            if (executionProgramTrig.evaluate()) {
+                result = true;
+                break;
+            }
+            try {
+                Thread.sleep(100); // Breve pausa tra i tentativi
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            }
+        }
+        assertTrue(result, "Il trigger dovrebbe attivarsi quando l'output del programma specificato è uguale a quello desiderato");
+
+        userInfo = "py-" + resourcePath + "-0";
+
+        executionProgramTrig.setUserInfo(userInfo);
         assertFalse(executionProgramTrig.evaluate(), "Il trigger dovrebbe attivarsi quando l'output del programma specificato è uguale a quello desiderato");
     }
 
     @Test
     @DisplayName("Inizializzazione di ExecutionProgramTrig con comando, programma e output specificati")
     public void testInitialization() {
-        String userInfo = "py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-Azione eseguita";
+        String resourcePath = getClass().getResource("/com/ccll/projectse_ifttt/programs/file.py").getPath();
+        // Se usi Windows, rimuovi il carattere iniziale '/' se presente
+        if (resourcePath.startsWith("/") && System.getProperty("os.name").toLowerCase().contains("windows")) {
+            resourcePath = resourcePath.substring(1);
+        }
+
+        String userInfo = "py-" + resourcePath + "-1";
         ExecutionProgramTrig executionProgramTrig = new ExecutionProgramTrig(userInfo);
 
         assertEquals(userInfo, executionProgramTrig.getUserInfo());
@@ -92,7 +68,13 @@ class ExecutionProgramTrigTest {
     @Test
     @DisplayName("Creazione di DayOfTheMonthTrig tramite DOTMTrigCreator")
     public void testCreator() {
-        String userInfo = "py-C:\\Users\\cuozz\\OneDrive\\Desktop\\exe\\file.py-Azione eseguita";
+        String resourcePath = getClass().getResource("/com/ccll/projectse_ifttt/programs/file.py").getPath();
+        // Se usi Windows, rimuovi il carattere iniziale '/' se presente
+        if (resourcePath.startsWith("/") && System.getProperty("os.name").toLowerCase().contains("windows")) {
+            resourcePath = resourcePath.substring(1);
+        }
+
+        String userInfo = "py-" + resourcePath + "-1";
         TriggerCreator EP = new EPTrigCreator();
         Trigger trigger = EP.createTrigger(userInfo);
         assertInstanceOf(ExecutionProgramTrig.class, trigger);
