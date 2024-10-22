@@ -24,6 +24,10 @@ import java.util.Objects;
  */
 public class CreateRuleController {
 
+    @FXML
+    private CheckBox periodicCheckBox;
+    @FXML
+    private CheckBox singleCheckBox;
     RuleManager ruleManager;
     private String filePath;
     private String selectedFilePath;
@@ -61,6 +65,9 @@ public class CreateRuleController {
 
     @FXML
     private ObservableList<Object> actionPaneItems = FXCollections.observableArrayList();
+
+    @FXML
+    private ObservableList<Object> periodicRuleItems = FXCollections.observableArrayList();
 
 
     /**
@@ -115,7 +122,63 @@ public class CreateRuleController {
             createActionItem(labelActionSelected, selectedItem);
         });
 
+        periodicCheckBox.setOnAction(e -> {
+            createPeriodicRule();
+        });
+
+        periodicCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            // Quando checkbox1 viene selezionata/deselezionata
+            singleCheckBox.setDisable(newValue); // Disabilita/abilita checkbox
+
+        });
+        singleCheckBox.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            // Quando checkbox1 viene selezionata/deselezionata
+            periodicCheckBox.setDisable(newValue); // Disabilita/abilita checkbox2
+            createSingleRule();
+        });
+
     }
+
+    @FXML
+    private void createPeriodicRule(){
+        System.out.println("createPeriodicRule");
+        Spinner<Integer> hourSpinner = new Spinner<>(0, 23, LocalTime.now().getHour());
+        Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, LocalTime.now().getMinute());
+        Spinner<Integer> day = new Spinner<>(0, 1000, LocalTime.now().getSecond());
+
+        Label hoursLabel = new Label("Hours");
+        Label minutesLabel = new Label("Minutes");
+        Label daysLabel = new Label("Days");
+
+        hourSpinner.setEditable(true);
+        hourSpinner.setPrefWidth(55);
+        minuteSpinner.setEditable(true);
+        minuteSpinner.setPrefWidth(55);
+        day.setEditable(true);
+        day.setPrefWidth(55);
+
+        day.setLayoutX(150);
+        day.setLayoutY(339);
+        daysLabel.setLayoutX(150);
+        daysLabel.setLayoutY(322);
+
+        hourSpinner.setLayoutX(212.0);
+        hourSpinner.setLayoutY(339);
+        hoursLabel.setLayoutX(212);
+        hoursLabel.setLayoutY(322);
+
+        minuteSpinner.setLayoutX(274.0);
+        minuteSpinner.setLayoutY(339);
+        minutesLabel.setLayoutX(272);
+        minutesLabel.setLayoutY(322);
+
+        rulePane.getChildren().addAll(day, hourSpinner, minuteSpinner, daysLabel, hoursLabel, minutesLabel);
+        periodicRuleItems.addAll(day, hourSpinner, minuteSpinner, daysLabel, hoursLabel, minutesLabel);
+    }
+
+    @FXML
+    private void createSingleRule(){}
+
 
     /**
      * Crea un elemento trigger all'interno del rule pane basato sul testo fornito.
@@ -675,7 +738,29 @@ public class CreateRuleController {
                 }
                 triggerType = triggerBox.getValue();
                 actionType = actionBox.getValue();
-                Rule newRule = ruleManager.createRule(name,triggerType, trigger, actionType, action);
+                Rule newRule;
+                String stringToWrite = "";
+                String ruleType = "";
+
+                if(periodicCheckBox.isSelected()){
+                    for (Object item : periodicRuleItems) {
+                        if (item instanceof Spinner<?>) {
+                            stringToWrite += ((Spinner<?>) item).getValue().toString() + ":"; // Recupera la stringa da scrivere
+                        }
+                    }
+                    stringToWrite = stringToWrite.substring(0, stringToWrite.length() - 1);
+                    ruleType = "periodicrule-" + stringToWrite;
+
+                }else if(singleCheckBox.isSelected()){
+                    ruleType = "singlerule";
+                }
+                if(ruleType.isEmpty()){
+                    newRule = ruleManager.createRule(name, triggerType, trigger, actionType, action);
+                }else{
+                    newRule = ruleManager.createRule(name, triggerType, trigger, actionType, action, ruleType);
+                }
+
+
 
                 // Aggiungi la nuova regola alla tabella nel IndexController
                 indexController.insertItems(newRule);
@@ -684,6 +769,7 @@ public class CreateRuleController {
                 ruleNameTxtField.clear();
                 triggerBox.setValue("");
                 actionBox.setValue("");
+                clearPeriodicRule();
             } catch (IllegalStateException e) {
                 System.out.println(e);
                 labelError.setVisible(true);
@@ -693,6 +779,16 @@ public class CreateRuleController {
 
     }
 
+    private void clearPeriodicRule(){
+        Iterator<Object> iterator = periodicRuleItems.iterator();
+
+        while (iterator.hasNext()) {
+            Object item = iterator.next();
+            rulePane.getChildren().remove(item);
+            iterator.remove();
+        }
+    }
+
     @FXML
     public void onClearButtonClick(ActionEvent actionEvent) {
         labelTriggerSelected.setText("");
@@ -700,6 +796,11 @@ public class CreateRuleController {
         ruleNameTxtField.clear();
         triggerBox.setValue("");
         actionBox.setValue("");
+        singleCheckBox.setSelected(false);
+        periodicCheckBox.setSelected(false);
+
+        clearPeriodicRule();
+
     }
 
 }

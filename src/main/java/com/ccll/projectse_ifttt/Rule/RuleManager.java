@@ -5,6 +5,8 @@ import com.ccll.projectse_ifttt.Triggers.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.util.Arrays;
+
 /**
  * Questa classe gestisce un insieme di regole nel sistema IFTTT.
  * Implementa il pattern Singleton per garantire che ci sia una sola istanza di
