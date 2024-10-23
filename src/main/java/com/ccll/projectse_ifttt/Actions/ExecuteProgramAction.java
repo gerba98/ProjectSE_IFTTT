@@ -55,7 +55,7 @@ public class ExecuteProgramAction implements Action {
                     processBuilder = new ProcessBuilder(programPath); // Solo l'applicazione
                 } else {
                     // Esegui l'applicazione con il comando
-                    processBuilder = new ProcessBuilder(programPath, command);
+                    processBuilder = new ProcessBuilder(command, programPath);
                 }
             } else {
                 throw new UnsupportedOperationException("Sistema operativo non supportato: " + os);

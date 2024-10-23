@@ -1,6 +1,7 @@
 
 package com.ccll.projectse_ifttt;
 
+import com.ccll.projectse_ifttt.Rule.PeriodicRule;
 import com.ccll.projectse_ifttt.Rule.Rule;
 import com.ccll.projectse_ifttt.Rule.RuleManager;
 import javafx.beans.property.SimpleStringProperty;
@@ -20,6 +21,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * Controller per la gestione della vista principale dell'applicazione.
@@ -115,7 +117,14 @@ public class IndexController {
     @FXML
     public void onActivateButtonClick(ActionEvent actionEvent) {
         Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
-        if (selectedRule != null) {
+
+        if(Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null){
+
+            PeriodicRule rule = (PeriodicRule) selectedRule;
+            rule.setButtonState(true);
+            selectedRule.setState(true);
+
+        }else if (selectedRule != null) {
             selectedRule.setState(true);  // Imposta lo stato su true (Active)
             rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
             errorLabel.setVisible(false);
@@ -127,7 +136,13 @@ public class IndexController {
     @FXML
     public void onDeactivateButtonClick(ActionEvent actionEvent) {
         Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
-        if (selectedRule != null) {
+        if(Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null){
+
+            PeriodicRule rule = (PeriodicRule) selectedRule;
+            rule.setButtonState(false);
+            selectedRule.setState(false);
+
+        }else if (selectedRule != null) {
             selectedRule.setState(false);  // Imposta lo stato su false (Inactive)
             rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
             errorLabel.setVisible(false);

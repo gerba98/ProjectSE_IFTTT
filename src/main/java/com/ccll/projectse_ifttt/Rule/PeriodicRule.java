@@ -15,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 public class PeriodicRule extends Rule {
     private final Duration period;
     private Duration endPeriod;
+    boolean buttonState = false;
 
     /**
      * Costruttore della classe PeriodicRule.
@@ -85,6 +86,15 @@ public class PeriodicRule extends Rule {
         endPeriod = period.minus(1, ChronoUnit.SECONDS);
     }
 
+
+    public boolean isButtonState() {
+        return buttonState;
+    }
+
+    public void setButtonState(boolean buttonState) {
+        this.buttonState = buttonState;
+    }
+
     /**
      * Aggiorna lo stato della regola.
      * Se la regola è attiva e la variabile endPeriod è diversa da null, la imposta a null.
@@ -95,19 +105,24 @@ public class PeriodicRule extends Rule {
      * <li>CASO 2: regola attiva --> utente disattiva regola --> regola resta non attiva --> utente riattiva regola --> caso 1</li>
      * <li>CASO 3: regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> utente riattiva regola --> caso 1</li>
      */
+
+
     private void updateState() {
         if (super.isState() && endPeriod != null) {
             endPeriod = null;
         }
-        if (!super.isState() && endPeriod != null){
-            System.out.println(endPeriod.toString());
-            if(endPeriod == Duration.ZERO) {
-                super.setState(true);
-            }else {
-                endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
+        if(buttonState){
+            if (!super.isState() && endPeriod != null){
+                System.out.println(endPeriod.toString());
+                if(endPeriod == Duration.ZERO) {
+                    super.setState(true);
+                }else {
+                    endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
+                }
+                System.out.println(endPeriod.toSeconds());
             }
-
         }
+
     }
 
     /**

@@ -141,7 +141,6 @@ public class CreateRuleController {
 
     @FXML
     private void createPeriodicRule(){
-        System.out.println("createPeriodicRule");
         Spinner<Integer> hourSpinner = new Spinner<>(0, 23, LocalTime.now().getHour());
         Spinner<Integer> minuteSpinner = new Spinner<>(0, 59, LocalTime.now().getMinute());
         Spinner<Integer> day = new Spinner<>(0, 1000, LocalTime.now().getSecond());
@@ -212,8 +211,6 @@ public class CreateRuleController {
 
                 rulePane.getChildren().addAll(hourSpinner, minuteSpinner);
                 triggerPaneItems.addAll(hourSpinner, minuteSpinner);
-
-
                 break;
             case "Day of the week":
                 label.setText("Day of the week (Monday, etc..)");
@@ -391,12 +388,7 @@ public class CreateRuleController {
 
 
                 //rulePane.getChildren().add(statusProgramField);
-                rulePane.getChildren().add(commandLabel);
-                rulePane.getChildren().add(commandField);
-                rulePane.getChildren().add(programBrowse);
-                rulePane.getChildren().add(programField);
-                rulePane.getChildren().add(outputLabel);
-                rulePane.getChildren().add(outputField);
+                rulePane.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                 triggerPaneItems.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
         }
     }
@@ -415,7 +407,7 @@ public class CreateRuleController {
     @FXML
     private void createActionItem(Label label, String text) {
 
-
+        System.out.println(text);
         switch (text) {
             case "Display message":
                 label.setText("Message to show");
@@ -467,15 +459,17 @@ public class CreateRuleController {
                 browseButton.setLayoutX(285.0);
                 browseButton.setLayoutY(225.0);
 
+                TextField fileField = new TextField();
+                fileField.setLayoutY(225);
+                fileField.setLayoutX(350);
+
                 browseButton.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
                     fileChooser.setTitle("Select a file");
                     File selectedFile = fileChooser.showOpenDialog(browseButton.getScene().getWindow());
-                    if (selectedFile != null) {
-                        filePath = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                    if (selectedFile != null) { // Salva il percorso nella variabile di istanza
                         // Mostra un messaggio di conferma
-                        labelError.setText("File selected: " + selectedFile.getName());
-                        labelError.setVisible(false);
+                        fileField.setText(selectedFile.getAbsolutePath());
                     }
                 });
 
@@ -484,8 +478,8 @@ public class CreateRuleController {
                 stringToWriteField.setLayoutX(285.0);
                 stringToWriteField.setLayoutY(265.0);
 
-                rulePane.getChildren().addAll(browseButton, stringToWriteField);
-                actionPaneItems.addAll(browseButton, stringToWriteField);
+                rulePane.getChildren().addAll(browseButton, stringToWriteField, fileField);
+                actionPaneItems.addAll(browseButton, stringToWriteField, fileField);
                 break;
 
             case "Copy File":
@@ -493,27 +487,37 @@ public class CreateRuleController {
                 Button fileSelectButton = new Button("Select File...");
                 fileSelectButton.setLayoutX(285.0);
                 fileSelectButton.setLayoutY(225.0);
+
+                TextField fileSelectedField = new TextField();
+                fileSelectedField.setLayoutY(225.0);
+                fileSelectedField.setLayoutX(365.0);
+
                 fileSelectButton.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
                     fileChooser.setTitle("Select a file to copy");
                     File file = fileChooser.showOpenDialog(null);
                     if (file != null) {
-                        selectedFilePath = file.getAbsolutePath();
+                        fileSelectedField.setText(file.getAbsolutePath());
                     }
                 });
                 Button destSelectButton = new Button("Select Destination...");
                 destSelectButton.setLayoutX(285.0);
                 destSelectButton.setLayoutY(265.0);
+
+                TextField destSelectedField = new TextField();
+                destSelectedField.setLayoutY(265.0);
+                destSelectedField.setLayoutX(410.0);
+
                 destSelectButton.setOnAction(e -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     directoryChooser.setTitle("Select destination directory");
                     File dir = directoryChooser.showDialog(null);
                     if (dir != null) {
-                        selectedDirectoryPath = dir.getAbsolutePath();
+                        destSelectedField.setText(dir.getAbsolutePath());
                     }
                 });
-                rulePane.getChildren().addAll(fileSelectButton, destSelectButton);
-                actionPaneItems.addAll(fileSelectButton, destSelectButton);
+                rulePane.getChildren().addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                actionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
                 break;
 
             case "Move file":
@@ -521,29 +525,39 @@ public class CreateRuleController {
                 Button fileSelectButton1 = new Button("Select File...");
                 fileSelectButton1.setLayoutX(285.0);
                 fileSelectButton1.setLayoutY(225.0);
+
+                TextField fileSelectedField1 = new TextField();
+                fileSelectedField1.setLayoutY(225.0);
+                fileSelectedField1.setLayoutX(365.0);
+
                 fileSelectButton1.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
                     fileChooser.setTitle("Select a file to move");
                     File file = fileChooser.showOpenDialog(null);
                     if (file != null) {
-                        selectedFilePath = file.getAbsolutePath();
+                        fileSelectedField1.setText(file.getAbsolutePath());
                     }
                 });
 
                 Button destSelectButton1 = new Button("Select Destination...");
                 destSelectButton1.setLayoutX(285.0);
                 destSelectButton1.setLayoutY(265.0);
+
+                TextField destSelectedField1 = new TextField();
+                destSelectedField1.setLayoutY(265.0);
+                destSelectedField1.setLayoutX(410.0);
+
                 destSelectButton1.setOnAction(e -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
                     directoryChooser.setTitle("Select destination directory");
                     File dir = directoryChooser.showDialog(null);
                     if (dir != null) {
-                        selectedDirectoryPath = dir.getAbsolutePath();
+                        destSelectedField1.setText(dir.getAbsolutePath());
                     }
                 });
 
-                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1);
-                actionPaneItems.addAll(fileSelectButton1, destSelectButton1);
+                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
+                actionPaneItems.addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
                 break;
             case "Remove file":
                 label.setText("Select the file to remove");
@@ -552,6 +566,10 @@ public class CreateRuleController {
                 browseRemButton.setLayoutX(285.0);
                 browseRemButton.setLayoutY(225.0);
 
+                TextField fileRemovedField = new TextField();
+                fileRemovedField.setLayoutY(225.0);
+                fileRemovedField.setLayoutX(350.0);
+
                 browseRemButton.setOnAction(e -> {
                     FileChooser removeFileChooser = new FileChooser();
                     removeFileChooser.setTitle("Select file to remove...");
@@ -559,12 +577,12 @@ public class CreateRuleController {
                     Stage stage = (Stage) browseRemButton.getScene().getWindow();
                     File selectedFile = removeFileChooser.showOpenDialog(stage);
                     if (selectedFile != null) {
-                        filePathToRemove = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                        fileRemovedField.setText(selectedFile.getAbsolutePath()); // Salva il percorso nella variabile di istanza
                     }
                 });
 
-                rulePane.getChildren().add(browseRemButton);
-                actionPaneItems.add(browseRemButton);
+                rulePane.getChildren().addAll(browseRemButton, fileRemovedField);
+                actionPaneItems.addAll(browseRemButton, fileRemovedField);
                 break;
             case "Execute Program":
                 label.setText("Choose the program to execute");
@@ -583,8 +601,7 @@ public class CreateRuleController {
                     programChooser.setTitle("Select a program to execute");
                     File selectedFile = programChooser.showOpenDialog(browseProgramButton.getScene().getWindow());
                     if (selectedFile != null) {
-                        selectedProgramPath = selectedFile.getAbsolutePath();
-                        programPathField.setText(selectedProgramPath);
+                        programPathField.setText(selectedFile.getAbsolutePath());
                     }
                 });
 
@@ -601,6 +618,7 @@ public class CreateRuleController {
                     programCommand = newValue;
                 });
 
+                break;
         }
     }
 
@@ -637,91 +655,196 @@ public class CreateRuleController {
         String triggerType = "";
         String actionType = "";
 
-        // Recupera il trigger
+
         Iterator<Object> iterator = triggerPaneItems.iterator();
-        while (iterator.hasNext()) {
-            Object item = iterator.next();
-            if (item instanceof TextField) {
-                if (!((TextField) item).getText().isEmpty()) {
-                    errorFlag = false;
-                    if (Objects.equals(triggerBox.getValue(), "Status program")) {
-                        trigger += ((TextField) item).getText() + "-";
-                    } else {
-                        trigger += ((TextField) item).getText() + " ";
+        switch (triggerBox.getValue()){
+            case "Time of the Day":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof Spinner){
+                        if (((Spinner<?>) item).getValue().toString().length() == 1) {
+                            trigger += "0" + ((Spinner<?>) item).getValue() + ":";
+                        } else {
+                            trigger += ((Spinner<?>) item).getValue() + ":";
+                        }
                     }
-                } else if (((TextField) item).getText().isEmpty() && Objects.equals(triggerBox.getValue(), "Status program")) {
+                }
+                break;
+            case "Day of the week":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof ComboBox<?>){
+                        if (!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+                            errorFlag = false;
+                            trigger += ((ComboBox<?>) item).getValue() + " ";
+                        } else {
+                                errorFlag = true;
+                        }
+                    }
+                }
+                break;
+            case "Date":
+            case "Day of the month":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if (item instanceof DatePicker) {
+                        if (!((DatePicker) item).getValue().toString().isEmpty()) {
+                            errorFlag = false;
+                            trigger += ((DatePicker) item).getValue() + " ";
+                        } else {
+                            errorFlag = true;
+                        }
+                    }
+                }
+                break;
+            case "File existence":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if (item instanceof TextField) {
+                        if (!((TextField) item).getText().isEmpty()) {
+                            errorFlag = false;
+                            trigger += ((TextField) item).getText() + "-";
+                        } else {
+                            errorFlag = true;
+                        }
+                    }
+                }
+                break;
+            case "File dimension":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if (item instanceof TextField) {
 
-                    trigger += " " + "-";
+                        if (!((TextField) item).getText().isEmpty()) {
+                            errorFlag = false;
+                            trigger += ((TextField) item).getText() + "-";
+                        }else{
+                            errorFlag = true;
+                        }
 
-                } else {
-                    errorFlag = true;
-                }
-            }
-            if (item instanceof Spinner) {
-                if (((Spinner) item).getValue().toString().length() == 1) {
-                    trigger += "0" + ((Spinner) item).getValue() + ":";
-                } else {
-                    trigger += ((Spinner) item).getValue() + ":";
+                    }else if (item instanceof ComboBox<?>) {
 
-                }
+                        if (!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+                            errorFlag = false;
+                            trigger += ((ComboBox<?>) item).getValue() + "-";
+                        }else{
+                            errorFlag = true;
+                        }
 
-            }
-            if (item instanceof ComboBox<?>) {
-                if (!((ComboBox<?>) item).getValue().toString().isEmpty()) {
-                    errorFlag = false;
-                    trigger += ((ComboBox<?>) item).getValue() + " ";
-                } else {
-                    errorFlag = true;
+                    }else if (item instanceof Spinner<?>) {
+                        if(!((Spinner<?>) item).getValue().toString().isEmpty()){
+                            errorFlag = false;
+                            trigger += ((Spinner<?>) item).getValue() + "-";
+                        }else{
+                            errorFlag = true;
+                        }
+                    }
                 }
-                if (item instanceof ComboBox) {
-                    trigger += ((ComboBox) item).getValue() + ":";
+                break;
+            case "Status program":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof TextField){
+                        if(((TextField) item).getText().isEmpty() && triggerPaneItems.indexOf(item) == 0){
+                            errorFlag = false;
+                            trigger += " " + "-";
+                        }else if(!((TextField) item).getText().isEmpty()){
+                            errorFlag = false;
+                            trigger += ((TextField) item).getText() + "-";
+                        }else{
+                            errorFlag = true;
+                        }
+                    }
                 }
-            }
-            if (item instanceof DatePicker) {
-                if (!((DatePicker) item).getValue().toString().isEmpty()) {
-                    errorFlag = false;
-                    trigger += ((DatePicker) item).getValue() + " ";
-                } else {
-                    errorFlag = true;
-                }
-            }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + triggerBox.getValue());
         }
-
-
+        //"Display message", "Play Audio", "Write string", "Copy File", "Move file", "Remove file", "Execute Program");
         iterator = actionPaneItems.iterator();
-        while (iterator.hasNext()) {
-            Object item = iterator.next();
-            if (item instanceof TextField) {
-                if (!((TextField) item).getText().isEmpty()) {
-                    errorFlag = false;
-                    action += ((TextField) item).getText();
-                } else {
-                    errorFlag = true;
+        switch (actionBox.getValue()){
+            case "Display message":
+            case "Play Audio":
+            case "Remove file":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof TextField){
+                        if(!((TextField) item).getText().isEmpty()){
+                            errorFlag = false;
+                            action += ((TextField) item).getText() + " ";
+                        }else{
+                            errorFlag = true;
+                        }
+                    }
                 }
-            }
-        }
-
-        // Controlla le selezioni di trigger e azione
-
-        // Costruisce l'azione in base al tipo selezionato
-        if (Objects.equals(actionBox.getValue(), "Write string")) {
-            String stringToWrite = "";
-            for (Object item : actionPaneItems) {
-                if (item instanceof TextField) {
-                    stringToWrite = ((TextField) item).getText(); // Recupera la stringa da scrivere
+                break;
+            case "Copy File":
+            case "Write string":
+            case "Move file":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof TextField){
+                        if(!((TextField) item).getText().isEmpty()){
+                            errorFlag = false;
+                            action += ((TextField) item).getText() + ";";
+                        }else{
+                            errorFlag = true;
+                        }
+                    }
                 }
-            }
-            action = filePath + ";" + stringToWrite;
-        } else if (Objects.equals(actionBox.getValue(), "Copy File")) {
-            action = selectedFilePath + ";" + selectedDirectoryPath;
-        } else if (Objects.equals(actionBox.getValue(), "Move file")) {
-            action = selectedFilePath + ";" + selectedDirectoryPath; // Passa i percorsi del file e della directory
-        } else if (Objects.equals(actionBox.getValue(), "Remove file")) {
-            action = filePathToRemove; // Utilizza il percorso del file selezionato per rimuovere
-        } else if (Objects.equals(actionBox.getValue(), "Execute Program")) {
-            action = selectedProgramPath + ";" + programCommand;
-        }
+                break;
+            case "Execute Program":
+                while (iterator.hasNext()) {
+                    Object item = iterator.next();
+                    if(item instanceof TextField){
+                        if(((TextField) item).getText().isEmpty() && triggerPaneItems.indexOf(item) == 1){
+                            errorFlag = false;
+                        }else if(!((TextField) item).getText().isEmpty()){
+                            errorFlag = false;
+                            action += ((TextField) item).getText() + ";";
+                        }else{
+                            errorFlag = true;
+                        }
+                    }
+                }
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + actionBox.getValue());
 
+        }
+//        while (iterator.hasNext()) {
+//            Object item = iterator.next();
+//            if (item instanceof TextField) {
+//                if (!((TextField) item).getText().isEmpty()) {
+//                    errorFlag = false;
+//                    action += ((TextField) item).getText();
+//                } else {
+//                    errorFlag = true;
+//                }
+//            }
+//        }
+//
+//        // Controlla le selezioni di trigger e azione
+//
+//        // Costruisce l'azione in base al tipo selezionato
+//        if (Objects.equals(actionBox.getValue(), "Write string")) {
+//            String stringToWrite = "";
+//            for (Object item : actionPaneItems) {
+//                if (item instanceof TextField) {
+//                    stringToWrite = ((TextField) item).getText(); // Recupera la stringa da scrivere
+//                }
+//            }
+//            action = filePath + ";" + stringToWrite;
+//        } else if (Objects.equals(actionBox.getValue(), "Copy File")) {
+//            action = selectedFilePath + ";" + selectedDirectoryPath;
+//        } else if (Objects.equals(actionBox.getValue(), "Move file")) {
+//            action = selectedFilePath + ";" + selectedDirectoryPath; // Passa i percorsi del file e della directory
+//        } else if (Objects.equals(actionBox.getValue(), "Remove file")) {
+//            action = filePathToRemove; // Utilizza il percorso del file selezionato per rimuovere
+//        } else if (Objects.equals(actionBox.getValue(), "Execute Program")) {
+//            action = selectedProgramPath + ";" + programCommand;
+//        }
+//
 
         // Controlla se ci sono errori nell'input
         if (Objects.equals(triggerBox.getValue(), null) || Objects.equals(actionBox.getValue(), null)) {
@@ -733,11 +856,15 @@ public class CreateRuleController {
         } else {
             try {
                 labelError.setVisible(false);
+                triggerType = triggerBox.getValue();
                 if (!trigger.isEmpty()) {
                     trigger = trigger.substring(0, trigger.length() - 1);
                 }
-                triggerType = triggerBox.getValue();
+
                 actionType = actionBox.getValue();
+                if(!action.isEmpty()){
+                    action = action.substring(0, action.length() - 1);
+                }
                 Rule newRule;
                 String stringToWrite = "";
                 String ruleType = "";
@@ -772,6 +899,7 @@ public class CreateRuleController {
                 clearPeriodicRule();
             } catch (IllegalStateException e) {
                 System.out.println(e);
+                System.out.println("ciao");
                 labelError.setVisible(true);
             }
         }

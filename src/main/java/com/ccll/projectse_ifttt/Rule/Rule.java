@@ -13,6 +13,7 @@ public class Rule {
     private Action action;
     private String name;
     private boolean state;
+
     private int numberOfExecutions;
 
     /**
@@ -105,7 +106,7 @@ public class Rule {
      * @param state Il nuovo stato da impostare
      */
     public void setState(boolean state) {
-        if (state) {
+        if (state && !isState()) {
             trigger.reset();
         }
         this.state = state;
