@@ -472,7 +472,8 @@ public class CreateRuleController {
                     fileChooser.setTitle("Select a file");
                     File selectedFile = fileChooser.showOpenDialog(browseButton.getScene().getWindow());
                     if (selectedFile != null) {
-                        filePath = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                        filePath = selectedFile.getAbsolutePath();
+                        labelActionSelected.setText(" " + selectedFile.getName());// Salva il percorso nella variabile di istanza
                         // Mostra un messaggio di conferma
                         labelError.setText("File selected: " + selectedFile.getName());
                         labelError.setVisible(false);
@@ -499,8 +500,14 @@ public class CreateRuleController {
                     File file = fileChooser.showOpenDialog(null);
                     if (file != null) {
                         selectedFilePath = file.getAbsolutePath();
+                        labelActionSelected.setText(" " + file.getName());
                     }
                 });
+                TextField directory1PathField = new TextField();
+                directory1PathField.setPromptText("Destination directory");
+                directory1PathField.setLayoutX(420.0);  // Posiziona accanto al bottone, regolando X
+                directory1PathField.setLayoutY(265.0);  // Spostala leggermente sotto i pulsanti
+
                 Button destSelectButton = new Button("Select Destination...");
                 destSelectButton.setLayoutX(285.0);
                 destSelectButton.setLayoutY(265.0);
@@ -510,10 +517,11 @@ public class CreateRuleController {
                     File dir = directoryChooser.showDialog(null);
                     if (dir != null) {
                         selectedDirectoryPath = dir.getAbsolutePath();
+                        directory1PathField.setText(selectedDirectoryPath);
                     }
                 });
-                rulePane.getChildren().addAll(fileSelectButton, destSelectButton);
-                actionPaneItems.addAll(fileSelectButton, destSelectButton);
+                rulePane.getChildren().addAll(fileSelectButton, destSelectButton, directory1PathField);
+                actionPaneItems.addAll(fileSelectButton, destSelectButton, directory1PathField);
                 break;
 
             case "Move file":
@@ -527,8 +535,14 @@ public class CreateRuleController {
                     File file = fileChooser.showOpenDialog(null);
                     if (file != null) {
                         selectedFilePath = file.getAbsolutePath();
+                        labelActionSelected.setText(" " + file.getName());
                     }
                 });
+
+                TextField directoryPathField = new TextField();
+                directoryPathField.setPromptText("Destination directory");
+                directoryPathField.setLayoutX(420.0);
+                directoryPathField.setLayoutY(265.0);
 
                 Button destSelectButton1 = new Button("Select Destination...");
                 destSelectButton1.setLayoutX(285.0);
@@ -539,11 +553,12 @@ public class CreateRuleController {
                     File dir = directoryChooser.showDialog(null);
                     if (dir != null) {
                         selectedDirectoryPath = dir.getAbsolutePath();
+                        directoryPathField.setText(selectedDirectoryPath);
                     }
                 });
 
-                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1);
-                actionPaneItems.addAll(fileSelectButton1, destSelectButton1);
+                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1, directoryPathField);
+                actionPaneItems.addAll(fileSelectButton1, destSelectButton1, directoryPathField);
                 break;
             case "Remove file":
                 label.setText("Select the file to remove");
@@ -559,7 +574,8 @@ public class CreateRuleController {
                     Stage stage = (Stage) browseRemButton.getScene().getWindow();
                     File selectedFile = removeFileChooser.showOpenDialog(stage);
                     if (selectedFile != null) {
-                        filePathToRemove = selectedFile.getAbsolutePath(); // Salva il percorso nella variabile di istanza
+                        filePathToRemove = selectedFile.getAbsolutePath();
+                        labelActionSelected.setText("File to remove: " + selectedFile.getName());// Salva il percorso nella variabile di istanza
                     }
                 });
 
