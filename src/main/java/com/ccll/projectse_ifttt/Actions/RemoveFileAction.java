@@ -75,6 +75,6 @@ public class RemoveFileAction implements Action {
      */
     @Override
     public String toString() {
-        return "Rimozione file";
+        return "Remove file;"+filePath;
     }
 }

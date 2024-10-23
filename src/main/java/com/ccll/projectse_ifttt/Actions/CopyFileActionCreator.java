@@ -16,7 +16,7 @@ public class CopyFileActionCreator extends ActionCreator {
      */
     @Override
     public Action createAction(String actionValue) {
-        String[] parts = actionValue.split(";"); // Divide la stringa in base al separatore ";"
+        String[] parts = actionValue.split("-"); // Divide la stringa in base al separatore ";"
         return new CopyFileAction(parts[0], parts[1]); // Crea e restituisce un'istanza di CopyFileAction
     }
 

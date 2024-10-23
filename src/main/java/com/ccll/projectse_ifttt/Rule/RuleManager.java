@@ -2,8 +2,11 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.*;
 import com.ccll.projectse_ifttt.Triggers.*;
+import com.ccll.projectse_ifttt.Rule.RulePersistence;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.util.Callback;
 
 import java.util.Arrays;
 
@@ -16,12 +19,19 @@ public class RuleManager {
     private static volatile RuleManager instance;
     private final ObservableList<Rule> rules;
     private CheckRule ruleChecker;
-
+    private RulePersistence rulePersistence;
     /**
      * Costruttore privato per inizializzare il RuleManager  e la lista delle regole.
      */
     private RuleManager() {
-        this.rules = FXCollections.observableArrayList();
+        // Configura l'ObservableList per tracciare i cambiamenti alle proprietà delle Rule
+        this.rules = FXCollections.observableArrayList(new Callback<Rule, Observable[]>() {
+            @Override
+            public javafx.beans.Observable[] call(Rule rule) {
+                return new javafx.beans.Observable[]{rule.stateProperty()};
+            }
+        });
+        //this.rulePersistence = new RulePersistence();
     }
 
     /**
@@ -85,9 +95,17 @@ public class RuleManager {
      * @return L'observable list contenente Rule
      */
     public ObservableList<Rule> getRules() {
+        if (rules.isEmpty()) {
+            rulePersistence = new RulePersistence();
+            rulePersistence.loadRules();
+        }
         return rules;
     }
 
+    public void saveRules(){
+        rulePersistence = new RulePersistence();
+        rulePersistence.saveRules();
+    }
 
     /**
      * Crea una nuova Rule basata sui parametri forniti.

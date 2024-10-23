@@ -69,7 +69,7 @@ public class DayOfTheMonthTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Trigger attivato a: " + dayOfMonth.getDayOfMonth();
+        return "Day of the Month;" + dayOfMonth.getDayOfMonth();
     }
 
 

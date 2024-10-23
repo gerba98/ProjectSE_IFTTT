@@ -66,7 +66,7 @@ public class SpecifiedDateTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Trigger attivato a: " + date;
+        return "date;" + date;
     }
 
     @Override

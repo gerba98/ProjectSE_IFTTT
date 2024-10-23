@@ -20,9 +20,9 @@ public class ExecuteProgramActionCreator extends ActionCreator {
      */
     @Override
     public Action createAction(String actionValue) {
-        String[] parts = actionValue.split(";", 2); // Dividi il valore in due parti
+        String[] parts = actionValue.split("-", 2); // Dividi il valore in due parti
         if (parts.length != 2) {
-            throw new IllegalArgumentException("Invalid action value. Expected format: programPath;command");
+            throw new IllegalArgumentException("Invalid action value. Expected format: programPath-command");
         }
         String programPath = parts[0];
         String command = parts[1];

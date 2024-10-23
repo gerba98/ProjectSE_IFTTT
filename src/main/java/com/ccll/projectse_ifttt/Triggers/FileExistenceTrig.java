@@ -69,6 +69,6 @@ public class FileExistenceTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "File existence; " + filePath;
+        return "File existence;" + filePath;
     }
 }

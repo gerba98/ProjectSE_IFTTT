@@ -112,7 +112,7 @@ public class ExecutionProgramTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Esecuzione Programma:" + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];
+        return "Status program;" + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];
     }
 
     @Override

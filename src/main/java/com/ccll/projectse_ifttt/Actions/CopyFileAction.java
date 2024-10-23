@@ -65,6 +65,6 @@ public class CopyFileAction implements Action {
     }
 
     public String toString() {
-        return "Copia di un file";
+        return "Copy File;"+sourcePath+"-"+destinationPath;
     }
 }

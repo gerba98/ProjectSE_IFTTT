@@ -2,6 +2,10 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.Action;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 
 /**
@@ -11,9 +15,11 @@ import com.ccll.projectse_ifttt.Triggers.Trigger;
 public class Rule {
     private Trigger trigger;
     private Action action;
-    private String name;
-    private boolean state;
+    private StringProperty name;
+    private BooleanProperty state;
     private int numberOfExecutions;
+
+
 
     /**
      * Costruttore della classe Rule.
@@ -28,8 +34,8 @@ public class Rule {
     public Rule(String name, Trigger trigger, Action action) {
         this.trigger = trigger;
         this.action = action;
-        this.name = name;
-        this.state = true;
+        this.name = new SimpleStringProperty(name);
+        this.state = new SimpleBooleanProperty(true);
         this.numberOfExecutions = 0;
     }
 
@@ -76,7 +82,7 @@ public class Rule {
      * @return Il nome della regola
      */
     public String getName() {
-        return name;
+        return name.get();
     }
 
     /**
@@ -85,7 +91,7 @@ public class Rule {
      * @param name Il nuovo nome da impostare
      */
     public void setName(String name) {
-        this.name = name;
+        this.name.set(name);
     }
 
 
@@ -95,9 +101,12 @@ public class Rule {
      * @return True se la regola è attiva, False altrimenti
      */
     public boolean isState() {
-        return state;
+        return state.get();
     }
 
+    public BooleanProperty stateProperty() {
+        return state;
+    }
     /**
      * Imposta lo stato della regola.
      * Se lo stato viene settato a true il trigger viene resettato.
@@ -108,7 +117,7 @@ public class Rule {
         if (state) {
             trigger.reset();
         }
-        this.state = state;
+        this.state.set(state);
     }
 
     /**
@@ -127,7 +136,7 @@ public class Rule {
      * @return True se il trigger è attivato, False altrimenti
      */
     public boolean evaluateTrigger() {
-        if (state) {
+        if (isState()) {
             return trigger.evaluate();
         }
         return false;
@@ -161,10 +170,6 @@ public class Rule {
      */
     @Override
     public String toString() {
-        return "Rule{" +
-                "name='" + name + '\'' +
-                "trigger=" + trigger +
-                ", action=" + action +
-                '}';
+        return name + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
     }
 }

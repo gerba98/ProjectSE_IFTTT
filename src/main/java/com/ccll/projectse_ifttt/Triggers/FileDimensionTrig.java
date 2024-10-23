@@ -124,6 +124,6 @@ public class FileDimensionTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "File dimension; " + filePath + " - " + dimension + " - " + unitDim;
+        return "File dimension;" + filePath + "-" + dimension + "-" + unitDim;
     }
 }

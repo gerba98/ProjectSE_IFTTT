@@ -42,7 +42,7 @@ public class CopyFileActionTest {
         String destinationPath = tempDir.toString();
 
         ActionCreator creator = new CopyFileActionCreator();
-        Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
+        Action copyFileAction = creator.createAction(sourcePath + "-" + destinationPath);
 
         assertTrue(copyFileAction.execute());
         assertTrue(Files.exists(Paths.get(destinationPath, sourceFileName)));

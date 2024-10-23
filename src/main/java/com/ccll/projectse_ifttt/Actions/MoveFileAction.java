@@ -60,6 +60,6 @@ public class MoveFileAction implements Action {
     }
 
     public String toString() {
-        return "Spostamento file";
+        return "Move file;"+sourceFilePath+"-"+destinationDirectoryPath;
     }
 }

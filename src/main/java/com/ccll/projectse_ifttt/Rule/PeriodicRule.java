@@ -2,6 +2,8 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.Action;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -14,8 +16,14 @@ import java.time.temporal.ChronoUnit;
 public class PeriodicRule extends Rule {
     private final Duration period;
     private Duration endPeriod;
-    private boolean reactivated;
+    private String strPeriod;
+
+
+    private BooleanProperty reactivated;
     private boolean test;
+
+
+
 
     /**
      * Costruttore della classe PeriodicRule.
@@ -29,11 +37,15 @@ public class PeriodicRule extends Rule {
      */
     public PeriodicRule(String name, Trigger trigger, Action action, String period) {
         super(name, trigger, action);
-        this.period = parsePeriod(period);
-        this.reactivated = true;
+        this.strPeriod = period;
+        this.period = parsePeriod(period).minus(1, ChronoUnit.SECONDS);
+        this.reactivated = new SimpleBooleanProperty(true);
         this.test = false;
     }
 
+    public void initEndPeriod(){
+        endPeriod=period;
+    }
     /**
      * Converte una stringa rappresentante un periodo in un oggetto Duration.
      *
@@ -65,6 +77,10 @@ public class PeriodicRule extends Rule {
         return "PeriodicRule";
     }
 
+
+    public String getStrPeriod() {
+        return strPeriod;
+    }
     /**
      * Aggiorna lo stato della regola ed esegue il metodo evaluateTrigger definito nella classe Rule
      *
@@ -76,6 +92,11 @@ public class PeriodicRule extends Rule {
         return super.evaluateTrigger();
     }
 
+    public BooleanProperty reactivatedProperty() {
+        return reactivated;
+    }
+
+
     /**
      * Esegue il metodo executeAction definito nella classe Rule.
      * Imposta lo stato della regola a false.
@@ -85,7 +106,12 @@ public class PeriodicRule extends Rule {
     public void executeAction() {
         super.executeAction();
         super.setState(false);
-        endPeriod = period.minus(1, ChronoUnit.SECONDS);
+        endPeriod = period;
+    }
+
+    @Override
+    public String toString() {
+        return super.getName() + ";" + super.getTrigger() + ";" + super.getAction() + ";" + isState() + ";" + getType()+ "-" + strPeriod + ";" +reactivated;
     }
 
     /**
@@ -94,7 +120,7 @@ public class PeriodicRule extends Rule {
      * @return true se la regola sarà riattivata, false altrimenti
      */
     public boolean isReactivated() {
-        return reactivated;
+        return reactivated.get();
     }
 
     /**
@@ -103,7 +129,7 @@ public class PeriodicRule extends Rule {
      * @param reactivated false per disattivare la riattivazione della regola, true per attivarla
      */
     public void setReactivated(boolean reactivated) {
-        this.reactivated = reactivated;
+        this.reactivated.set(reactivated);
     }
 
     /**
@@ -121,12 +147,11 @@ public class PeriodicRule extends Rule {
             // CASO 3
             if (super.isState()) {
                 endPeriod = null;
+                reactivated.set(true);
                 return;
-            }
-            if (!super.isState()){
+            }else{
                 // CASO 2
-                if(!reactivated){
-                    reactivated = true;
+                if(!reactivated.get()){
                     endPeriod=null;
                     return;
                 }
@@ -138,6 +163,7 @@ public class PeriodicRule extends Rule {
                 }
 
             }
+
         }
     }
 

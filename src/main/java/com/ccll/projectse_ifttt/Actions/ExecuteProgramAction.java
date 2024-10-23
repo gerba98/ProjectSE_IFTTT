@@ -33,28 +33,20 @@ public class ExecuteProgramAction implements Action {
             ProcessBuilder processBuilder;
             String os = System.getProperty("os.name").toLowerCase();
 
-            // Verifica se il file è un'applicazione .app
             boolean isApp = programPath.endsWith(".app");
 
-            // Se è macOS
             if (os.contains("mac")) {
                 if (isApp) {
-                    // Apri l'applicazione usando open -a
                     String[] commandArray = {"open", "-a", programPath};
                     processBuilder = new ProcessBuilder(commandArray);
                 } else {
-                    // Esegui il comando arbitrario
                     String[] commandArray = {"/bin/bash", "-c", command};
                     processBuilder = new ProcessBuilder(commandArray);
                 }
-            }
-            // Se è Windows
-            else if (os.contains("win")) {
-                // Se il comando è nullo o vuoto, esegui solo l'applicazione
+            } else if (os.contains("win")) {
                 if (command == null || command.trim().isEmpty()) {
-                    processBuilder = new ProcessBuilder(programPath); // Solo l'applicazione
+                    processBuilder = new ProcessBuilder(programPath);
                 } else {
-                    // Esegui l'applicazione con il comando
                     processBuilder = new ProcessBuilder(programPath, command);
                 }
             } else {
@@ -62,17 +54,18 @@ public class ExecuteProgramAction implements Action {
             }
 
             processBuilder.inheritIO(); // Mostra l'output del programma nella console
-            Process process = processBuilder.start();
 
-            int exitCode = process.waitFor();
-            return exitCode == 0; // Ritorna true se il programma è stato eseguito con successo
-        } catch (IOException | InterruptedException e) {
+            // Avvia il processo senza aspettare la sua terminazione
+            processBuilder.start();
+
+            return true; // Ritorna subito senza bloccare l'interfaccia grafica
+        } catch (IOException e) {
             e.printStackTrace();
-            return false; // Ritorna false in caso di errore
+            return false;
         }
     }
 
     public String toString() {
-        return "Esecuzione Programma";
+        return "Execution Program;"+programPath+"-"+command;
     }
 }

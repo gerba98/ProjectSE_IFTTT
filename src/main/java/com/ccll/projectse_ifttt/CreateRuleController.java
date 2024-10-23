@@ -673,9 +673,9 @@ public class CreateRuleController {
                 } else {
                     errorFlag = true;
                 }
-                if (item instanceof ComboBox) {
-                    trigger += ((ComboBox) item).getValue() + ":";
-                }
+//                if (item instanceof ComboBox) {
+//                    trigger += ((ComboBox) item).getValue() + ":";
+//                }
             }
             if (item instanceof DatePicker) {
                 if (!((DatePicker) item).getValue().toString().isEmpty()) {
@@ -711,15 +711,15 @@ public class CreateRuleController {
                     stringToWrite = ((TextField) item).getText(); // Recupera la stringa da scrivere
                 }
             }
-            action = filePath + ";" + stringToWrite;
+            action = filePath + "-" + stringToWrite;
         } else if (Objects.equals(actionBox.getValue(), "Copy File")) {
-            action = selectedFilePath + ";" + selectedDirectoryPath;
+            action = selectedFilePath + "-" + selectedDirectoryPath;
         } else if (Objects.equals(actionBox.getValue(), "Move file")) {
-            action = selectedFilePath + ";" + selectedDirectoryPath; // Passa i percorsi del file e della directory
+            action = selectedFilePath + "-" + selectedDirectoryPath; // Passa i percorsi del file e della directory
         } else if (Objects.equals(actionBox.getValue(), "Remove file")) {
             action = filePathToRemove; // Utilizza il percorso del file selezionato per rimuovere
         } else if (Objects.equals(actionBox.getValue(), "Execute Program")) {
-            action = selectedProgramPath + ";" + programCommand;
+            action = selectedProgramPath + "-" + programCommand;
         }
 
 

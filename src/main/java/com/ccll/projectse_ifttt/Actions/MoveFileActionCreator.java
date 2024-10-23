@@ -18,9 +18,9 @@ public class MoveFileActionCreator extends ActionCreator {
      */
     @Override
     public Action createAction(String actionValue) {
-        String[] values = actionValue.split(";");
+        String[] values = actionValue.split("-");
         if (values.length != 2) {
-            throw new IllegalArgumentException("Expected format: sourceFilePath;destinationDirectoryPath");
+            throw new IllegalArgumentException("Expected format: sourceFilePath-destinationDirectoryPath");
         }
         return new MoveFileAction(values[0], values[1]);
     }

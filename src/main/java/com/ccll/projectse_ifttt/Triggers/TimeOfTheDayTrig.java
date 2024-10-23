@@ -75,7 +75,7 @@ public class TimeOfTheDayTrig implements Trigger {
      */
     @Override
     public String toString() {
-        return "Trigger attivato alle" + time;
+        return "Time of the day;" + time;
     }
 
 
