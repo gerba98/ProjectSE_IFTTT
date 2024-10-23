@@ -67,13 +67,7 @@ public class IndexController {
             return new SimpleStringProperty(state ? "Active" : "Inactive");
         });
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));  // Aggiunto per la colonna "Tipologia"
-
-        // Imposta la larghezza delle colonne
-        nameColumn.setPrefWidth(180);
-        triggerColumn.setPrefWidth(180);
-        actionColumn.setPrefWidth(180);
-        stateColumn.setPrefWidth(100);
-        typeColumn.setPrefWidth(120);  // Imposta la larghezza della colonna "Tipologia"
+        
 
         rulesTable.setItems(rulesList);
     }

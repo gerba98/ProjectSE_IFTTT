@@ -5,34 +5,36 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" prefHeight="415.0" prefWidth="847.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.IndexController">
+<VBox alignment="CENTER" prefHeight="497.0" prefWidth="783.0" spacing="20.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.IndexController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-    <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-        <AnchorPane maxHeight="500.0" maxWidth="500.0" minHeight="0.0" minWidth="0.0" prefHeight="500.0" prefWidth="1500.0">
-            <Button fx:id="createRuleButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
-            <Button fx:id="deleteRuleButton" layoutX="14.0" layoutY="55.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" />
-            <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0" text="Select a Rule" textFill="RED" visible="false" />
-            <Button fx:id="activateButton" layoutX="14.0" layoutY="93.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #2b6112;" text="Activate" textFill="WHITE">
-                <font>
-                    <Font name="ArimaMadurai-Regular" size="13.0" />
-                </font>
-            </Button>
-            <Button fx:id="deactivateButton" layoutX="13.0" layoutY="130.0" mnemonicParsing="false" onAction="#onDeactivateButtonClick" prefHeight="26.0" prefWidth="77.0" style="-fx-background-color: #cd1515;" text="Deactivate" textFill="WHITE" />
-        </AnchorPane>
+    <SplitPane prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
             <children>
-                <TableView fx:id="rulesTable" layoutX="28.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="350.0" prefWidth="631.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <TableView fx:id="rulesTable" layoutX="-9.0" layoutY="14.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="381.0" prefWidth="750.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-9.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                        <TableColumn fx:id="nameColumn" maxWidth="150.0" prefWidth="110.0" text="Nome" />
-                        <TableColumn fx:id="triggerColumn" maxWidth="150.0" prefWidth="110.0" text="Trigger" />
-                        <TableColumn fx:id="actionColumn" maxWidth="150.0" prefWidth="110.0" text="Azione" />
-                        <TableColumn fx:id="stateColumn" maxWidth="150.0" prefWidth="110.0" text="Stato" />
-                        <TableColumn fx:id="typeColumn" maxWidth="150.0" prefWidth="120.0" text="Tipologia" />
+                        <TableColumn fx:id="nameColumn" maxWidth="150.0" prefWidth="150.0" text="Nome" />
+                        <TableColumn fx:id="triggerColumn" maxWidth="150.0" prefWidth="150.0" text="Trigger" />
+                        <TableColumn fx:id="actionColumn" maxWidth="150.0" prefWidth="150.0" text="Azione" />
+                        <TableColumn fx:id="stateColumn" maxWidth="150.0" prefWidth="150.0" text="Stato" />
+                        <TableColumn fx:id="typeColumn" maxWidth="150.0" prefWidth="150.0" text="Tipologia" />
                     </columns>
                 </TableView>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <Pane prefHeight="200.0" prefWidth="200.0" />
             </children>
         </AnchorPane>
     </SplitPane>
+     <AnchorPane maxHeight="500.0" maxWidth="647.0" minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="647.0">
+         <Button fx:id="createRuleButton" layoutX="210.0" layoutY="2.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
+         <Button fx:id="deleteRuleButton" layoutX="324.0" layoutY="2.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" />
+         <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0" text="Select a Rule" textFill="RED" visible="false" />
+         <Button fx:id="activateButton" layoutX="115.0" layoutY="41.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="26.0" prefWidth="172.0" style="-fx-background-color: #2b6112;" text="Activate rule" textFill="WHITE">
+             <font>
+                 <Font name="ArimaMadurai-Regular" size="13.0" />
+             </font>
+         </Button>
+         <Button fx:id="deactivateButton" layoutX="324.0" layoutY="41.0" mnemonicParsing="false" onAction="#onDeactivateButtonClick" prefHeight="17.0" prefWidth="172.0" style="-fx-background-color: #cd1515;" text="Deactivate rule" textFill="WHITE" />
+     </AnchorPane>
 </VBox>
