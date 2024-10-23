@@ -5,7 +5,6 @@ import com.ccll.projectse_ifttt.Triggers.Trigger;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -15,6 +14,8 @@ import java.time.temporal.ChronoUnit;
 public class PeriodicRule extends Rule {
     private final Duration period;
     private Duration endPeriod;
+    private boolean reactivated;
+    private boolean test;
 
     /**
      * Costruttore della classe PeriodicRule.
@@ -29,6 +30,8 @@ public class PeriodicRule extends Rule {
     public PeriodicRule(String name, Trigger trigger, Action action, String period) {
         super(name, trigger, action);
         this.period = parsePeriod(period);
+        this.reactivated = true;
+        this.test = false;
     }
 
     /**
@@ -86,38 +89,56 @@ public class PeriodicRule extends Rule {
     }
 
     /**
+     * Restituisce lo stato di riattivazione della regola periodica.
+     *
+     * @return true se la regola sarà riattivata, false altrimenti
+     */
+    public boolean isReactivated() {
+        return reactivated;
+    }
+
+    /**
+     * Imposta lo stato di riattivazione della regola periodica.
+     *
+     * @param reactivated false per disattivare la riattivazione della regola, true per attivarla
+     */
+    public void setReactivated(boolean reactivated) {
+        this.reactivated = reactivated;
+    }
+
+    /**
      * Aggiorna lo stato della regola.
      * Se la regola è attiva e la variabile endPeriod è diversa da null, la imposta a null.
      * Se la regola è disattivata e la variabile endPeriod è diversa da null e il giorno e l'ora corrente sono uguali alla variabile endPeriod, imposta lo stato della regola a true.
      * <p></p>
      * Casi d'uso considerati:
-     * <li>CASO 1: regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> trascorre il period --> regola attiva --> ... </li>
-     * <li>CASO 2: regola attiva --> utente disattiva regola --> regola resta non attiva --> utente riattiva regola --> caso 1</li>
-     * <li>CASO 3: regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> utente riattiva regola --> caso 1</li>
+     * <li>CASO 1: (funzionamento base) regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> trascorre il period --> regola attiva --> ... </li>
+     * <li>CASO 2: (se l'utente disattiva la regola essa rimane disattivata) regola attiva/non attiva --> utente disattiva regola --> regola resta non attiva --> utente riattiva regola --> caso 1</li>
+     * <li>CASO 3: (se l'utente riattiva la regola endPeriod viene azzerato) regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> utente riattiva regola --> caso 1</li>
      */
     private void updateState() {
-        if (super.isState() && endPeriod != null) {
-            endPeriod = null;
-        }
-        if (!super.isState() && endPeriod != null){
-            System.out.println(endPeriod.toString());
-            if(endPeriod == Duration.ZERO) {
-                super.setState(true);
-            }else {
-                endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
+        if(endPeriod!=null) {
+            // CASO 3
+            if (super.isState()) {
+                endPeriod = null;
+                return;
             }
+            if (!super.isState()){
+                // CASO 2
+                if(!reactivated){
+                    reactivated = true;
+                    endPeriod=null;
+                    return;
+                }
+                // CASO 1
+                if(endPeriod == Duration.ZERO) {
+                    super.setState(true);
+                }else{
+                    endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
+                }
 
+            }
         }
-    }
-
-    /**
-     * Restituisce la data e l'ora corrente più il periodo della regola,
-     * con secondi e nanosecondi impostati a zero.
-     *
-     * @return La data e l'ora corrente più il periodo
-     */
-    private LocalDateTime getCurrentDateTime() {
-        return LocalDateTime.now().withSecond(0).withNano(0);
     }
 
 }
