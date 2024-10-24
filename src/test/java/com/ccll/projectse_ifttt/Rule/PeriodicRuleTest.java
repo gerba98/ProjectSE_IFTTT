@@ -94,7 +94,7 @@ class PeriodicRuleTest {
         periodicRule.setReactivated(false);
         waitCheckRule(61000);
         Assertions.assertFalse(periodicRule.isState(), "La regola dovrebbe essere disattivata dopo l'esecuzione");
-        Assertions.assertFalse(periodicRule.isReactivated(), "La variabile Reactivated dovrebbe essere settata a true");
+        Assertions.assertTrue(periodicRule.isReactivated(), "La variabile Reactivated dovrebbe essere settata a true");
 
         //funzionamento base
         periodicRule.setState(true);
