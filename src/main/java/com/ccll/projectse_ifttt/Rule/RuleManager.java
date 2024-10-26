@@ -158,6 +158,31 @@ public class RuleManager {
     }
 
     /**
+     * Crea un trigger basato sul tipo e valore specificati.
+     *
+     * @param triggerType  Il tipo di trigger da creare. Deve essere una stringa non nulla.
+     *                     Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
+     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger.
+     *                     Es. Per "time of the day": l'orario in formato stringa (es. "14:30").
+     * @return Un'istanza di Trigger creata in base ai parametri forniti.
+     * @throws IllegalStateException se viene fornito un tipo di trigger non supportato.
+     */
+    public static Trigger createTrigger(String triggerType, String triggerValue) {
+        TriggerCreator triggerCreator = switch (triggerType.toLowerCase()) {
+            case "time of the day" -> new TOTDTrigCreator();
+            case "day of the week" -> new DOTWTrigCreator();
+            case "day of the month" -> new DOTMTrigCreator();
+            case "date" -> new SDTrigCreator();
+            case "status program" -> new EPTrigCreator();
+            case "file dimension" -> new FileDimTrigCreator();
+            case "file existence" -> new FileExisTrigCreator();
+            case "composite" -> new CompositeTrigCreator();
+            default -> throw new IllegalStateException("Unexpected value: " + triggerType);
+        };
+        return triggerCreator.createTrigger(triggerValue);
+    }
+
+    /**
      * Crea un'azione basata sul tipo e valore specificati.
      *
      * @param actionType  Il tipo di azione da creare. Deve essere una stringa non nulla.
@@ -167,7 +192,7 @@ public class RuleManager {
      * @return Un'istanza di Action creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di azione non supportato.
      */
-    private Action createAction(String actionType, String actionValue) {
+    public static Action createAction(String actionType, String actionValue) {
         ActionCreator actionCreator = switch (actionType.toLowerCase()) {
             case "play audio" -> new PlayAudioActionCreator();
             case "display message" -> new DisplayMessageActionCreator();
@@ -179,30 +204,6 @@ public class RuleManager {
             default -> throw new IllegalStateException("Unsupported action type: " + actionType);
         };
         return actionCreator.createAction(actionValue);
-    }
-
-    /**
-     * Crea un trigger basato sul tipo e valore specificati.
-     *
-     * @param triggerType  Il tipo di trigger da creare. Deve essere una stringa non nulla.
-     *                     Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
-     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger.
-     *                     Es. Per "time of the day": l'orario in formato stringa (es. "14:30").
-     * @return Un'istanza di Trigger creata in base ai parametri forniti.
-     * @throws IllegalStateException se viene fornito un tipo di trigger non supportato.
-     */
-    private Trigger createTrigger(String triggerType, String triggerValue) {
-        TriggerCreator triggerCreator = switch (triggerType.toLowerCase()) {
-            case "time of the day" -> new TOTDTrigCreator();
-            case "day of the week" -> new DOTWTrigCreator();
-            case "day of the month" -> new DOTMTrigCreator();
-            case "date" -> new SDTrigCreator();
-            case "status program" -> new EPTrigCreator();
-            case "file dimension" -> new FileDimTrigCreator();
-            case "file existence" -> new FileExisTrigCreator();
-            default -> throw new IllegalStateException("Unexpected value: " + triggerType);
-        };
-        return triggerCreator.createTrigger(triggerValue);
     }
 
 }

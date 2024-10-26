@@ -15,7 +15,6 @@ public class FileExisTrigCreator extends TriggerCreator {
         String[] parts = path.split(" ");
         Path folderPath = Paths.get(parts[0]);
         Path filePath = folderPath.resolve(parts[1]);
-        System.out.println(filePath);
         return new FileExistenceTrig(filePath.toString());
     }
 

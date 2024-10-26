@@ -22,6 +22,6 @@ public class TOTDTrigCreator extends TriggerCreator {
 
     @Override
     public String getType() {
-        return "time of the day";
+        return "Time of the day";
     }
 }

@@ -2,18 +2,20 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.File;
 
-public class FileDimensionTrig implements Trigger {
+/**
+ * Implementa un trigger che si attiva se un file ha una dimensione maggiore o uguale di una dimensione specificata
+ */
+public class FileDimensionTrig extends AbstractTrigger {
     private long dimension;
     private String filePath;
     private String unitDim;
-    private boolean lastEvaluation = false;
 
     /**
-     * Costruisce un FileDimensionTrig con la dimensione specificata e un file da controllare.
+     * Costruisce un FileDimensionTrig con la dimensione, l'unità di misura e il percorso del file specificati.
      *
-     * @param dimension la dimensione specifica per cui questo trigger deve attivarsi.
-     * @param unitDim specifica l'unità di misura indicata dall'utente
-     * @param filePath è il percorso del file da controllare
+     * @param dimension la dimensione che se è maggiore o uguale a quella del file fa attivare il trigger
+     * @param unitDim l'unità di misura indicata dall'utente
+     * @param filePath il percorso del file da controllare
      */
     public FileDimensionTrig(int dimension, String unitDim, String filePath) {
         this.dimension = dimension;
@@ -82,7 +84,7 @@ public class FileDimensionTrig implements Trigger {
      * @return true se il trigger è attivo, false altrimenti.
      */
     @Override
-    public boolean evaluate() {
+    public boolean getCurrentEvaluation() {
         long dim = 0;
         switch (unitDim) {
             case "B" -> dim = dimension;
@@ -90,31 +92,13 @@ public class FileDimensionTrig implements Trigger {
             case "MB" -> dim = dimension * 1048576;
             case "GB" -> dim = dimension * 1073741824;
         }
-
         File file = new File(filePath);
-        boolean evaluation = false;
-
+        boolean newEvaluation = false;
         if (file.exists() && file.isFile()) {
             long fileSize = file.length();
-            boolean newEvaluation = fileSize >= dim;
-
-            // Il trigger si attiva solo quando la condizione passa da false a true
-            if (newEvaluation && !lastEvaluation) {
-                evaluation = true;
-            }
-
-            lastEvaluation = newEvaluation;
+            newEvaluation = fileSize >= dim;
         }
-
-        return evaluation;
-    }
-
-    /**
-     * Reimposta lo stato della valutazione.
-     */
-    @Override
-    public void reset() {
-        lastEvaluation = false;
+        return newEvaluation;
     }
 
     /**

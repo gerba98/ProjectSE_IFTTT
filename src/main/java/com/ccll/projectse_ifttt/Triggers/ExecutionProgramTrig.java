@@ -10,9 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Rappresenta un trigger che si attiva ad un valore specifico ritornato da un programma specifico.
  * Questo trigger valuta se l'output restituito dal programma corrisponde con quello specificato.
  */
-public class ExecutionProgramTrig implements Trigger {
+public class ExecutionProgramTrig extends AbstractTrigger {
     boolean isThreadRunning = false;
-    boolean lastEvaluation = false;
     AtomicBoolean evaluation = new AtomicBoolean(false);
     AtomicInteger exitCode = new AtomicInteger();
     private CompletableFuture<Integer> runningProcess = null;
@@ -54,8 +53,8 @@ public class ExecutionProgramTrig implements Trigger {
      * @return true se il trigger è attivo, false altrimenti.
      */
     @Override
-    public boolean evaluate() {
-
+    public boolean getCurrentEvaluation() {
+        boolean newEvaluation = false;
         String output = this.userInfo.split("-")[2];
         if (runningProcess == null) {
             // Start a new process if there isn't one running
@@ -66,21 +65,13 @@ public class ExecutionProgramTrig implements Trigger {
         if (runningProcess.isDone()) {
             try {
                 int exitCode = runningProcess.get();
-                boolean newEvaluation = (String.valueOf(exitCode).equals(output));
-
-                if (newEvaluation && !lastEvaluation) {
-                    lastEvaluation = true;
-                    runningProcess = null; // Reset for next evaluation
-                    return true;
-                }
-
-                lastEvaluation = newEvaluation;
+                newEvaluation = (String.valueOf(exitCode).equals(output));
                 runningProcess = null; // Reset for next evaluation
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return false; // Process is still running or evaluation didn't change
+        return newEvaluation; // Process is still running or evaluation didn't change
     }
 
     private void startNewProcess() {
@@ -117,9 +108,9 @@ public class ExecutionProgramTrig implements Trigger {
 
     @Override
     public void reset() {
+        super.reset();
         evaluation = new AtomicBoolean(false);
         exitCode = new AtomicInteger();
-        lastEvaluation = false;
         isThreadRunning = false;
         if (runningProcess != null && !runningProcess.isDone()) {
             runningProcess.cancel(true);

@@ -8,10 +8,17 @@ public interface Trigger {
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
+     * Questo metodo controlla se il trigger passa da uno stato disattivato a uno attivato.
+     *
+     * @return true se la condizione del trigger è soddisfatta (passando da "false" a "true"),
+     *         false altrimenti.
+     */
+    boolean evaluate();
+    /**
+     * Valuta se la condizione del trigger è soddisfatta.
      *
      * @return true se la condizione del trigger è soddisfatta, false altrimenti.
      */
-    boolean evaluate();
-
+    boolean getCurrentEvaluation();
     void reset();
 }

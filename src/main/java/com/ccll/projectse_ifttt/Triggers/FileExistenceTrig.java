@@ -2,12 +2,14 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.File;
 
-public class FileExistenceTrig implements Trigger {
+/**
+ * Implementa un trigger che si attiva se è presente un determinato file nel percorso specificato
+ */
+public class FileExistenceTrig extends AbstractTrigger {
     private String filePath;
-    private boolean lastEvaluation = false; // Per tracciare lo stato dell'ultima valutazione
 
     /**
-     * Costruisce un FileExistenceTrig con il percorso specificato e un file da controllare.
+     * Costruisce un FileExistenceTrig con il percorso del file per il quale deve essere verificata l'esistenza.
      *
      * @param filePath è il percorso del file da controllare
      */
@@ -16,18 +18,18 @@ public class FileExistenceTrig implements Trigger {
     }
 
     /**
-     * Restituisce il percorso del file controllato da questo trigger.
+     * Restituisce il percorso del file.
      *
-     * @return il percorso del file che deve essere controllato.
+     * @return il percorso del file per il quale deve essere verificata l'esistenza.
      */
     public String getFilePath() {
         return filePath;
     }
 
     /**
-     * Imposta il percorso del file da controllare per questo trigger.
+     * Imposta il percorso del file per il quale deve essere verificata l'esistenza.
      *
-     * @param filePath il percorso del file che deve essere controllato.
+     * @param filePath il percorso del file per il quale deve essere verificata l'esistenza.
      */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
@@ -35,37 +37,19 @@ public class FileExistenceTrig implements Trigger {
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se il file inizia ad esistere.
+     * La condizione è soddisfatta se il file esiste.
      *
-     * @return true se il trigger si attiva (quando il file comincia a esistere), false altrimenti.
+     * @return true se la condizione è soddisfatta, false altrimenti.
      */
     @Override
-    public boolean evaluate() {
-        File file = new File(filePath);
-        boolean newEvaluation = file.exists();  // Valutazione corrente
-
-        boolean evaluation = false;
-        // Il trigger si attiva solo se il file esiste ora, ma non esisteva prima
-        if (newEvaluation && !lastEvaluation) {
-            evaluation = true;
-        }
-
-        lastEvaluation = newEvaluation;  // Aggiorna lo stato della valutazione
-        return evaluation;
-    }
-
-    /**
-     * Reimposta lo stato della valutazione.
-     */
-    @Override
-    public void reset() {
-        lastEvaluation = false;
+    public boolean getCurrentEvaluation() {
+        return new File(filePath).exists();
     }
 
     /**
      * Restituisce una rappresentazione stringa del trigger.
      *
-     * @return una stringa che rappresenta lo stato del trigger di esistenza del file.
+     * @return una stringa in cui è specificato il trigger type e il trigger value separato da ";"
      */
     @Override
     public String toString() {
