@@ -149,7 +149,7 @@ public class RuleManager {
      * @return Un'istanza di Action creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di azione non supportato.
      */
-    private Action createAction(String actionType, String actionValue) {
+    public static Action createAction(String actionType, String actionValue) {
         ActionCreator actionCreator = switch (actionType.toLowerCase()) {
             case "play audio" -> new PlayAudioActionCreator();
             case "display message" -> new DisplayMessageActionCreator();
