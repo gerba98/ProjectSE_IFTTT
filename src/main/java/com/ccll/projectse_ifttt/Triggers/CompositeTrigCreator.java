@@ -7,7 +7,7 @@ public class CompositeTrigCreator extends TriggerCreator {
 
     @Override
     public Trigger createTrigger(String triggers) {
-        // Il formato del triggerValue sarà: "OPERATOR:trigger1Type:trigger1Value:trigger2Type:trigger2Value"
+        // Il formato del triggerValue sarà: "OPERATOR:trigger1Type:(opera))"
         String[] parts = triggers.split(":");
 
         LogicalOperator operator = LogicalOperator.valueOf(parts[0]);

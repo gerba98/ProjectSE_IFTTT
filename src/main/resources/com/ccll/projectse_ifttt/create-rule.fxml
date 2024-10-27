@@ -4,23 +4,37 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="399.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.CreateRuleController">
-   <children>
-      <Pane fx:id="rulePane" prefHeight="399.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Label layoutX="24.0" layoutY="50.0" text="Rule Name" />
-            <TextField fx:id="ruleNameTxtField" layoutX="24.0" layoutY="67.0" prefHeight="25.0" prefWidth="210.0" />
-            <Label layoutX="24.0" layoutY="125.0" text="Trigger" />
-            <ComboBox fx:id="triggerBox" layoutX="24.0" layoutY="142.0" prefHeight="25.0" prefWidth="210.0" />
-            <Label layoutX="25.0" layoutY="208.0" text="Action" />
-            <ComboBox fx:id="actionBox" layoutX="24.0" layoutY="225.0" prefHeight="25.0" prefWidth="210.0" />
-            <Button fx:id="createButton" layoutX="465.0" layoutY="339.0" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />
-            <Button fx:id="ClearButton" layoutX="553.0" layoutY="339.0" mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear" />
-            <Label id="labelTriggerSelected" fx:id="labelTriggerSelected" layoutX="286.0" layoutY="125.0" prefHeight="17.0" prefWidth="275.0" />
-            <TextField layoutX="277.0" layoutY="142.0" prefHeight="25.0" prefWidth="143.0" visible="false" />
-            <Label fx:id="labelActionSelected" layoutX="286.0" layoutY="208.0" prefHeight="17.0" prefWidth="190.0" />
-            <Label fx:id="labelError" layoutX="336.0" layoutY="343.0" prefHeight="17.0" prefWidth="91.0" text="Missing info" textFill="RED" visible="false" />
-            <CheckBox fx:id="periodicCheckBox" layoutX="25.0" layoutY="343.0" mnemonicParsing="false" text="Periodic rule" />
-            <CheckBox fx:id="singleCheckBox" layoutX="25.0" layoutY="279.0" mnemonicParsing="false" text="Single rule" />
-         </children></Pane>
-   </children>
+   <AnchorPane fx:id="anchorPaneComposite" prefHeight="399.0" prefWidth="646.0">
+      <Button fx:id="backRuleButton" layoutX="14.0" layoutY="359.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+      <ComboBox fx:id="CTBox1" layoutX="103.0" layoutY="113.0" prefHeight="26.0" prefWidth="220.0" />
+      <ComboBox fx:id="operatorBox" layoutX="103.0" layoutY="195.0" prefHeight="26.0" prefWidth="67.0" />
+      <ComboBox fx:id="CTBox2" layoutX="103.0" layoutY="276.0" prefHeight="26.0" prefWidth="220.0" />
+      <Button layoutX="496.0" layoutY="359.0" mnemonicParsing="false" text="Create" />
+      <Button layoutX="588.0" layoutY="359.0" mnemonicParsing="false" text="Clear" />
+      <Label layoutX="103.0" layoutY="96.0" text="First trigger" />
+      <Label layoutX="103.0" layoutY="177.0" text="Operator" />
+      <Label layoutX="103.0" layoutY="258.0" text="Second trigger" />
+      <CheckBox fx:id="notOperator1" layoutX="55.0" layoutY="117.0" mnemonicParsing="false" text="Not" />
+      <CheckBox fx:id="notOperator2" layoutX="55.0" layoutY="280.0" mnemonicParsing="false" text="Not" />
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="221.0" layoutY="14.0" prefHeight="51.0" prefWidth="203.0" style="-fx-font-size: 18; -fx-text-fill: red; -fx-font-weight: bold;" text="COMPOSITE TRIGGER" />
+   </AnchorPane>
+   <AnchorPane fx:id="anchorPane" prefHeight="399.0" prefWidth="646.0" visible="false">
+      <Pane fx:id="rulePane" prefHeight="399.0" prefWidth="646.0" AnchorPane.bottomAnchor="-199.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-446.0" AnchorPane.topAnchor="0.0">
+         <Label layoutX="24.0" layoutY="50.0" text="Rule Name" />
+         <TextField fx:id="ruleNameTxtField" layoutX="24.0" layoutY="67.0" prefHeight="25.0" prefWidth="210.0" />
+         <Label layoutX="24.0" layoutY="125.0" text="Trigger" />
+         <ComboBox fx:id="triggerBox" layoutX="24.0" layoutY="142.0" prefHeight="25.0" prefWidth="210.0" />
+         <Label layoutX="25.0" layoutY="208.0" text="Action" />
+         <ComboBox fx:id="actionBox" layoutX="24.0" layoutY="225.0" prefHeight="25.0" prefWidth="210.0" />
+         <Button fx:id="createButton" layoutX="465.0" layoutY="339.0" mnemonicParsing="false" onAction="#onCreateButtonClick" text="Create" />
+         <Button fx:id="ClearButton" layoutX="553.0" layoutY="339.0" mnemonicParsing="false" onAction="#onClearButtonClick" text="Clear" />
+         <Label id="labelTriggerSelected" fx:id="labelTriggerSelected" layoutX="286.0" layoutY="125.0" prefHeight="17.0" prefWidth="275.0" />
+         <TextField layoutX="277.0" layoutY="142.0" prefHeight="25.0" prefWidth="143.0" visible="false" />
+         <Label fx:id="labelActionSelected" layoutX="286.0" layoutY="208.0" prefHeight="17.0" prefWidth="190.0" />
+         <Label fx:id="labelError" layoutX="336.0" layoutY="343.0" prefHeight="17.0" prefWidth="91.0" text="Missing info" textFill="RED" visible="false" />
+         <CheckBox fx:id="periodicCheckBox" layoutX="25.0" layoutY="343.0" mnemonicParsing="false" text="Periodic rule" />
+         <CheckBox fx:id="singleCheckBox" layoutX="25.0" layoutY="279.0" mnemonicParsing="false" text="Single rule" />
+         <Button fx:id="compositeTriggerButton" layoutX="260.0" layoutY="142.0" mnemonicParsing="false" onAction="#createCompositeTrigger" text="Create composite trigger" />
+      </Pane>
+   </AnchorPane>
 </AnchorPane>

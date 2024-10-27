@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -23,7 +24,14 @@ import java.util.Objects;
  * regole basate su trigger e azioni.
  */
 public class CreateRuleController {
-
+    @FXML
+    private AnchorPane anchorPaneComposite;
+    @FXML
+    private Button compositeTriggerButton;
+    @FXML
+    private Button backRuleButton;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private CheckBox periodicCheckBox;
     @FXML
@@ -54,7 +62,7 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> actionBox;
     @FXML
-    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week", "Day of the month", "Date", "File existence", "File dimension", "Status program");
+    final ObservableList<String> triggersList = FXCollections.observableArrayList("Time of the Day", "Day of the week", "Day of the month", "Date", "File existence", "File dimension", "Status program", "Composite trigger");
     @FXML
     final ObservableList<String> actionsList = FXCollections.observableArrayList("Display message", "Play Audio", "Write string", "Copy File", "Move file", "Remove file", "Execute Program");
     @FXML
@@ -96,7 +104,12 @@ public class CreateRuleController {
         triggerBox.setItems(triggersList);
         actionBox.setItems(actionsList);
 
+
+
         triggerBox.setOnAction(e -> {
+            if(!triggerBox.getValue().isEmpty()){
+                compositeTriggerButton.setVisible(false);
+            }
             String selectedItem = triggerBox.getSelectionModel().getSelectedItem();
             if (!triggerPaneItems.isEmpty()) {
                 Iterator<Object> iterator = triggerPaneItems.iterator();
@@ -137,6 +150,17 @@ public class CreateRuleController {
             createSingleRule();
         });
 
+    }
+    @FXML
+    private void createCompositeTrigger() {
+        anchorPane.visibleProperty().setValue(false);
+        anchorPaneComposite.setVisible(true);
+    }
+
+    @FXML
+    private void backButton(){
+        anchorPane.visibleProperty().setValue(true);
+        anchorPaneComposite.setVisible(false);
     }
 
     @FXML
@@ -398,6 +422,9 @@ public class CreateRuleController {
                 rulePane.getChildren().add(outputLabel);
                 rulePane.getChildren().add(outputField);
                 triggerPaneItems.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
+                break;
+
+
         }
     }
 
@@ -814,6 +841,7 @@ public class CreateRuleController {
         actionBox.setValue("");
         singleCheckBox.setSelected(false);
         periodicCheckBox.setSelected(false);
+        compositeTriggerButton.setVisible(true);
 
         clearPeriodicRule();
 
