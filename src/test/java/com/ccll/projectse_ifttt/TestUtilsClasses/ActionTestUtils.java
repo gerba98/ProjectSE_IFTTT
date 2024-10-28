@@ -4,11 +4,12 @@ import com.ccll.projectse_ifttt.Actions.Action;
 
 public class ActionTestUtils implements Action {
     private boolean executed = false;
+    private boolean result = true; // Impostazione predefinita
 
     @Override
     public boolean execute() {
         executed = true;
-        return true;
+        return result;
     }
 
     public boolean wasExecuted() {
@@ -17,6 +18,11 @@ public class ActionTestUtils implements Action {
 
     public void reset() {
         executed = false;
+    }
+
+    // Configura il risultato dell'esecuzione (true o false)
+    public void setExecutionResult(boolean result) {
+        this.result = result;
     }
 
     @Override

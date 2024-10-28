@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 /**
- * La classe {@code WriteStringAction} implementa l'interfaccia {@code Action}
+ * La classe {@code WriteStringAction} implementa l'interfaccia {@link Action}
  * e rappresenta un'azione per scrivere una stringa alla fine di un file di testo.
  * Questa azione verifica se il file specificato esiste prima di tentare di
  * scrivere nel file. Se il file non esiste, l'azione restituisce {@code false}.
@@ -41,7 +41,7 @@ public class WriteStringAction implements Action {
      * viene stampato un messaggio di errore.
      *
      * @return {@code true} se la scrittura è avvenuta con successo,
-     * {@code false} altrimenti
+     *         {@code false} altrimenti
      */
     @Override
     public boolean execute() {
@@ -81,6 +81,11 @@ public class WriteStringAction implements Action {
         });
     }
 
+    /**
+     * Restituisce una rappresentazione in formato stringa di questa azione.
+     *
+     * @return una stringa che descrive l'azione come "Scrittura su file"
+     */
     @Override
     public String toString() {
         return "Scrittura su file";

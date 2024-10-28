@@ -1,39 +1,74 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import com.ccll.projectse_ifttt.Rule.RuleManager;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompositeAction implements Action{
+/**
+ * La classe CompositeAction rappresenta un'azione composta, che consente di combinare più azioni
+ * in una singola esecuzione. Implementa il pattern Composite, permettendo di eseguire una
+ * sequenza di azioni in cui ogni azione deve essere eseguita correttamente affinché
+ * l'intera esecuzione sia considerata riuscita.
+ */
+public class CompositeAction implements Action {
 
     private final List<Action> actions;
 
+    /**
+     * Costruttore per creare un'istanza di CompositeAction senza azioni iniziali.
+     */
     public CompositeAction() {
         this.actions = new ArrayList<Action>();
     }
 
+    /**
+     * Aggiunge un'azione alla lista di azioni da eseguire.
+     *
+     * @param action l'azione da aggiungere alla composizione
+     */
     public void addAction(Action action) {
         actions.add(action);
     }
 
+    /**
+     * Rimuove un'azione dalla lista di azioni da eseguire.
+     *
+     * @param action l'azione da rimuovere dalla composizione
+     */
     public void removeAction(Action action) {
         actions.remove(action);
     }
 
-    public List<Action> getChildren(){
+    /**
+     * Restituisce la lista di azioni figlie attualmente presenti nella composizione.
+     *
+     * @return una lista delle azioni figlie
+     */
+    public List<Action> getChildren() {
         return this.actions;
     }
 
+    /**
+     * Esegue tutte le azioni nella composizione. Se una qualsiasi azione non viene eseguita
+     * correttamente, l'esecuzione dell'intera composizione fallisce.
+     *
+     * @return true se tutte le azioni sono state eseguite con successo, false altrimenti
+     */
     @Override
     public boolean execute() {
-        boolean success = true;
         for (Action action : actions) {
-            success &= action.execute();
+            if (!action.execute()) {
+                return false;
+            }
         }
-        return success;
+        return true;
     }
 
+    /**
+     * Restituisce una rappresentazione testuale della composizione di azioni.
+     * Ogni azione è rappresentata dalla sua stringa, separata da ":".
+     *
+     * @return una stringa che descrive la composizione di azioni
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -48,5 +83,4 @@ public class CompositeAction implements Action{
 
         return sb.toString();
     }
-
 }

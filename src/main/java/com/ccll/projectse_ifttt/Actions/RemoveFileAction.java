@@ -15,18 +15,20 @@ public class RemoveFileAction implements Action {
     private final String filePath;
 
     /**
-     * Costruttore della classe RemoveFileAction.
+     * Costruttore della classe {@code RemoveFileAction}.
      *
-     * @param filePath Il percorso del file da rimuovere.
+     * @param filePath il percorso del file da rimuovere
      */
     public RemoveFileAction(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Esegue l'azione di rimozione del file.
+     * Esegue l'azione di rimozione del file. Se il file esiste e viene rimosso con successo,
+     * restituisce {@code true}. Se il file non esiste o non può essere rimosso, restituisce {@code false}
+     * e mostra un messaggio di errore.
      *
-     * @return true se il file è stato rimosso con successo, false altrimenti.
+     * @return {@code true} se il file è stato rimosso con successo, {@code false} altrimenti
      */
     @Override
     public boolean execute() {
@@ -51,12 +53,11 @@ public class RemoveFileAction implements Action {
         }
     }
 
-
     /**
      * Mostra un alert con un titolo e un messaggio specificati.
      *
-     * @param title   Il titolo dell'alert.
-     * @param message Il messaggio da visualizzare nell'alert.
+     * @param title   il titolo dell'alert
+     * @param message il messaggio da visualizzare nell'alert
      */
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
@@ -71,7 +72,7 @@ public class RemoveFileAction implements Action {
     /**
      * Restituisce una rappresentazione in formato stringa di questa azione.
      *
-     * @return Una stringa che descrive l'azione.
+     * @return una stringa che descrive l'azione come "Rimozione file"
      */
     @Override
     public String toString() {

@@ -8,13 +8,13 @@ package com.ccll.projectse_ifttt.Actions;
 public class MoveFileActionCreator extends ActionCreator {
 
     /**
-     * Crea un'istanza di MoveFileAction a partire da una stringa che contiene i percorsi del file sorgente
+     * Crea un'istanza di {@link MoveFileAction} a partire da una stringa che contiene i percorsi del file sorgente
      * e della directory di destinazione separati da un punto e virgola.
      *
-     * @param actionValue Una stringa contenente il percorso del file sorgente e della directory di destinazione
-     *                    nel formato "sourceFilePath;destinationDirectoryPath".
-     * @return Un'istanza di MoveFileAction creata con i parametri forniti.
-     * @throws IllegalArgumentException Se l'actionValue non è nel formato corretto.
+     * @param actionValue una stringa contenente il percorso del file sorgente e della directory di destinazione
+     *                    nel formato "sourceFilePath;destinationDirectoryPath"
+     * @return un'istanza di {@link MoveFileAction} creata con i parametri forniti
+     * @throws IllegalArgumentException se {@code actionValue} non è nel formato corretto
      */
     @Override
     public Action createAction(String actionValue) {
@@ -28,7 +28,7 @@ public class MoveFileActionCreator extends ActionCreator {
     /**
      * Restituisce il tipo di azione supportata da questo creatore.
      *
-     * @return Una stringa che rappresenta il tipo di azione, in questo caso "Move file".
+     * @return una stringa che rappresenta il tipo di azione, in questo caso "Move file"
      */
     @Override
     public String getType() {

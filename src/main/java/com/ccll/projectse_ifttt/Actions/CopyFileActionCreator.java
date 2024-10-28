@@ -2,17 +2,20 @@ package com.ccll.projectse_ifttt.Actions;
 
 /**
  * Factory per la creazione di azioni di copia file.
- * Questa classe estende ActionCreator e fornisce un'implementazione per
- * creare azioni di copia file.
+ * Questa classe estende {@link ActionCreator} e fornisce un'implementazione
+ * per creare azioni di copia file basate su stringhe di input.
  */
 public class CopyFileActionCreator extends ActionCreator {
 
     /**
-     * Crea un'azione di copia file basata su una stringa di valori.
+     * Crea un'istanza di {@link CopyFileAction} utilizzando una stringa contenente i percorsi
+     * del file sorgente e della directory di destinazione, separati da un punto e virgola.
      *
-     * @param actionValue La stringa contenente i percorsi del file sorgente
-     *                    e della directory di destinazione, separati da un punto e virgola.
-     * @return Un'istanza di CopyFileAction creata con i percorsi forniti.
+     * @param actionValue la stringa contenente il percorso del file sorgente e quello della
+     *                    directory di destinazione, separati da un punto e virgola
+     * @return un'istanza di {@link CopyFileAction} configurata con i percorsi forniti
+     * @throws ArrayIndexOutOfBoundsException se la stringa {@code actionValue} non contiene
+     *                                        entrambi i percorsi richiesti
      */
     @Override
     public Action createAction(String actionValue) {
@@ -21,9 +24,9 @@ public class CopyFileActionCreator extends ActionCreator {
     }
 
     /**
-     * Restituisce il tipo di azione supportata da questo creator.
+     * Restituisce il tipo di azione supportata da questa factory.
      *
-     * @return Una stringa che rappresenta il tipo di azione, in questo caso "Copy File".
+     * @return una stringa che rappresenta il tipo di azione, in questo caso "Copy File"
      */
     @Override
     public String getType() {

@@ -3,9 +3,9 @@ package com.ccll.projectse_ifttt.Actions;
 import java.io.IOException;
 
 /**
- * Rappresenta un'azione per eseguire un'applicazione esterna con argomenti specificati.
- * Questa classe supporta l'esecuzione di applicazioni su macOS e Windows e permette
- * di specificare comandi arbitrari.
+ * Rappresenta un'azione per eseguire un'applicazione esterna con comandi specificati.
+ * Supporta l'esecuzione di applicazioni su sistemi operativi macOS e Windows, consentendo
+ * di aprire applicazioni e di passare comandi opzionali.
  */
 public class ExecuteProgramAction implements Action {
     private final String programPath; // Il percorso dell'applicazione o del file da eseguire
@@ -24,8 +24,9 @@ public class ExecuteProgramAction implements Action {
 
     /**
      * Esegue l'azione di avvio dell'applicazione o di esecuzione del comando specificato.
+     * Verifica il sistema operativo e configura il comando di esecuzione in base a esso.
      *
-     * @return true se l'azione è stata eseguita con successo, false se si è verificato un errore
+     * @return {@code true} se l'azione è stata eseguita con successo, {@code false} in caso di errore
      */
     @Override
     public boolean execute() {
@@ -36,19 +37,19 @@ public class ExecuteProgramAction implements Action {
             // Verifica se il file è un'applicazione .app
             boolean isApp = programPath.endsWith(".app");
 
-            // Se è macOS
+            // Configurazione per macOS
             if (os.contains("mac")) {
                 if (isApp) {
-                    // Apri l'applicazione usando open -a
+                    // Apri l'applicazione usando il comando "open -a"
                     String[] commandArray = {"open", "-a", programPath};
                     processBuilder = new ProcessBuilder(commandArray);
                 } else {
-                    // Esegui il comando arbitrario
+                    // Esegui un comando arbitrario con bash
                     String[] commandArray = {"/bin/bash", "-c", command};
                     processBuilder = new ProcessBuilder(commandArray);
                 }
             }
-            // Se è Windows
+            // Configurazione per Windows
             else if (os.contains("win")) {
                 // Se il comando è nullo o vuoto, esegui solo l'applicazione
                 if (command == null || command.trim().isEmpty()) {
@@ -72,6 +73,12 @@ public class ExecuteProgramAction implements Action {
         }
     }
 
+    /**
+     * Restituisce una rappresentazione testuale dell'azione.
+     *
+     * @return una stringa che descrive l'azione come "Esecuzione Programma"
+     */
+    @Override
     public String toString() {
         return "Esecuzione Programma";
     }

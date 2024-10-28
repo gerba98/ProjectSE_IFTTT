@@ -18,10 +18,10 @@ public class MoveFileAction implements Action {
     private final String destinationDirectoryPath;
 
     /**
-     * Costruttore della classe MoveFileAction.
+     * Costruttore della classe {@code MoveFileAction}.
      *
-     * @param sourceFilePath           Il percorso del file sorgente da spostare.
-     * @param destinationDirectoryPath Il percorso della directory di destinazione.
+     * @param sourceFilePath           il percorso del file sorgente da spostare
+     * @param destinationDirectoryPath il percorso della directory di destinazione
      */
     public MoveFileAction(String sourceFilePath, String destinationDirectoryPath) {
         this.sourceFilePath = sourceFilePath;
@@ -29,9 +29,10 @@ public class MoveFileAction implements Action {
     }
 
     /**
-     * Esegue l'azione di spostamento del file.
+     * Esegue l'azione di spostamento del file. Se il file sorgente non esiste, l'azione fallisce.
+     * Al termine dello spostamento, viene mostrato un messaggio di conferma all'utente tramite un dialogo informativo.
      *
-     * @return true se il file è stato spostato con successo, false altrimenti.
+     * @return {@code true} se il file è stato spostato con successo, {@code false} se il file non esiste o si verifica un errore
      */
     @Override
     public boolean execute() {
@@ -59,6 +60,12 @@ public class MoveFileAction implements Action {
         }
     }
 
+    /**
+     * Restituisce una rappresentazione testuale dell'azione.
+     *
+     * @return una stringa che descrive l'azione come "Spostamento file"
+     */
+    @Override
     public String toString() {
         return "Spostamento file";
     }
