@@ -18,7 +18,12 @@ public class DOTMTrigCreator extends TriggerCreator {
     @Override
     public Trigger createTrigger(String triggerValue) {
         String[] list = triggerValue.split("-");
-        MonthDay dayOfMonth = MonthDay.of(Integer.parseInt(list[1]), Integer.parseInt(list[2]));
+        MonthDay dayOfMonth;
+        if(list.length == 2){
+            dayOfMonth = MonthDay.of(Integer.parseInt(list[0]), Integer.parseInt(list[1]));
+        }else{
+            dayOfMonth = MonthDay.of(Integer.parseInt(list[1]), Integer.parseInt(list[2]));
+        }
         return new DayOfTheMonthTrig(dayOfMonth);
     }
 

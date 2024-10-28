@@ -55,14 +55,54 @@ public class CompositeTrigger extends AbstractTrigger {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(COMPOSITE).append(";").append(operator).append(":");
-        for (int i = 0; i < triggers.size(); i++) {
-            sb.append(triggers.get(i).toString().replace(";",":"));
-            if (i < triggers.size() - 1) {
-                sb.append(":");
-            }
-        }
+        sb.append("COMPOSITE;");
+        sb.append(formatTriggerExpression());
         return sb.toString();
     }
+
+    private String formatTriggerExpression() {
+        System.out.println(triggers.size());
+        StringBuilder sb = new StringBuilder();
+
+        // Add operator
+        sb.append(operator);
+
+        // Add opening parenthesis for complex expressions
+        boolean needsParentheses = triggers.size() > 1 || triggers.get(0) instanceof CompositeTrigger;
+        if (needsParentheses) {
+            sb.append("(");
+        }
+
+        // Add triggers
+        for (int i = 0; i < triggers.size(); i++) {
+            Trigger trigger = triggers.get(i);
+
+            // Handle the trigger string
+            String triggerStr = trigger.toString();
+            if (trigger instanceof CompositeTrigger) {
+                // For composite triggers, only keep the expression part
+                triggerStr = triggerStr.split(";")[1];
+            } else {
+                // For simple triggers, replace semicolons with #
+                triggerStr = triggerStr.replace(";", "#");
+            }
+
+            sb.append(triggerStr);
+
+            // Add separator between triggers
+            if (i < triggers.size() - 1) {
+                sb.append("@");
+            }
+        }
+
+        // Add closing parenthesis for complex expressions
+        if (needsParentheses) {
+            sb.append(")");
+        }
+
+        return sb.toString();
+    }
+
+
 }
 

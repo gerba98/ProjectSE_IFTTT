@@ -57,6 +57,6 @@ public class DayOfTheMonthTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "Day of the Month;" + dayOfMonth.getDayOfMonth();
+        return "Day of the Month;"  +dayOfMonth.getMonth().getValue() + "-" + dayOfMonth.getDayOfMonth();
     }
 }

@@ -1,28 +1,20 @@
 package com.ccll.projectse_ifttt.TestUtilsClasses;
 
+import com.ccll.projectse_ifttt.Triggers.AbstractTrigger;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 
-public class TriggerTestUtils implements Trigger {
+public class TriggerTestUtils extends AbstractTrigger {
     private boolean shouldTrigger;
-    private boolean lastEvaluation;
-
 
     public TriggerTestUtils(boolean shouldTrigger) {
         this.shouldTrigger = shouldTrigger;
-        this.lastEvaluation = false;
     }
 
     @Override
-    public boolean evaluate() {
-        boolean evaluation = !lastEvaluation && shouldTrigger;
-        lastEvaluation = shouldTrigger;
-        return evaluation;
+    public boolean getCurrentEvaluation() {
+        return shouldTrigger;
     }
 
-    @Override
-    public void reset() {
-        lastEvaluation = false;
-    }
 
     public void setShouldTrigger(boolean shouldTrigger) {
         this.shouldTrigger = shouldTrigger;
