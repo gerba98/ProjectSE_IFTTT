@@ -1,1 +1,2 @@
 GG;Time of the day;16:40;Display Message;GG;true;Rule
+gg;COMPOSITE;AND(Time of the day#18:52@Day of the week#MONDAY);Display Message;gg;true;Rule
