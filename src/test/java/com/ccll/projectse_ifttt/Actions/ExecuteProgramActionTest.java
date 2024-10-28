@@ -30,7 +30,7 @@ public class ExecuteProgramActionTest {
     public void testExecuteProgramActionSuccess() {
         // Crea l'azione utilizzando il comando valido per il sistema operativo
         ActionCreator creator = new ExecuteProgramActionCreator();
-        Action executeProgramAction = creator.createAction(validProgramPath + "-" + validCommand);
+        Action executeProgramAction = creator.createAction(validProgramPath + ";" + validCommand);
 
         // Verifica che l'azione venga eseguita correttamente
         assertTrue(executeProgramAction.execute());
@@ -42,7 +42,7 @@ public class ExecuteProgramActionTest {
     public void testExecuteProgramActionFailure() {
         // Fornire un comando o un percorso di programma non valido
         ActionCreator creator = new ExecuteProgramActionCreator();
-        Action executeProgramAction = creator.createAction("/path/to/nowhere-" + "invalidCommand");
+        Action executeProgramAction = creator.createAction("/path/to/nowhere;" + "invalidCommand");
 
         // Verifica che l'esecuzione fallisca
         assertFalse(executeProgramAction.execute());

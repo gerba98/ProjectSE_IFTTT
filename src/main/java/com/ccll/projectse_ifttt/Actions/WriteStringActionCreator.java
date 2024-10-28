@@ -1,8 +1,8 @@
 package com.ccll.projectse_ifttt.Actions;
 
 /**
- * La classe {@code WriteStringActionCreator} estende {@code ActionCreator}
- * e fornisce un modo per creare un'istanza di {@code WriteStringAction}.
+ * La classe {@code WriteStringActionCreator} estende {@link ActionCreator}
+ * e fornisce un modo per creare un'istanza di {@link WriteStringAction}.
  * Questa classe implementa il metodo {@code createAction} per accettare
  * un valore di azione che deve contenere un percorso di file e una stringa
  * da scrivere, separati da un punto e virgola (';').
@@ -10,13 +10,13 @@ package com.ccll.projectse_ifttt.Actions;
 public class WriteStringActionCreator extends ActionCreator {
 
     /**
-     * Crea un'azione {@code WriteStringAction} a partire dal valore dell'azione
+     * Crea un'azione {@link WriteStringAction} a partire dal valore dell'azione
      * fornito.
      *
      * @param actionValue il valore dell'azione che contiene il percorso del file
      *                    e la stringa da scrivere, separati da ';'
-     * @return una nuova istanza di {@code WriteStringAction} con il percorso del file
-     * e la stringa da scrivere
+     * @return una nuova istanza di {@link WriteStringAction} con il percorso del file
+     *         e la stringa da scrivere
      * @throws IllegalArgumentException se {@code actionValue} non contiene
      *                                  un separatore ';' oppure se il percorso del file
      *                                  o la stringa da scrivere non sono forniti
@@ -24,12 +24,12 @@ public class WriteStringActionCreator extends ActionCreator {
     @Override
     public Action createAction(String actionValue) {
         // Verifica se actionValue contiene il separatore ";"
-        if (actionValue == null || !actionValue.contains("-")) {
-            throw new IllegalArgumentException("The action value must contain a file path and a string, separated by '-'");
+        if (actionValue == null || !actionValue.contains(";")) {
+            throw new IllegalArgumentException("The action value must contain a file path and a string, separated by ';'");
         }
 
         // Divide actionValue in due parti, il percorso del file e la stringa da scrivere
-        String[] parts = actionValue.split("-", 2); // Assume che il percorso del file e la stringa da scrivere siano separati da ";"
+        String[] parts = actionValue.split(";", 2); // Assume che il percorso del file e la stringa da scrivere siano separati da ";"
 
         // Verifica che entrambe le parti (percorso del file e stringa) siano presenti
         if (parts.length < 2 || parts[0].isEmpty() || parts[1].isEmpty()) {

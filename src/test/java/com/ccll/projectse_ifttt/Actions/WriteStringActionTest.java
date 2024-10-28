@@ -37,7 +37,7 @@ public class WriteStringActionTest {
     @DisplayName("Test scrittura stringa in file esistente con successo")
     public void testWriteStringActionSuccess() throws Exception {
         ActionCreator creator = new WriteStringActionCreator();
-        Action writeStringAction = creator.createAction(tempFile.toString() + "-" + contentToWrite);
+        Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
         // Esegue l'azione di scrittura
         assertTrue(writeStringAction.execute());
@@ -54,7 +54,7 @@ public class WriteStringActionTest {
         Files.deleteIfExists(tempFile);
 
         ActionCreator creator = new WriteStringActionCreator();
-        Action writeStringAction = creator.createAction(tempFile.toString() + "-" + contentToWrite);
+        Action writeStringAction = creator.createAction(tempFile.toString() + ";" + contentToWrite);
 
         // Esegue l'azione di scrittura
         assertFalse(writeStringAction.execute());

@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class CopyFileActionTest {
     private Path tempDir;
@@ -24,27 +25,56 @@ public class CopyFileActionTest {
 
     @BeforeEach
     public void setUp() throws Exception {
+        // Crea una directory temporanea per i file di test
         tempDir = Files.createTempDirectory("testDir");
         Files.createFile(Paths.get(tempDir.toString(), sourceFileName));
     }
 
     @AfterEach
     public void tearDown() throws Exception {
+        // Cancella file e directory creati nei test
         Files.deleteIfExists(Paths.get(tempDir.toString(), sourceFileName));
         Files.deleteIfExists(Paths.get(tempDir.toString(), destinationFileName));
         Files.deleteIfExists(tempDir);
     }
 
     @Test
-    @DisplayName("Test copia file: l'azione di copia deve essere eseguita correttamente")
-    public void testCopyFileAction() {
+    @DisplayName("Copia file con successo")
+    public void testCopyFileActionSuccess() {
         String sourcePath = Paths.get(tempDir.toString(), sourceFileName).toString();
         String destinationPath = tempDir.toString();
 
         ActionCreator creator = new CopyFileActionCreator();
-        Action copyFileAction = creator.createAction(sourcePath + "-" + destinationPath);
+        Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
-        assertTrue(copyFileAction.execute());
-        assertTrue(Files.exists(Paths.get(destinationPath, sourceFileName)));
+        // Verifica che l'esecuzione sia riuscita e che il file di destinazione esista
+        assertTrue(copyFileAction.execute(), "L'azione di copia deve essere eseguita correttamente");
+        assertTrue(Files.exists(Paths.get(destinationPath, sourceFileName)), "Il file copiato deve esistere nel percorso di destinazione");
+    }
+
+    @Test
+    @DisplayName("Fallimento della copia: file sorgente inesistente")
+    public void testCopyFileActionSourceFileNotExist() {
+        String sourcePath = Paths.get(tempDir.toString(), "nonExistentFile.txt").toString();
+        String destinationPath = tempDir.toString();
+
+        ActionCreator creator = new CopyFileActionCreator();
+        Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
+
+        // Verifica che l'azione fallisca se il file sorgente non esiste
+        assertFalse(copyFileAction.execute(), "L'azione di copia deve fallire se il file sorgente non esiste");
+    }
+
+    @Test
+    @DisplayName("Fallimento della copia: percorso di destinazione non valido")
+    public void testCopyFileActionInvalidDestinationPath() {
+        String sourcePath = Paths.get(tempDir.toString(), sourceFileName).toString();
+        String invalidDestinationPath = Paths.get(tempDir.toString(), "nonExistentDir").toString();
+
+        ActionCreator creator = new CopyFileActionCreator();
+        Action copyFileAction = creator.createAction(sourcePath + ";" + invalidDestinationPath);
+
+        // Verifica che l'azione fallisca se il percorso di destinazione non esiste
+        assertFalse(copyFileAction.execute(), "L'azione di copia deve fallire se il percorso di destinazione non è valido");
     }
 }

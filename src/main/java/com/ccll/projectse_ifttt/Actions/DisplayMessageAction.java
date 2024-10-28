@@ -5,7 +5,8 @@ import javafx.scene.control.Alert;
 
 /**
  * Questa classe rappresenta un'azione per visualizzare un messaggio in una finestra di dialogo.
- * Implementa l'interfaccia {@link Action} e permette di eseguire l'azione ogni volta che viene chiamata.
+ * Implementa l'interfaccia {@link Action} e consente di eseguire l'azione ogni volta che viene chiamata,
+ * mostrando il messaggio sia in console sia in una finestra di dialogo JavaFX.
  */
 public class DisplayMessageAction implements Action {
 
@@ -17,7 +18,7 @@ public class DisplayMessageAction implements Action {
     /**
      * Costruttore della classe {@code DisplayMessageAction}.
      *
-     * @param message Il messaggio da visualizzare nella finestra di dialogo.
+     * @param message il messaggio da visualizzare nella finestra di dialogo
      */
     public DisplayMessageAction(String message) {
         this.message = message;
@@ -25,29 +26,40 @@ public class DisplayMessageAction implements Action {
 
     /**
      * Esegue l'azione di visualizzazione del messaggio in una finestra di dialogo.
+     * Se il messaggio è nullo o vuoto, l'azione fallisce restituendo {@code false}.
+     * Altrimenti, il messaggio viene stampato in console e visualizzato in un alert di tipo informativo.
      *
-     * @return {@code true} se l'azione è stata eseguita con successo, {@code false} altrimenti.
+     * @return {@code true} se l'azione è stata eseguita con successo, {@code false} se il messaggio è nullo o vuoto
      */
     @Override
     public boolean execute() {
+        if (message == null || message.trim().isEmpty()) {
+            // Fallisce se il messaggio è nullo o vuoto
+            return false;
+        }
+
+        // Log del messaggio in console per tracciabilità
+        System.out.println("Displaying message: " + message);
+
+        // Visualizzazione del messaggio in una finestra di dialogo informativa con JavaFX
         Platform.runLater(() -> {
-            // Crea un dialog di avviso per mostrare il messaggio
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Notifica");
             alert.setHeaderText(null);
             alert.setContentText(message);
             alert.showAndWait();
         });
-        return true; // Restituisce true poiché l'azione è sempre eseguita
+
+        return true; // L'azione è eseguita con successo
     }
 
     /**
-     * Restituisce una rappresentazione in formato stringa di questa azione.
+     * Restituisce una rappresentazione testuale di questa azione, inclusa il messaggio da visualizzare.
      *
-     * @return Una stringa che descrive l'azione, inclusa il messaggio da visualizzare.
+     * @return una stringa che descrive l'azione, inclusa il messaggio da visualizzare
      */
     @Override
     public String toString() {
-        return "Display Message;"+message;
+        return "Visualizza messaggio: " + message;
     }
 }

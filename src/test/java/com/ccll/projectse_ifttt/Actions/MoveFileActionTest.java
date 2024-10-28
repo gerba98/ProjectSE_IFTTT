@@ -47,7 +47,7 @@ public class MoveFileActionTest {
         assertTrue(Files.exists(Paths.get(sourcePath)));
 
         ActionCreator creator = new MoveFileActionCreator();
-        Action moveFileAction = creator.createAction(sourcePath + "-" + destinationPath);
+        Action moveFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
         // Esegue l'azione di spostamento
         assertTrue(moveFileAction.execute());
@@ -64,7 +64,7 @@ public class MoveFileActionTest {
         String destinationPath = tempDirDestination.toString();
 
         ActionCreator creator = new MoveFileActionCreator();
-        Action moveFileAction = creator.createAction(sourcePath + "-" + destinationPath);
+        Action moveFileAction = creator.createAction(sourcePath + ";" + destinationPath);
 
         // Prima esecuzione dovrebbe avere successo
         assertTrue(moveFileAction.execute());

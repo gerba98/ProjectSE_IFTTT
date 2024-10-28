@@ -3,16 +3,16 @@ package com.ccll.projectse_ifttt.Actions;
 /**
  * Questa classe crea istanze di {@link RemoveFileAction}.
  * Estende {@link ActionCreator} e fornisce la logica necessaria per
- * creare un'istanza di RemoveFileAction utilizzando il percorso del file da rimuovere.
+ * creare un'istanza di {@link RemoveFileAction} utilizzando il percorso del file da rimuovere.
  */
 public class RemoveFileActionCreator extends ActionCreator {
 
     /**
-     * Crea un'istanza di RemoveFileAction a partire da un valore che rappresenta
+     * Crea un'istanza di {@link RemoveFileAction} a partire da un valore che rappresenta
      * il percorso del file da rimuovere.
      *
-     * @param actionValue Una stringa che rappresenta il percorso del file da rimuovere.
-     * @return Un'istanza di RemoveFileAction creata con il percorso fornito.
+     * @param actionValue una stringa che rappresenta il percorso del file da rimuovere
+     * @return un'istanza di {@link RemoveFileAction} creata con il percorso fornito
      */
     @Override
     public Action createAction(String actionValue) {
@@ -23,7 +23,7 @@ public class RemoveFileActionCreator extends ActionCreator {
     /**
      * Restituisce il tipo di azione supportata da questo creatore.
      *
-     * @return Una stringa che rappresenta il tipo di azione, in questo caso "remove file".
+     * @return una stringa che rappresenta il tipo di azione, in questo caso "remove file"
      */
     @Override
     public String getType() {

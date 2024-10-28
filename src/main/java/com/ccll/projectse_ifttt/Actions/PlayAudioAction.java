@@ -25,23 +25,24 @@ public class PlayAudioAction implements Action {
     private static final Logger LOGGER = Logger.getLogger(PlayAudioAction.class.getName());
 
     /**
-     * Il percorso del file audio che verrà riprodotto
+     * Il percorso del file audio che verrà riprodotto.
      */
     private final Path audioFilePath;
 
     /**
      * Costruttore che inizializza l'azione con il percorso del file audio da riprodurre.
      *
-     * @param audioFilePath Il percorso del file audio.
+     * @param audioFilePath il percorso del file audio
      */
     public PlayAudioAction(Path audioFilePath) {
         this.audioFilePath = audioFilePath;
     }
 
     /**
-     * Esegue l'azione di riproduzione del file audio.
+     * Esegue l'azione di riproduzione del file audio. Se il file non esiste, mostra un avviso
+     * all'utente. Se il file esiste, avvia la riproduzione e permette all'utente di interromperla tramite un prompt.
      *
-     * @return true se l'audio viene riprodotto correttamente, false in caso di errore.
+     * @return {@code true} se l'audio viene riprodotto correttamente, {@code false} in caso di errore
      */
     @Override
     public boolean execute() {
@@ -72,7 +73,7 @@ public class PlayAudioAction implements Action {
      * Mostra un alert che chiede all'utente se desidera fermare la riproduzione della musica.
      * Se l'utente sceglie di fermare la musica, la riproduzione viene interrotta.
      *
-     * @param mediaPlayer Il MediaPlayer da fermare se richiesto.
+     * @param mediaPlayer il {@link MediaPlayer} da fermare se richiesto
      */
     private void showStopMusicAlert(MediaPlayer mediaPlayer) {
         Platform.runLater(() -> {
@@ -93,8 +94,8 @@ public class PlayAudioAction implements Action {
     /**
      * Mostra un alert di avviso all'utente con un titolo e un messaggio specifici.
      *
-     * @param title   Il titolo dell'alert.
-     * @param message Il messaggio dell'alert.
+     * @param title   il titolo dell'alert
+     * @param message il messaggio dell'alert
      */
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
@@ -109,10 +110,10 @@ public class PlayAudioAction implements Action {
     /**
      * Restituisce una rappresentazione in formato stringa di questa azione.
      *
-     * @return Una stringa che descrive l'azione, inclusa il nome del file audio.
+     * @return una stringa che descrive l'azione, inclusa il nome del file audio
      */
     @Override
     public String toString() {
-        return "Play Audio;" + audioFilePath.getFileName();
+        return "Riproduci audio: " + audioFilePath.getFileName();
     }
 }

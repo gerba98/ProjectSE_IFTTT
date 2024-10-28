@@ -11,8 +11,8 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 /**
- * Implementa l'azione di copia di un file.
- * Questa classe consente di copiare un file da un percorso sorgente a una directory di destinazione.
+ * Implementa un'azione che consente di copiare un file da un percorso sorgente a una directory di destinazione.
+ * Questa classe gestisce l'operazione di copia e mostra un messaggio di successo all'utente.
  */
 public class CopyFileAction implements Action {
     private final String sourcePath;      // Percorso del file sorgente
@@ -21,8 +21,8 @@ public class CopyFileAction implements Action {
     /**
      * Costruttore per creare un'istanza di CopyFileAction.
      *
-     * @param sourcePath      Il percorso del file sorgente.
-     * @param destinationPath Il percorso della directory di destinazione.
+     * @param sourcePath      il percorso del file sorgente
+     * @param destinationPath il percorso della directory di destinazione
      */
     public CopyFileAction(String sourcePath, String destinationPath) {
         this.sourcePath = sourcePath;
@@ -30,9 +30,10 @@ public class CopyFileAction implements Action {
     }
 
     /**
-     * Esegue l'azione di copia del file.
+     * Esegue l'azione di copia del file dal percorso sorgente alla destinazione.
+     * Se la copia è completata con successo, viene mostrato un messaggio di notifica.
      *
-     * @return true se il file è stato copiato con successo, false altrimenti.
+     * @return true se il file è stato copiato correttamente, false in caso di errore
      */
     @Override
     public boolean execute() {
@@ -52,7 +53,8 @@ public class CopyFileAction implements Action {
     }
 
     /**
-     * Mostra un alert per informare l'utente che l'operazione è avvenuta con successo.
+     * Mostra un messaggio di avviso per informare l'utente che l'operazione di copia
+     * è stata completata con successo.
      */
     private void showSuccessAlert() {
         Platform.runLater(() -> {
@@ -64,7 +66,13 @@ public class CopyFileAction implements Action {
         });
     }
 
+    /**
+     * Restituisce una descrizione testuale dell'azione di copia del file.
+     *
+     * @return una stringa descrittiva dell'azione
+     */
+    @Override
     public String toString() {
-        return "Copy File;"+sourcePath+"-"+destinationPath;
+        return "Copia di un file";
     }
 }
