@@ -123,6 +123,7 @@ class CompositeTriggerTest {
 
         Trigger t = RuleManager.createTrigger("composite", notT5.toString().split(";")[1]);
         assertEquals(notT5.toString(), t.toString(), "il risultato del toString dei due trigger dovrebbe corrispondere");
+        System.out.println(t);
     }
 
     @Test

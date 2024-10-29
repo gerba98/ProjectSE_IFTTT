@@ -6,54 +6,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Classe CompositeTrigCreator per creare trigger compositi complessi che combinano trigger di base
- * e\o altri trigger compositi utilizzando gli operatori logici AND, OR e NOT.
+ * Classe CompositeTrigCreator per creare trigger composti che combinano trigger di base
+ * e\o altri trigger composti utilizzando gli operatori logici AND, OR e NOT.
  * Estende la classe astratta TriggerCreator e implementa la logica per interpretare espressioni complesse di trigger.
  */
 public class CompositeTrigCreator extends TriggerCreator {
 
-    private static final String TRIGGER_SEPARATOR = "@";
-
+    /**
+     * Crea un trigger composto a partire dalla stringa in input.
+     *
+     * @param triggerValue La stringa che rappresenta l'espressione logica attraverso la quale sono descritti
+     * i trigger semplici e/o composti che compongono il trigger composto.
+     *
+     * <p>L'espressione deve seguire la sintassi:</p>
+     * <ul>
+     *     <li>Per ogni trigger semplice deve essere indicato il tipo e il valore separato da "#":
+     *      TriggerType#TriggerValue </li>
+     *     <li>I trigger devono essere separati dal carattere "@":
+     *      TriggerType#TriggerValue@TriggerType#TriggerValue </li>
+     *     <li>Le espressioni composte devono essere formate dall'operatore AND | OR | NOT seguito dai trigger semplici
+     *      e/o composti da cui è composta l'espressione. Questi trigger devono essere racchiusi tra parentesi per
+     *      indicare l'ordine di valutazione:
+     *      AND(TriggerType#TriggerValue@NOT(TriggerType#TriggerValue))</li>
+     *     <li>Per l'operatore AND e OR devono essere specificati 2 trigger semplici/composti mentre per l'operatore
+     *      NOT deve essere specificato un trigger semplice/composto </li>
+     * </ul>
+     * <p>Esempi di espressioni valide:</p>
+     * <ul>
+     *     <li><code>NOT(Time of the day#11:30)</code> - Un trigger che si attiva se non è l'ora specificata.</li>
+     *     <li><code>AND(Day of the week#MONDAY@Time of the day#09:00)</code> - Un trigger che si attiva
+     *         solo se è lunedì alle 09:00.</li>
+     *     <li><code>OR(Day of the week#FRIDAY@NOT(Time of the day#17:00))</code> - Un trigger che si attiva
+     *         se è venerdì o se non è l'ora specificata.</li>
+     *     <li><code>COMPOSITE;NOT(OR(Day of the week#MONDAY@NOT(AND(Day of the week#MONDAY@NOT(Time of the day#11:30)))))</code></li>
+     * </ul>
+     *
+     * @return un oggetto CompositeTrigger
+     */
     @Override
-    public Trigger createTrigger(String triggerString) {
-        return parseTriggerExpression(triggerString);
-    }
-
-    private Trigger parseTriggerExpression(String expression) {
-
+    public Trigger createTrigger(String triggerValue) {
         LogicalOperator operator;
         String remaining;
 
         // individuo l'operatore
-        if (expression.startsWith("NOT")) {
+        if (triggerValue.startsWith("NOT")) {
             operator = LogicalOperator.NOT;
-            remaining = expression.substring(3);
-        } else if (expression.startsWith("AND")) {
+            remaining = triggerValue.substring(3);
+        } else if (triggerValue.startsWith("AND")) {
             operator = LogicalOperator.AND;
-            remaining = expression.substring(3);
-        } else if (expression.startsWith("OR")) {
+            remaining = triggerValue.substring(3);
+        } else if (triggerValue.startsWith("OR")) {
             operator = LogicalOperator.OR;
-            remaining = expression.substring(2);
+            remaining = triggerValue.substring(2);
         } else {
-            throw new IllegalArgumentException("Invalid expression: " + expression);
+            throw new IllegalArgumentException("Invalid expression: " + triggerValue);
         }
 
-        // creo il trigger composto
         CompositeTrigger compositeTrigger = new CompositeTrigger(operator);
 
-        // rimuovo le parentesi
         remaining = remaining.substring(1, remaining.length() - 1);
 
-
-        // Parse the triggers inside
         List<String> triggerStrings = splitTriggers(remaining);
 
         for (String triggerStr : triggerStrings) {
             if (triggerStr.startsWith("AND") || triggerStr.startsWith("OR") || triggerStr.startsWith("NOT")) {
-                // Recursive case - this is another composite trigger
-                compositeTrigger.addTrigger(parseTriggerExpression(triggerStr));
+                compositeTrigger.addTrigger(createTrigger(triggerStr));
             } else {
-                // Base case - this is a simple trigger
                 String[] parts = triggerStr.split("#", 2);
                 compositeTrigger.addTrigger(RuleManager.createTrigger(parts[0], parts[1]));
             }
@@ -62,6 +80,15 @@ public class CompositeTrigCreator extends TriggerCreator {
         return compositeTrigger;
     }
 
+    /**
+     * Divide l'espressione nelle sotto-stringhe che rappresentano i trigger semplici/composti che andranno a comporre
+     * il trigger composto
+     *
+     * @param expression La stringa che rappresenta l'espressione logica attraverso la quale sono descritti
+     * i trigger semplici e/o composti che compongono il trigger composto.
+     * @return Una lista di 1 0 2 stringhe. Ogni stringa rappresenta un trigger semplice/composto
+     * che compone l'espressione
+     */
     private List<String> splitTriggers(String expression) {
         List<String> triggers = new ArrayList<>();
         int parenthesesCount = 0;
