@@ -750,6 +750,7 @@ public class CreateRuleController {
                 TextField outputField = new TextField();
                 outputField.setPromptText("Insert desired output");
 
+
                 if(Objects.equals(value, "normal")){
                     Utils.layoutLabel(commandLabel, 285, 125);
                     Utils.layoutFiled(commandField, 50, 285, 142, "command");
@@ -818,6 +819,7 @@ public class CreateRuleController {
                 pathAudioField.setFocusTraversable(false);
                 pathAudioField.setEditable(false);
                 pathAudioField.setDisable(false);
+                pathAudioField.setPromptText("Chosen audio file");
 
                 browseAudioButton.setLayoutX(450.0);
                 browseAudioButton.setLayoutY(225);
@@ -845,7 +847,9 @@ public class CreateRuleController {
 
                 TextField fileField = new TextField();
                 fileField.setLayoutY(225);
-                fileField.setLayoutX(350);
+                fileField.setLayoutX(370);
+                fileField.setPrefWidth(180.0);
+                fileField.setPromptText("Chosen File");
 
                 browseButton.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
@@ -867,14 +871,16 @@ public class CreateRuleController {
                 break;
 
             case "Copy File":
-                label.setText("Select file and destination directory");
+                label.setText("Choose a file to copy");
                 Button fileSelectButton = new Button("Select File...");
                 fileSelectButton.setLayoutX(285.0);
                 fileSelectButton.setLayoutY(225.0);
 
                 TextField fileSelectedField = new TextField();
                 fileSelectedField.setLayoutY(225.0);
-                fileSelectedField.setLayoutX(365.0);
+                fileSelectedField.setLayoutX(430.0);
+                fileSelectedField.setPromptText("File to copy");
+                fileSelectedField.setPrefWidth(180.0);
 
                 fileSelectButton.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
@@ -890,7 +896,9 @@ public class CreateRuleController {
 
                 TextField destSelectedField = new TextField();
                 destSelectedField.setLayoutY(265.0);
-                destSelectedField.setLayoutX(410.0);
+                destSelectedField.setLayoutX(430.0);
+                destSelectedField.setPrefWidth(180.0);
+                destSelectedField.setPromptText("Destination Path");
 
                 destSelectButton.setOnAction(e -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -905,14 +913,16 @@ public class CreateRuleController {
                 break;
 
             case "Move file":
-                label.setText("Select file and destination directory");
+                label.setText("Choose a file to move");
                 Button fileSelectButton1 = new Button("Select File...");
                 fileSelectButton1.setLayoutX(285.0);
                 fileSelectButton1.setLayoutY(225.0);
 
                 TextField fileSelectedField1 = new TextField();
                 fileSelectedField1.setLayoutY(225.0);
-                fileSelectedField1.setLayoutX(365.0);
+                fileSelectedField1.setLayoutX(430.0);
+                fileSelectedField1.setPrefWidth(180.0);
+                fileSelectedField1.setPromptText("Chosen File");
 
                 fileSelectButton1.setOnAction(e -> {
                     FileChooser fileChooser = new FileChooser();
@@ -929,7 +939,9 @@ public class CreateRuleController {
 
                 TextField destSelectedField1 = new TextField();
                 destSelectedField1.setLayoutY(265.0);
-                destSelectedField1.setLayoutX(410.0);
+                destSelectedField1.setLayoutX(430.0);
+                destSelectedField1.setPrefWidth(180.0);
+                destSelectedField1.setPromptText("Destination Path");
 
                 destSelectButton1.setOnAction(e -> {
                     DirectoryChooser directoryChooser = new DirectoryChooser();
@@ -944,7 +956,7 @@ public class CreateRuleController {
                 actionPaneItems.addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
                 break;
             case "Remove file":
-                label.setText("Select the file to remove");
+                label.setText("Choose a file to remove");
                 Button browseRemButton = new Button("Browse...");
 
                 browseRemButton.setLayoutX(285.0);
@@ -952,7 +964,10 @@ public class CreateRuleController {
 
                 TextField fileRemovedField = new TextField();
                 fileRemovedField.setLayoutY(225.0);
-                fileRemovedField.setLayoutX(350.0);
+                fileRemovedField.setLayoutX(370.0);
+                fileRemovedField.setPrefWidth(180.0);
+                fileRemovedField.setPromptText("Remove File");
+
 
                 browseRemButton.setOnAction(e -> {
                     FileChooser removeFileChooser = new FileChooser();
