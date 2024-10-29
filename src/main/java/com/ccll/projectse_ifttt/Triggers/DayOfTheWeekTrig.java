@@ -4,34 +4,34 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /**
- * Rappresenta un trigger che si attiva al giorno specificato della settimana.
- * Questo trigger valuta se il giorno della settimana corrente corrisponde o supera il giorno specificato.
+ * Implementa un trigger che si attiva in un giorno specificato della settimana.
+ * Questo trigger valuta se il giorno della settimana corrente corrisponde al giorno specificato.
  */
 public class DayOfTheWeekTrig extends AbstractTrigger {
-    DayOfWeek dayOfWeek;
+    private DayOfWeek dayOfWeek;
 
     /**
-     * Costruisce un DayOfTheWeekTrig con l'ora specificata.
+     * Costruisce un trigger basato su un giorno specifico della settimana.
      *
-     * @param dayOfWeek il giorno della settimana specificato per cui questo trigger deve attivarsi.
+     * @param dayOfWeek il giorno della settimana per cui questo trigger deve attivarsi.
      */
     public DayOfTheWeekTrig(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
     /**
-     * Restituisce il giorno della settimana specificato per questo trigger.
+     * Restituisce il giorno della settimana per cui questo trigger è configurato ad attivarsi.
      *
-     * @return il giorno della settimana alla quale questo trigger si attiva.
+     * @return il giorno della settimana associato al trigger.
      */
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
     /**
-     * Imposta un nuovo giorno della settimana specificato per questo trigger.
+     * Imposta un nuovo giorno della settimana per cui questo trigger deve attivarsi.
      *
-     * @param dayOfWeek il nuovo giorno della settimana alla quale questo trigger deve attivarsi.
+     * @param dayOfWeek il nuovo giorno della settimana per l'attivazione del trigger.
      */
     public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
@@ -39,9 +39,9 @@ public class DayOfTheWeekTrig extends AbstractTrigger {
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se il giorno della settimana  corrente è uguale a quello specificato.
+     * Il trigger si attiva se il giorno della settimana corrente corrisponde a quello specificato.
      *
-     * @return true se il trigger è attivo, false altrimenti.
+     * @return true se il giorno corrente corrisponde al giorno specificato, false altrimenti.
      */
     @Override
     public boolean getCurrentEvaluation() {
@@ -49,12 +49,12 @@ public class DayOfTheWeekTrig extends AbstractTrigger {
     }
 
     /**
-     * Restituisce una rappresentazione stringa del trigger.
+     * Fornisce una rappresentazione in stringa di questo trigger.
      *
-     * @return una stringa che indica il giorno della settimana alla quale il trigger si attiva.
+     * @return una stringa che indica il giorno della settimana per l'attivazione del trigger.
      */
     @Override
     public String toString() {
-        return "Day of the week;" + dayOfWeek;
+        return "Day of the week; " + dayOfWeek;
     }
 }

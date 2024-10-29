@@ -3,31 +3,32 @@ package com.ccll.projectse_ifttt.Triggers;
 import java.io.File;
 
 /**
- * Implementa un trigger che si attiva se è presente un determinato file nel percorso specificato
+ * Implementa un trigger che si attiva in base alla presenza di un file in un percorso specificato.
+ * Questo trigger verifica se un determinato file esiste nel percorso fornito.
  */
 public class FileExistenceTrig extends AbstractTrigger {
     private String filePath;
 
     /**
-     * Costruisce un FileExistenceTrig con il percorso del file per il quale deve essere verificata l'esistenza.
+     * Costruisce un trigger basato sull'esistenza di un file specifico.
      *
-     * @param filePath è il percorso del file da controllare
+     * @param filePath il percorso del file da monitorare per verificarne l'esistenza.
      */
     public FileExistenceTrig(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Restituisce il percorso del file.
+     * Restituisce il percorso del file monitorato da questo trigger.
      *
-     * @return il percorso del file per il quale deve essere verificata l'esistenza.
+     * @return il percorso del file per il quale viene verificata l'esistenza.
      */
     public String getFilePath() {
         return filePath;
     }
 
     /**
-     * Imposta il percorso del file per il quale deve essere verificata l'esistenza.
+     * Imposta un nuovo percorso del file da monitorare.
      *
      * @param filePath il percorso del file per il quale deve essere verificata l'esistenza.
      */
@@ -37,9 +38,9 @@ public class FileExistenceTrig extends AbstractTrigger {
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * La condizione è soddisfatta se il file esiste.
+     * La condizione è considerata soddisfatta se il file esiste nel percorso specificato.
      *
-     * @return true se la condizione è soddisfatta, false altrimenti.
+     * @return true se il file esiste, false altrimenti.
      */
     @Override
     public boolean getCurrentEvaluation() {
@@ -47,12 +48,12 @@ public class FileExistenceTrig extends AbstractTrigger {
     }
 
     /**
-     * Restituisce una rappresentazione stringa del trigger.
+     * Fornisce una rappresentazione stringa di questo trigger.
      *
-     * @return una stringa in cui è specificato il trigger type e il trigger value separato da ";"
+     * @return una stringa che descrive il tipo di trigger e il percorso del file monitorato, separati da un punto e virgola.
      */
     @Override
     public String toString() {
-        return "File existence;" + filePath;
+        return "File existence; " + filePath;
     }
 }

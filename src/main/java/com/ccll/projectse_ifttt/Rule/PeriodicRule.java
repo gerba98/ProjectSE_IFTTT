@@ -10,30 +10,24 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Questa classe rappresenta una regola periodica che estende la classe Rule.
- * Una regola periodica si attiva a intervalli regolari definiti da un periodo.
+ * Questa classe rappresenta una regola periodica che estende la classe {@link Rule}.
+ * Una regola periodica si attiva a intervalli regolari definiti da un periodo, con possibilità di riattivazione automatica.
  */
 public class PeriodicRule extends Rule {
     private final Duration period;
     private Duration endPeriod;
     private String strPeriod;
-
-
     private BooleanProperty reactivated;
     private boolean test;
 
-
-
-
     /**
-     * Costruttore della classe PeriodicRule.
-     * Crea una nuova istanza di PeriodicRule dato il nome, il trigger, l'azione e il periodo specificati.
-     * Lo stato della regola è inizializzato a true e il numero di esecuzioni a 0.
+     * Costruisce una nuova istanza di PeriodicRule dato il nome, il trigger, l'azione e il periodo specificati.
+     * Lo stato della regola è inizializzato a true e la riattivazione è impostata su true.
      *
-     * @param name    Il nome della regola
-     * @param trigger Il trigger della regola
-     * @param action  L'azione della regola
-     * @param period  Il periodo della regola in formato stringa (dd:hh:mm)
+     * @param name    il nome della regola
+     * @param trigger il trigger della regola
+     * @param action  l'azione della regola
+     * @param period  il periodo della regola in formato stringa (dd:hh:mm)
      */
     public PeriodicRule(String name, Trigger trigger, Action action, String period) {
         super(name, trigger, action);
@@ -43,19 +37,23 @@ public class PeriodicRule extends Rule {
         this.test = false;
     }
 
-    public void initEndPeriod(){
-        endPeriod=period;
-    }
     /**
-     * Converte una stringa rappresentante un periodo in un oggetto Duration.
+     * Inizializza {@code endPeriod} con il valore del periodo.
+     */
+    public void initEndPeriod() {
+        endPeriod = period;
+    }
+
+    /**
+     * Converte una stringa rappresentante un periodo in un oggetto {@link Duration}.
      *
-     * @param time Il periodo in formato stringa (dd:hh:mm)
-     * @return Un oggetto Duration rappresentante il periodo
+     * @param time il periodo in formato stringa (dd:hh:mm)
+     * @return un oggetto {@link Duration} rappresentante il periodo
      */
     private static Duration parsePeriod(String time) {
         int days = 0, hours = 0, minutes = 0;
-
         String[] tokens = time.split(":");
+
         if (tokens.length == 3) {
             days = Integer.parseInt(tokens[0]);
             hours = Integer.parseInt(tokens[1]);
@@ -70,21 +68,26 @@ public class PeriodicRule extends Rule {
     /**
      * Restituisce il tipo della regola.
      *
-     * @return Il tipo della regola
+     * @return il tipo della regola come stringa
      */
     @Override
     public String getType() {
         return "PeriodicRule";
     }
 
-
+    /**
+     * Restituisce il periodo della regola come stringa.
+     *
+     * @return una stringa che rappresenta il periodo della regola
+     */
     public String getStrPeriod() {
         return strPeriod;
     }
+
     /**
-     * Aggiorna lo stato della regola ed esegue il metodo evaluateTrigger definito nella classe Rule
+     * Aggiorna lo stato della regola ed esegue il metodo {@code evaluateTrigger} della classe {@link Rule}.
      *
-     * @return il risultato del metodo evaluateTrigger definito nella classe Rule
+     * @return il risultato del metodo {@code evaluateTrigger} della classe {@link Rule}
      */
     @Override
     public boolean evaluateTrigger() {
@@ -92,15 +95,18 @@ public class PeriodicRule extends Rule {
         return super.evaluateTrigger();
     }
 
+    /**
+     * Restituisce la proprietà {@code reactivated}, utilizzata per monitorare lo stato di riattivazione.
+     *
+     * @return un oggetto {@link BooleanProperty} rappresentante la riattivazione
+     */
     public BooleanProperty reactivatedProperty() {
         return reactivated;
     }
 
-
     /**
-     * Esegue il metodo executeAction definito nella classe Rule.
-     * Imposta lo stato della regola a false.
-     * Assegna alla variabile endPeriod la data e l'ora corrente più il periodo della regola.
+     * Esegue l'azione associata alla regola e aggiorna lo stato della regola a "non attiva".
+     * Imposta inoltre {@code endPeriod} per monitorare il periodo fino alla prossima attivazione.
      */
     @Override
     public void executeAction() {
@@ -109,9 +115,14 @@ public class PeriodicRule extends Rule {
         endPeriod = period;
     }
 
+    /**
+     * Restituisce una rappresentazione stringa della regola periodica.
+     *
+     * @return una stringa che rappresenta la regola, con nome, trigger, azione, stato e tipo
+     */
     @Override
     public String toString() {
-        return super.getName() + ";" + super.getTrigger() + ";" + super.getAction() + ";" + isState() + ";" + getType()+ "-" + strPeriod + ";" +reactivated;
+        return super.getName() + ";" + super.getTrigger() + ";" + super.getAction() + ";" + isState() + ";" + getType() + "-" + strPeriod + ";" + reactivated;
     }
 
     /**
@@ -133,38 +144,33 @@ public class PeriodicRule extends Rule {
     }
 
     /**
-     * Aggiorna lo stato della regola.
-     * Se la regola è attiva e la variabile endPeriod è diversa da null, la imposta a null.
-     * Se la regola è disattivata e la variabile endPeriod è diversa da null e il giorno e l'ora corrente sono uguali alla variabile endPeriod, imposta lo stato della regola a true.
-     * <p></p>
-     * Casi d'uso considerati:
-     * <li>CASO 1: (funzionamento base) regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> trascorre il period --> regola attiva --> ... </li>
-     * <li>CASO 2: (se l'utente disattiva la regola essa rimane disattivata) regola attiva/non attiva --> utente disattiva regola --> regola resta non attiva --> utente riattiva regola --> caso 1</li>
-     * <li>CASO 3: (se l'utente riattiva la regola endPeriod viene azzerato) regola attiva --> trigger verificato --> azione eseguita --> regola non attiva --> utente riattiva regola --> caso 1</li>
+     * Aggiorna lo stato della regola in base ai seguenti casi:
+     * <ul>
+     *     <li><b>CASO 1</b>: Se la regola è attiva e il trigger è verificato, esegue l'azione e disattiva la regola.</li>
+     *     <li><b>CASO 2</b>: Se la regola è disattivata e {@code reactivated} è false, mantiene la regola disattivata.</li>
+     *     <li><b>CASO 3</b>: Se l'utente riattiva la regola mentre è disattiva, azzera {@code endPeriod} per una nuova attivazione.</li>
+     * </ul>
      */
     private void updateState() {
-        if(endPeriod!=null) {
+        if (endPeriod != null) {
             // CASO 3
             if (super.isState()) {
                 endPeriod = null;
                 reactivated.set(true);
                 return;
-            }else{
+            } else {
                 // CASO 2
-                if(!reactivated.get()){
-                    endPeriod=null;
+                if (!reactivated.get()) {
+                    endPeriod = null;
                     return;
                 }
                 // CASO 1
-                if(endPeriod == Duration.ZERO) {
+                if (endPeriod == Duration.ZERO) {
                     super.setState(true);
-                }else{
+                } else {
                     endPeriod = endPeriod.minus(1, ChronoUnit.SECONDS);
                 }
-
             }
-
         }
     }
-
 }

@@ -4,34 +4,34 @@ import java.time.LocalDate;
 import java.time.MonthDay;
 
 /**
- * Rappresenta un trigger che si attiva al giorno specificato del mese.
- * Questo trigger valuta se il giorno del mese corrente corrisponde a quello specificato.
+ * Implementa un trigger che si attiva in un giorno specifico del mese.
+ * Questo trigger valuta se il giorno e il mese corrente corrispondono al giorno specificato.
  */
 public class DayOfTheMonthTrig extends AbstractTrigger {
-    MonthDay dayOfMonth;
+    private MonthDay dayOfMonth;
 
     /**
-     * Costruisce un DayOfTheMonthTrig con con il giorno del mese specificato.
+     * Costruisce un trigger basato su un giorno specifico del mese.
      *
-     * @param dayOfMonth il giorno del mese specificato per cui questo trigger deve attivarsi.
+     * @param dayOfMonth il giorno del mese per cui questo trigger deve attivarsi.
      */
     public DayOfTheMonthTrig(MonthDay dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
     }
 
     /**
-     * Restituisce il giorno del mese specificato per questo trigger.
+     * Restituisce il giorno del mese per cui questo trigger è configurato ad attivarsi.
      *
-     * @return il giorno del mese alla quale questo trigger si attiva.
+     * @return il giorno del mese associato al trigger.
      */
     public MonthDay getDayOfMonth() {
         return dayOfMonth;
     }
 
     /**
-     * Imposta un nuovo giorno del mese specificato per questo trigger.
+     * Imposta un nuovo giorno del mese per cui questo trigger deve attivarsi.
      *
-     * @param dayOfMonth il nuovo giorno del mese alla quale questo trigger deve attivarsi.
+     * @param dayOfMonth il nuovo giorno del mese per l'attivazione del trigger.
      */
     public void setDayOfMonth(MonthDay dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
@@ -39,24 +39,23 @@ public class DayOfTheMonthTrig extends AbstractTrigger {
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se il giorno del mese corrente è uguale a quello specificato.
+     * Il trigger si attiva se il giorno e il mese corrente corrispondono a quelli specificati.
      *
-     * @return true se il trigger è attivo, false altrimenti.
+     * @return true se il giorno e il mese corrente corrispondono al giorno specificato, false altrimenti.
      */
     @Override
     public boolean getCurrentEvaluation() {
-        LocalDate todayInt = LocalDate.now();
-        MonthDay today = MonthDay.of(todayInt.getMonth(), todayInt.getDayOfMonth());
-        return dayOfMonth.getDayOfMonth() == today.getDayOfMonth();
+        MonthDay today = MonthDay.from(LocalDate.now());
+        return dayOfMonth.equals(today);
     }
 
     /**
-     * Restituisce una rappresentazione stringa del trigger.
+     * Fornisce una rappresentazione in stringa di questo trigger.
      *
-     * @return una stringa che indica il giorno del mese alla quale il trigger si attiva.
+     * @return una stringa che indica il giorno del mese per l'attivazione del trigger.
      */
     @Override
     public String toString() {
-        return "Day of the Month;"  +dayOfMonth.getMonth().getValue() + "-" + dayOfMonth.getDayOfMonth();
+        return "Day of the Month; " + dayOfMonth.getMonthValue() + "-" + dayOfMonth.getDayOfMonth();
     }
 }

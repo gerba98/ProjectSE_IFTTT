@@ -5,20 +5,18 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Questa classe si occupa di controllare periodicamente
- * le regole gestite da RuleManager. Se il trigger associato ad una regola
- * è verificato viene eseguita l'azione associata alla regola.
+ * Questa classe si occupa di controllare periodicamente le regole gestite da {@link RuleManager}.
+ * Se il trigger associato a una regola è verificato, viene eseguita l'azione associata.
+ * La classe utilizza un {@link ScheduledExecutorService} per eseguire controlli periodici.
  */
 public class CheckRule {
     private final RuleManager ruleManager;
-
-
     private Boolean isRunning;
     private ScheduledExecutorService scheduler;
 
     /**
      * Costruttore che inizializza un'istanza di CheckRule.
-     * Recupera l'istanza del RuleManager e crea un ScheduledExecutorService
+     * Recupera l'istanza di {@link RuleManager} e crea un {@link ScheduledExecutorService}
      * per eseguire il controllo periodico delle regole.
      */
     public CheckRule() {
@@ -27,22 +25,19 @@ public class CheckRule {
         this.scheduler = Executors.newSingleThreadScheduledExecutor();
     }
 
-
     /**
-     * Getter per ottenere lo status dell'oggetto CheckerRule
+     * Restituisce lo stato di esecuzione di {@code CheckRule}.
      *
-     * @return la variabile booleana isRunning
+     * @return true se il controllo delle regole è attualmente in esecuzione, false altrimenti.
      */
     public Boolean getRunning() {
         return isRunning;
     }
 
-
     /**
-     * Avvia il thread che controlla periodicamente le regole gestite da RuleManager.
-     * Se lo scheduler è stato chiuso, ne crea uno nuovo.
+     * Avvia il thread che controlla periodicamente le regole gestite da {@link RuleManager}.
+     * Se lo scheduler è stato chiuso, ne crea uno nuovo. Il controllo delle regole viene eseguito ogni secondo.
      * Se il trigger di una regola è verificato, viene eseguita l'azione associata.
-     * Il controllo delle regole viene eseguito ogni secondo.
      * Questo metodo può essere chiamato solo se il thread non è già in esecuzione.
      */
     public void start() {
@@ -62,7 +57,7 @@ public class CheckRule {
     }
 
     /**
-     * Ferma l'esecuzione del controllo delle regole
+     * Ferma l'esecuzione del controllo delle regole e chiude lo scheduler.
      */
     public void stop() {
         if (isRunning) {
@@ -70,5 +65,4 @@ public class CheckRule {
             isRunning = false;
         }
     }
-
 }

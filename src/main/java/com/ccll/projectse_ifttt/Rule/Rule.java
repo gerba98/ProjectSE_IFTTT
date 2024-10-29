@@ -7,10 +7,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-
 /**
  * Questa classe rappresenta una regola IFTTT (If This Then That).
- * Una regola è composta da un gggetto trigger e un oggetto action
+ * Una regola è composta da un oggetto trigger e un oggetto action, che definiscono rispettivamente
+ * la condizione e l'azione da eseguire al verificarsi della condizione.
  */
 public class Rule {
     private Trigger trigger;
@@ -19,17 +19,14 @@ public class Rule {
     private BooleanProperty state;
     private int numberOfExecutions;
 
-
-
     /**
      * Costruttore della classe Rule.
-     * Crea una nuova istanza di Rule dato il trigger, l'azione e il nome specificati.
-     * lo stato della regola è inizializzato a true
-     * Il numero di esecuzioni della regola è inizializzato a 0
+     * Crea una nuova istanza di Rule con il trigger, l'azione e il nome specificati.
+     * Lo stato della regola è inizializzato a true, e il numero di esecuzioni è inizializzato a 0.
      *
-     * @param name    Il nome della regola
-     * @param trigger Il trigger della regola
-     * @param action  L'azione della regola
+     * @param name    Il nome della regola.
+     * @param trigger Il trigger della regola.
+     * @param action  L'azione della regola.
      */
     public Rule(String name, Trigger trigger, Action action) {
         this.trigger = trigger;
@@ -40,18 +37,18 @@ public class Rule {
     }
 
     /**
-     * Restituisce il trigger associato alla regola
+     * Restituisce il trigger associato alla regola.
      *
-     * @return Il trigger della regola
+     * @return Il trigger della regola.
      */
     public Trigger getTrigger() {
         return trigger;
     }
 
     /**
-     * Imposta il trigger della regola.
+     * Imposta un nuovo trigger per la regola.
      *
-     * @param trigger Il nuovo trigger da impostare
+     * @param trigger Il nuovo trigger da impostare.
      */
     public void setTrigger(Trigger trigger) {
         this.trigger = trigger;
@@ -60,17 +57,16 @@ public class Rule {
     /**
      * Restituisce l'azione associata alla regola.
      *
-     * @return L'azione della regola
+     * @return L'azione della regola.
      */
-
     public Action getAction() {
         return action;
     }
 
     /**
-     * Imposta l'azione della regola.
+     * Imposta una nuova azione per la regola.
      *
-     * @param action La nuova azione da impostare
+     * @param action La nuova azione da impostare.
      */
     public void setAction(Action action) {
         this.action = action;
@@ -79,39 +75,43 @@ public class Rule {
     /**
      * Restituisce il nome della regola.
      *
-     * @return Il nome della regola
+     * @return Il nome della regola.
      */
     public String getName() {
         return name.get();
     }
 
     /**
-     * Imposta il nome della regola.
+     * Imposta un nuovo nome per la regola.
      *
-     * @param name Il nuovo nome da impostare
+     * @param name Il nuovo nome da impostare.
      */
     public void setName(String name) {
         this.name.set(name);
     }
 
-
     /**
      * Restituisce lo stato della regola.
      *
-     * @return True se la regola è attiva, False altrimenti
+     * @return True se la regola è attiva, False altrimenti.
      */
     public boolean isState() {
         return state.get();
     }
 
+    /**
+     * Restituisce la proprietà di stato della regola.
+     *
+     * @return La proprietà BooleanProperty dello stato.
+     */
     public BooleanProperty stateProperty() {
         return state;
     }
+
     /**
-     * Imposta lo stato della regola.
-     * Se lo stato viene settato a true il trigger viene resettato.
+     * Imposta lo stato della regola. Se lo stato è impostato a true, il trigger viene resettato.
      *
-     * @param state Il nuovo stato da impostare
+     * @param state Il nuovo stato da impostare.
      */
     public void setState(boolean state) {
         if (state) {
@@ -123,7 +123,7 @@ public class Rule {
     /**
      * Restituisce il tipo della regola.
      *
-     * @return Il tipo della regola
+     * @return Il tipo della regola.
      */
     public String getType() {
         return "Rule";
@@ -131,9 +131,9 @@ public class Rule {
 
     /**
      * Valuta il trigger associato alla regola se lo stato della regola è attivo.
-     * Questo metodo viene chiamato nel metodo run della classe CheckRule.
+     * Questo metodo è chiamato dal metodo run di {@link CheckRule}.
      *
-     * @return True se il trigger è attivato, False altrimenti
+     * @return True se il trigger è attivato, False altrimenti.
      */
     public boolean evaluateTrigger() {
         if (isState()) {
@@ -142,20 +142,18 @@ public class Rule {
         return false;
     }
 
-
     /**
-     * Restituisce il numero di volte che l'azione associata alla regola è stata eseguita.
+     * Restituisce il numero di volte in cui l'azione associata alla regola è stata eseguita.
      *
-     * @return Il numero di esecuzioni dell'azione
+     * @return Il numero di esecuzioni dell'azione.
      */
     public int getNumberOfExecutions() {
         return numberOfExecutions;
     }
 
-
     /**
-     * Esegue l'azione associata alla regola.
-     * Questo metodo viene chiamato nel metodo run della classe CheckRule quando il metodo evaluate del Trigger restituisce True.
+     * Esegue l'azione associata alla regola e incrementa il numero di esecuzioni.
+     * Questo metodo è chiamato dal metodo run di {@link CheckRule} quando il metodo evaluate del Trigger restituisce True.
      */
     public void executeAction() {
         action.execute();
@@ -163,13 +161,13 @@ public class Rule {
     }
 
     /**
-     * Restituisce una rappresentazione stringa della regola.
-     * La stringa contiene informazioni sul trigger e sull'azione.
+     * Restituisce una rappresentazione in stringa della regola, contenente il nome, il trigger, l'azione,
+     * lo stato e il tipo della regola.
      *
-     * @return Una stringa che descrive la regola
+     * @return Una stringa che descrive la regola.
      */
     @Override
     public String toString() {
-        return name + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
+        return name.get() + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
     }
 }

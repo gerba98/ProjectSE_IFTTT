@@ -2,43 +2,41 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.*;
 import com.ccll.projectse_ifttt.Triggers.*;
-import com.ccll.projectse_ifttt.Rule.RulePersistence;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.util.Callback;
 
-import java.util.Arrays;
-
 /**
  * Questa classe gestisce un insieme di regole nel sistema IFTTT.
  * Implementa il pattern Singleton per garantire che ci sia una sola istanza di
- * RuleManager durante l'esecuzione dell'applicazione.
+ * {@code RuleManager} durante l'esecuzione dell'applicazione.
+ * Fornisce metodi per aggiungere, rimuovere, salvare e caricare regole, e per creare trigger e azioni.
  */
 public class RuleManager {
     private static volatile RuleManager instance;
     private final ObservableList<Rule> rules;
     private CheckRule ruleChecker;
     private RulePersistence rulePersistence;
+
     /**
-     * Costruttore privato per inizializzare il RuleManager  e la lista delle regole.
+     * Costruttore privato per inizializzare {@code RuleManager} e la lista delle regole.
+     * Configura l'ObservableList per tracciare i cambiamenti alle proprietà di stato delle regole.
      */
     private RuleManager() {
-        // Configura l'ObservableList per tracciare i cambiamenti alle proprietà delle Rule
         this.rules = FXCollections.observableArrayList(new Callback<Rule, Observable[]>() {
             @Override
             public javafx.beans.Observable[] call(Rule rule) {
                 return new javafx.beans.Observable[]{rule.stateProperty()};
             }
         });
-        //this.rulePersistence = new RulePersistence();
     }
 
     /**
-     * Restituisce l'istanza singleton di RuleManager.
+     * Restituisce l'istanza singleton di {@code RuleManager}.
      * Se l'istanza non è ancora stata creata, la crea.
      *
-     * @return L'istanza di RuleManager.
+     * @return L'istanza singleton di {@code RuleManager}.
      */
     public static RuleManager getInstance() {
         RuleManager result = instance;
@@ -54,9 +52,8 @@ public class RuleManager {
     }
 
     /**
-     * Aggiunge una nuova regola alla lista delle regole.
-     * Se è la prima regola aggiunta, istanzia un nuovo thread per il controllo delle regole e
-     * inizia il controllo.
+     * Aggiunge una nuova regola alla lista delle regole gestite.
+     * Se è la prima regola aggiunta, avvia il thread per il controllo periodico delle regole.
      *
      * @param rule La regola da aggiungere.
      */
@@ -70,7 +67,6 @@ public class RuleManager {
             if (!ruleChecker.getRunning()) {
                 ruleChecker.start();
             }
-
         }
     }
 
@@ -81,18 +77,17 @@ public class RuleManager {
      * @param ruleIndex L'indice della regola da rimuovere.
      */
     public void removeRule(int ruleIndex) {
-        Rule rule;
-        rule = rules.remove(ruleIndex);
+        Rule rule = rules.remove(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }
     }
 
-
     /**
      * Restituisce la lista delle regole attualmente gestite.
+     * Se la lista è vuota, inizializza {@code RulePersistence} e carica le regole salvate.
      *
-     * @return L'observable list contenente Rule
+     * @return L'observable list contenente le regole.
      */
     public ObservableList<Rule> getRules() {
         if (rules.isEmpty()) {
@@ -102,20 +97,23 @@ public class RuleManager {
         return rules;
     }
 
-    public void saveRules(){
+    /**
+     * Salva le regole gestite usando {@code RulePersistence}.
+     */
+    public void saveRules() {
         rulePersistence = new RulePersistence();
         rulePersistence.saveRules();
     }
 
     /**
-     * Crea una nuova Rule basata sui parametri forniti.
+     * Crea una nuova regola basata sui parametri forniti.
      *
-     * @param ruleName     Il nome della regola da creare
-     * @param triggerType  Il tipo di trigger per la regola
-     * @param triggerValue Il valore del trigger per la regola
-     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger
-     * @param actionValue  Il valore associato all'azione da eseguire
-     * @return La nuova regola creata con i parametri forniti
+     * @param ruleName     Il nome della regola da creare.
+     * @param triggerType  Il tipo di trigger per la regola.
+     * @param triggerValue Il valore del trigger per la regola.
+     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger.
+     * @param actionValue  Il valore associato all'azione da eseguire.
+     * @return La nuova regola creata con i parametri forniti.
      */
     public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue) {
         Trigger trigger = createTrigger(triggerType, triggerValue);
@@ -126,24 +124,23 @@ public class RuleManager {
     }
 
     /**
-     * Crea una nuova Rule basata sui parametri forniti e sul tipo specificato.
+     * Crea una nuova regola basata sui parametri forniti e sul tipo specificato.
      *
-     * @param ruleName     Il nome della regola da creare
-     * @param triggerType  Il tipo di trigger per la regola
-     * @param triggerValue Il valore del trigger per la regola
-     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger
-     * @param actionValue  Il valore associato all'azione da eseguire
-     * @param ruleType     Il tipo di regola che deve essere create:
-     *                     "PeriodicRule-gg:hh:mm" per creare una PeriodicRule.
-     *                     (gg:hh:mm è il periodo durante il quale la regola deve rimanere disattivata espresso in giorni:ore:minuti)
-     *                     "SingleRule" per creare una SingleRule
-     *                     "Rule" per creare una Rule
-     *                     Se questo parametro non viene specificato verrà creata una Rule.
-     *                     (case-insensitive)
-     * @return La nuova regola creata con i parametri forniti
+     * @param ruleName     Il nome della regola da creare.
+     * @param triggerType  Il tipo di trigger per la regola.
+     * @param triggerValue Il valore del trigger per la regola.
+     * @param actionType   Il tipo di azione da eseguire quando viene attivato il trigger.
+     * @param actionValue  Il valore associato all'azione da eseguire.
+     * @param ruleType     Il tipo di regola da creare:
+     *                     <ul>
+     *                         <li>"PeriodicRule-gg:hh:mm" per creare una {@code PeriodicRule} (gg:hh:mm è il periodo di inattività espresso in giorni:ore:minuti).</li>
+     *                         <li>"SingleRule" per creare una {@code SingleRule}.</li>
+     *                         <li>"Rule" per creare una {@code Rule} generica.</li>
+     *                     </ul>
+     *                     Se non specificato, viene creata una {@code Rule} generica.
+     * @return La nuova regola creata con i parametri forniti.
      */
     public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue, String ruleType) {
-
         Trigger trigger = createTrigger(triggerType, triggerValue);
         Action action = createAction(actionType, actionValue);
         String[] ruleInfo = ruleType.split("-");
@@ -160,11 +157,9 @@ public class RuleManager {
     /**
      * Crea un trigger basato sul tipo e valore specificati.
      *
-     * @param triggerType  Il tipo di trigger da creare. Deve essere una stringa non nulla.
-     *                     Attualmente, l'unico valore supportato è "time of the day" (case-insensitive).
-     * @param triggerValue Il valore associato al trigger. Il significato dipende dal tipo di trigger.
-     *                     Es. Per "time of the day": l'orario in formato stringa (es. "14:30").
-     * @return Un'istanza di Trigger creata in base ai parametri forniti.
+     * @param triggerType  Il tipo di trigger da creare.
+     * @param triggerValue Il valore associato al trigger.
+     * @return Un'istanza di {@code Trigger} creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di trigger non supportato.
      */
     public static Trigger createTrigger(String triggerType, String triggerValue) {
@@ -185,11 +180,9 @@ public class RuleManager {
     /**
      * Crea un'azione basata sul tipo e valore specificati.
      *
-     * @param actionType  Il tipo di azione da creare. Deve essere una stringa non nulla.
-     *                    I valori supportati sono "play audio" e "display message" (case-insensitive).
-     * @param actionValue Il valore associato all'azione. Il significato dipende dal tipo di azione.
-     *                    Es. Per "play audio": il percorso del file audio da riprodurre.
-     * @return Un'istanza di Action creata in base ai parametri forniti.
+     * @param actionType  Il tipo di azione da creare.
+     * @param actionValue Il valore associato all'azione.
+     * @return Un'istanza di {@code Action} creata in base ai parametri forniti.
      * @throws IllegalStateException se viene fornito un tipo di azione non supportato.
      */
     public static Action createAction(String actionType, String actionValue) {
@@ -205,5 +198,4 @@ public class RuleManager {
         };
         return actionCreator.createAction(actionValue);
     }
-
 }
