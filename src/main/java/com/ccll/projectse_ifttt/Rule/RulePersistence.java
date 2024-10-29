@@ -15,20 +15,31 @@ public class RulePersistence {
     private final RuleManager ruleManager = RuleManager.getInstance();
 
 
-
+    /**
+     * Imposta il percorso del file CSV dove vengono salvate le regole.
+     *
+     * @param path il nuovo percorso del file CSV.
+     */
     public void setPath(String path) {
         this.CSV_FILE_PATH = path;
     }
 
+    /**
+     * Restituisce il percorso del file CSV attualmente impostato.
+     *
+     * @return il percorso del file CSV.
+     */
     public String getPath() {
         return CSV_FILE_PATH;
     }
 
 
     /**
-     * Permette di salvare le regole in un file csv
+     * Salva le regole attualmente gestite da RuleManager in un file CSV.
      *
-     *
+     * Le regole vengono scritte nel formato stringa e nel caso di
+     * PeriodicRule, vengono inclusi anche il periodo e lo stato di
+     * riattivazione.
      */
     public void saveRules() {
         ruleManager.getInstance();
@@ -38,11 +49,7 @@ public class RulePersistence {
             try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(CSV_FILE_PATH))) {
                 for (Rule rule : rules) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append(rule.getName()).append(";")
-                            .append(rule.getTrigger()).append(";")
-                            .append(rule.getAction()).append(";")
-                            .append(rule.isState()).append(";")
-                            .append(rule.getType());
+                    sb.append(rule.toString());
 
                     if (rule instanceof PeriodicRule) {
                         PeriodicRule newPeriodicRule = (PeriodicRule) rule;
@@ -62,20 +69,23 @@ public class RulePersistence {
     }
 
     /**
-     * Permette di caricare le regole sotto forma di stringa dal file csv
-     * @return rules la lista di stringhe che identificano le regole
+     * Carica le regole da un file CSV e le aggiunge a RuleManager.
+     *
+     * Le regole vengono lette come stringhe e, nel caso di
+     * PeriodicRule, viene impostato lo stato di riattivazione.
+     *
+     * Se il file CSV non esiste, viene creato automaticamente.
      */
     public void loadRules(){
         try {
             File csvFile = new File(CSV_FILE_PATH);
             if (!csvFile.exists()) {
                 Files.createFile(csvFile.toPath());
-                return;
-            }
+            } else if (csvFile.length()>0) {
 
 
-            // Carica le regole esistenti
-            List<String> lines = Files.readAllLines(Paths.get(CSV_FILE_PATH));
+                // Carica le regole esistenti
+                List<String> lines = Files.readAllLines(Paths.get(CSV_FILE_PATH));
                 for (String line : lines) {
                     String[] parts = line.split(";");
                     // ruleName,triggerType,triggerValue,actionType,actionValue,ruleType
@@ -98,27 +108,28 @@ public class RulePersistence {
                         }
                     }
                 }
-
-            } catch(IOException e){
-                e.printStackTrace();
             }
+        } catch(IOException e){
+            e.printStackTrace();
+        }
 
     }
 
-        /**
+    /**
      * Permette di cancellare le regole selezionate dall'interfaccia
      *
      * @param selectedIndex indica la riga da rimuovere
      */
-//    public void deleteRules(int selectedIndex){
-//        try {
-//            List<String> lines = Files.readAllLines(Paths.get(path));
-//
-//            lines.remove(selectedIndex);
-//
-//            Files.write(Paths.get(path), lines);
-//        }catch (IOException e){
-//            System.out.println(e);
-//        }
-//    }
+    public void deleteRules(int selectedIndex){
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(CSV_FILE_PATH));
+            if (!lines.isEmpty()) {
+                lines.remove(selectedIndex);
+            }
+
+            Files.write(Paths.get(CSV_FILE_PATH), lines);
+        }catch (IOException e){
+            System.out.println(e);
+        }
+    }
 }

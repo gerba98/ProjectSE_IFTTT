@@ -73,6 +73,6 @@ public class CopyFileAction implements Action {
      */
     @Override
     public String toString() {
-        return "Copia di un file";
+        return "Copy File;";
     }
 }

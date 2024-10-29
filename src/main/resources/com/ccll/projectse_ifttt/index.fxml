@@ -29,7 +29,7 @@
      <AnchorPane maxHeight="500.0" maxWidth="647.0" minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="647.0">
          <Button fx:id="createRuleButton" layoutX="210.0" layoutY="2.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
          <Button fx:id="deleteRuleButton" layoutX="324.0" layoutY="2.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" />
-         <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0" text="Select a Rule" textFill="RED" visible="false" />
+         <Label fx:id="errorLabel" layoutX="409.0" layoutY="3.0" prefHeight="25.0" prefWidth="84.0" text="Select a Rule" textFill="RED" visible="false" />
          <Button fx:id="activateButton" layoutX="115.0" layoutY="41.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="26.0" prefWidth="172.0" style="-fx-background-color: #2b6112;" text="Activate rule" textFill="WHITE">
              <font>
                  <Font name="ArimaMadurai-Regular" size="13.0" />

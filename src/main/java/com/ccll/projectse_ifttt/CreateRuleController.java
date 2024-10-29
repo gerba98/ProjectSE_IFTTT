@@ -151,6 +151,7 @@ public class CreateRuleController {
         CTBox2.setItems(triggersList);
 
         operatorBox.setItems(operators);
+        operatorBox.setPrefWidth(70);
 
         CTBox1.setOnAction(e -> handleTriggerSelection("composite1"));
         CTBox2.setOnAction(e -> handleTriggerSelection("composite2"));
@@ -613,7 +614,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, "normal")){
                     label.setText("Day of the week (Monday, etc..)");
-                    Utils.layoutCombo(dayOfWeek, 330, 142);
+                    Utils.layoutCombo(dayOfWeek, 285, 142);
 
                     rulePane.getChildren().add(dayOfWeek);
                     triggerPaneItems.add(dayOfWeek);

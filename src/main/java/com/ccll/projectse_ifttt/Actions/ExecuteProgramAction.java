@@ -80,6 +80,6 @@ public class ExecuteProgramAction implements Action {
      */
     @Override
     public String toString() {
-        return "Esecuzione Programma";
+        return "Execute program;";
     }
 }

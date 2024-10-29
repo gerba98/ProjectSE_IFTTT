@@ -170,6 +170,6 @@ public class Rule {
      */
     @Override
     public String toString() {
-        return name + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
+        return getName() + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
     }
 }

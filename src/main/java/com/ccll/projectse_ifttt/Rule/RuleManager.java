@@ -82,7 +82,9 @@ public class RuleManager {
      */
     public void removeRule(int ruleIndex) {
         Rule rule;
+        rulePersistence = new RulePersistence();
         rule = rules.remove(ruleIndex);
+        rulePersistence.deleteRules(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }

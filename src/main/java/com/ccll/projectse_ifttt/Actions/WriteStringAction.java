@@ -88,6 +88,6 @@ public class WriteStringAction implements Action {
      */
     @Override
     public String toString() {
-        return "Scrittura su file";
+        return "write string;";
     }
 }

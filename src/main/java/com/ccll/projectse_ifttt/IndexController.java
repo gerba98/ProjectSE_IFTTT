@@ -120,6 +120,10 @@ public class IndexController {
         }
     }
 
+    /*
+    Cancella la regola tramite il rule manager, l'interfaccia è sincronizzata su quella lista
+
+     */
     @FXML
     public void onDeleteRuleButton(ActionEvent actionEvent) {
         RuleManager ruleManager = RuleManager.getInstance();
@@ -127,7 +131,7 @@ public class IndexController {
         if (selectedRule != null) {
             int selectedIndex = rulesTable.getSelectionModel().getSelectedIndex();
             ruleManager.removeRule(selectedIndex);
-            rulesTable.getItems().remove(selectedIndex);
+            System.out.println(ruleManager.getRules());
             errorLabel.setVisible(false);
         } else {
             errorLabel.setVisible(true);
