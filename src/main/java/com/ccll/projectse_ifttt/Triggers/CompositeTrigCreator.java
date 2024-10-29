@@ -5,6 +5,11 @@ import com.ccll.projectse_ifttt.Rule.RuleManager;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe CompositeTrigCreator per creare trigger compositi complessi che combinano trigger di base
+ * e\o altri trigger compositi utilizzando gli operatori logici AND, OR e NOT.
+ * Estende la classe astratta TriggerCreator e implementa la logica per interpretare espressioni complesse di trigger.
+ */
 public class CompositeTrigCreator extends TriggerCreator {
 
     private static final String TRIGGER_SEPARATOR = "@";
@@ -15,32 +20,30 @@ public class CompositeTrigCreator extends TriggerCreator {
     }
 
     private Trigger parseTriggerExpression(String expression) {
-        // Remove any leading/trailing whitespace
-        expression = expression.trim();
 
-        // Find the operator
         LogicalOperator operator;
         String remaining;
 
+        // individuo l'operatore
         if (expression.startsWith("NOT")) {
             operator = LogicalOperator.NOT;
-            remaining = expression.substring(3).trim();
+            remaining = expression.substring(3);
         } else if (expression.startsWith("AND")) {
             operator = LogicalOperator.AND;
-            remaining = expression.substring(3).trim();
+            remaining = expression.substring(3);
         } else if (expression.startsWith("OR")) {
             operator = LogicalOperator.OR;
-            remaining = expression.substring(2).trim();
+            remaining = expression.substring(2);
         } else {
             throw new IllegalArgumentException("Invalid expression: " + expression);
         }
 
-        // Remove outer parentheses if present
-        if (remaining.startsWith("(") && remaining.endsWith(")")) {
-            remaining = remaining.substring(1, remaining.length() - 1);
-        }
-
+        // creo il trigger composto
         CompositeTrigger compositeTrigger = new CompositeTrigger(operator);
+
+        // rimuovo le parentesi
+        remaining = remaining.substring(1, remaining.length() - 1);
+
 
         // Parse the triggers inside
         List<String> triggerStrings = splitTriggers(remaining);
@@ -74,16 +77,15 @@ public class CompositeTrigCreator extends TriggerCreator {
             }
 
             if (c == '@' && parenthesesCount == 0) {
-                triggers.add(currentTrigger.toString().trim());
+                triggers.add(currentTrigger.toString());
                 currentTrigger = new StringBuilder();
             } else {
                 currentTrigger.append(c);
             }
         }
 
-        // Add the last trigger
         if (!currentTrigger.isEmpty()) {
-            triggers.add(currentTrigger.toString().trim());
+            triggers.add(currentTrigger.toString());
         }
 
         return triggers;

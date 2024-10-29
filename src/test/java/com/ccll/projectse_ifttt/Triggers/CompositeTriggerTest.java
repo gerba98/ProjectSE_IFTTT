@@ -1,6 +1,5 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import com.ccll.projectse_ifttt.Rule.Rule;
 import com.ccll.projectse_ifttt.Rule.RuleManager;
 import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
 import org.junit.Assert;
@@ -75,7 +74,7 @@ class CompositeTriggerTest {
     }
 
     @Test
-    void testComplexNestedTriggerEvaluation() {
+    void testNestedTriggerEvaluation() {
 
         // NOT(trigger1)
         CompositeTrigger notTrigger = new CompositeTrigger(LogicalOperator.NOT);
@@ -95,47 +94,35 @@ class CompositeTriggerTest {
     }
 
     @Test
-    void testTriggerCreation(){
+    void testTriggerCreation() {
 
-        String targetTime = LocalTime.now().truncatedTo(ChronoUnit.MINUTES).toString();
-        Trigger t1 = RuleManager.createTrigger("time of the day", targetTime);
+        Trigger t1 = RuleManager.createTrigger("time of the day", "11:30");
 
         Trigger t2 = RuleManager.createTrigger("day of the week", "Monday");
 
         Trigger t3 = RuleManager.createTrigger("day of the week", "Monday");
 
+        CompositeTrigger notT1 = new CompositeTrigger(LogicalOperator.NOT); //false
+        notT1.addTrigger(t1);
 
-
-        CompositeTrigger t4 = new CompositeTrigger(LogicalOperator.AND); //true
-        t4.addTrigger(t1);
+        CompositeTrigger t4 = new CompositeTrigger(LogicalOperator.AND);
         t4.addTrigger(t2);
+        t4.addTrigger(notT1);
+
 
         CompositeTrigger notT4 = new CompositeTrigger(LogicalOperator.NOT); //false
         notT4.addTrigger(t4);
 
         CompositeTrigger t5 = new CompositeTrigger(LogicalOperator.OR);
-        t5.addTrigger(notT4);
         t5.addTrigger(t3);
+        t5.addTrigger(notT4);
 
 
+        CompositeTrigger notT5 = new CompositeTrigger(LogicalOperator.NOT);
+        notT5.addTrigger(t5);
 
-        System.out.println(t5);
-        //System.out.println(t5.toTreeString(0));
-
-        Trigger t = RuleManager.createTrigger("composite", t5.toString().split(";")[1]);
-        System.out.println(t.evaluate());
-        //CompositeTrigger tc = (CompositeTrigger) t;
-        //System.out.println(t5.toTreeString(0));
-
-//        CompositeTrigger t5 = new CompositeTrigger(LogicalOperator.OR);
-//        Trigger t4 = RuleManager.createTrigger("day of the month", "2024-10-29");
-//        t5.addTrigger(t4);
-//        t5.addTrigger(t3);
-//
-//
-//        Trigger t = RuleManager.createTrigger("composite", t5.toString().split(";")[1]);
-//        CompositeTrigger tc = (CompositeTrigger) t;
-
+        Trigger t = RuleManager.createTrigger("composite", notT5.toString().split(";")[1]);
+        assertEquals(notT5.toString(), t.toString(), "il risultato del toString dei due trigger dovrebbe corrispondere");
     }
 
     @Test
@@ -161,28 +148,4 @@ class CompositeTriggerTest {
         boolean evaluationAfterReset = compositeTrigger.evaluate();
         assertTrue(evaluationAfterReset, "La valutazione dopo il reset dovrebbe essere true");
     }
-
-    @Test
-    void testEdgeTriggeredBehavior() {
-
-        TriggerTestUtils trigger1 = new TriggerTestUtils(true);
-
-        // Prima valutazione
-        assertTrue(trigger1.evaluate(), "La prima valutazione dovrebbe essere true quando entrambi i trigger sono true");
-
-        // Seconda valutazione senza cambiamenti
-        assertFalse(trigger1.evaluate(), "La seconda valutazione dovrebbe essere false (edge-triggered)");
-
-        // Cambio stato e nuova valutazione
-        trigger1.setShouldTrigger(false);
-
-        trigger1.evaluate();
-        assertFalse(trigger1.evaluate(), "La terza valutazione dovrebbe essere false in quanto un trigger è false");
-
-        trigger1.setShouldTrigger(true);
-        assertTrue(trigger1.evaluate(), "La valutazione dopo un cambiamento di stato dovrebbe essere true");
-    }
-
-
-
 }

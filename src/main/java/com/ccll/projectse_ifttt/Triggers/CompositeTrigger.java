@@ -3,9 +3,8 @@ package com.ccll.projectse_ifttt.Triggers;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ccll.projectse_ifttt.Triggers.TriggerType.COMPOSITE;
-
 public class CompositeTrigger extends AbstractTrigger {
+    private static final int MAX_TRIGGERS = 2;
     private final LogicalOperator operator;
     private final List<Trigger> triggers;
 
@@ -15,11 +14,18 @@ public class CompositeTrigger extends AbstractTrigger {
     }
 
     public void addTrigger(Trigger trigger) {
+        if (triggers.size() >= MAX_TRIGGERS) {
+            throw new IllegalStateException("Cannot add more than " + MAX_TRIGGERS + " triggers to a composite trigger");
+        }
         triggers.add(trigger);
     }
 
     public void removeTrigger(Trigger trigger) {
         triggers.remove(trigger);
+    }
+
+    public List<Trigger> getChildren() {
+        return this.triggers;
     }
 
     @Override
@@ -32,10 +38,16 @@ public class CompositeTrigger extends AbstractTrigger {
     }
 
     private boolean evaluateAnd() {
+        if (triggers.size() != 2) {
+            throw new IllegalStateException("AND operator requires exactly two triggers");
+        }
         return triggers.stream().allMatch(Trigger::getCurrentEvaluation);
     }
 
     private boolean evaluateOr() {
+        if (triggers.size() != 2) {
+            throw new IllegalStateException("OR operator requires exactly two triggers");
+        }
         return triggers.stream().anyMatch(Trigger::getCurrentEvaluation);
     }
 
@@ -54,55 +66,35 @@ public class CompositeTrigger extends AbstractTrigger {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("COMPOSITE;");
-        sb.append(formatTriggerExpression());
-        return sb.toString();
+        return "COMPOSITE;" + getTriggerExpression();
     }
 
-    private String formatTriggerExpression() {
-        System.out.println(triggers.size());
+    private String getTriggerExpression() {
         StringBuilder sb = new StringBuilder();
-
-        // Add operator
         sb.append(operator);
+        sb.append("(");
 
-        // Add opening parenthesis for complex expressions
-        boolean needsParentheses = triggers.size() > 1 || triggers.get(0) instanceof CompositeTrigger;
-        if (needsParentheses) {
-            sb.append("(");
-        }
-
-        // Add triggers
         for (int i = 0; i < triggers.size(); i++) {
-            Trigger trigger = triggers.get(i);
-
-            // Handle the trigger string
-            String triggerStr = trigger.toString();
-            if (trigger instanceof CompositeTrigger) {
-                // For composite triggers, only keep the expression part
-                triggerStr = triggerStr.split(";")[1];
-            } else {
-                // For simple triggers, replace semicolons with #
-                triggerStr = triggerStr.replace(";", "#");
-            }
-
+            String triggerStr = getTriggerStr(i);
             sb.append(triggerStr);
-
-            // Add separator between triggers
             if (i < triggers.size() - 1) {
                 sb.append("@");
             }
         }
 
-        // Add closing parenthesis for complex expressions
-        if (needsParentheses) {
-            sb.append(")");
-        }
-
+        sb.append(")");
         return sb.toString();
     }
 
+    private String getTriggerStr(int i) {
+        Trigger trigger = triggers.get(i);
 
+        String triggerStr = trigger.toString();
+        if (trigger instanceof CompositeTrigger) {
+            triggerStr = triggerStr.split(";")[1];
+        } else {
+            triggerStr = triggerStr.replace(";", "#");
+        }
+        return triggerStr;
+    }
 }
-
