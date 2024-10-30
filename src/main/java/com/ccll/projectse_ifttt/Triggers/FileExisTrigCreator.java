@@ -1,5 +1,6 @@
 package com.ccll.projectse_ifttt.Triggers;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -12,10 +13,8 @@ public class FileExisTrigCreator extends TriggerCreator {
      */
     @Override
     public Trigger createTrigger(String path) {
-        String[] parts = path.split(" ");
-        Path folderPath = Paths.get(parts[0]);
-        Path filePath = folderPath.resolve(parts[1]);
-        return new FileExistenceTrig(filePath.toString());
+        String[] parts = path.split("-");
+        return new FileExistenceTrig(new File(Path.of(parts[0],parts[1]).toString()));
     }
 
     @Override

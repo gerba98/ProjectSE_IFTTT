@@ -23,13 +23,13 @@ public class WriteStringActionCreator extends ActionCreator {
      */
     @Override
     public Action createAction(String actionValue) {
-        // Verifica se actionValue contiene il separatore ";"
-        if (actionValue == null || !actionValue.contains(";")) {
-            throw new IllegalArgumentException("The action value must contain a file path and a string, separated by ';'");
+        // Verifica se actionValue contiene il separatore "-"
+        if (actionValue == null || !actionValue.contains("-")) {
+            throw new IllegalArgumentException("The action value must contain a file path and a string, separated by '-'");
         }
 
         // Divide actionValue in due parti, il percorso del file e la stringa da scrivere
-        String[] parts = actionValue.split(";", 2); // Assume che il percorso del file e la stringa da scrivere siano separati da ";"
+        String[] parts = actionValue.split("-", 2); // Assume che il percorso del file e la stringa da scrivere siano separati da "-"
 
         // Verifica che entrambe le parti (percorso del file e stringa) siano presenti
         if (parts.length < 2 || parts[0].isEmpty() || parts[1].isEmpty()) {

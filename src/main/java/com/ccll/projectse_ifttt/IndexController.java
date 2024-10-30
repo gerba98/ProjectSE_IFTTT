@@ -68,8 +68,14 @@ public class IndexController {
     @FXML
     public void initialize() {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-        triggerColumn.setCellValueFactory(new PropertyValueFactory<>("trigger"));
-        actionColumn.setCellValueFactory(new PropertyValueFactory<>("action"));
+        triggerColumn.setCellValueFactory(cellData -> {
+                    String trigger = cellData.getValue().getTrigger().toString();
+                    return new SimpleStringProperty(trigger.split(";")[0]+" '"+trigger.split(";")[1]+"'");
+                });
+        actionColumn.setCellValueFactory(cellData -> {
+            String action = cellData.getValue().getAction().toString();
+            return new SimpleStringProperty(action.split(";")[0]+" '"+action.split(";")[1]+"'");
+        });
         stateColumn.setCellValueFactory(cellData -> statePropertyFunction(cellData));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));  // Aggiunto per la colonna "Tipologia"
 
@@ -131,7 +137,7 @@ public class IndexController {
         if (selectedRule != null) {
             int selectedIndex = rulesTable.getSelectionModel().getSelectedIndex();
             ruleManager.removeRule(selectedIndex);
-            System.out.println(ruleManager.getRules());
+            updateRulesList(ruleManager);
             errorLabel.setVisible(false);
         } else {
             errorLabel.setVisible(true);
@@ -178,6 +184,12 @@ public class IndexController {
 
     public void insertItems(Rule rule) {
         rulesList.add(rule);
+        rulesTable.setItems(rulesList);
+    }
+
+    public void updateRulesList(RuleManager rm) {
+        rulesList.clear();
+        rulesList.addAll(rm.getRules());
         rulesTable.setItems(rulesList);
     }
 

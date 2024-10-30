@@ -67,6 +67,6 @@ public class MoveFileAction implements Action {
      */
     @Override
     public String toString() {
-        return "Move File;";
+        return "Move File;"+sourceFilePath+"-"+destinationDirectoryPath;
     }
 }

@@ -103,7 +103,8 @@ public class ExecutionProgramTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "Status program;" + this.userInfo.split("-")[2] + " " + this.userInfo.split("-")[1];
+        //System.out.println("to string: "+userInfo);
+        return "Status program;" + this.userInfo.split("-")[0] + "-" + this.userInfo.split("-")[1]+"-"+this.userInfo.split("-")[2];
     }
 
     @Override
