@@ -11,11 +11,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Questo trigger valuta se l'output restituito dal programma corrisponde con quello specificato.
  */
 public class ExecutionProgramTrig extends AbstractTrigger {
-    boolean isThreadRunning = false;
-    AtomicBoolean evaluation = new AtomicBoolean(false);
-    AtomicInteger exitCode = new AtomicInteger();
+    private boolean isThreadRunning = false;
+    private AtomicBoolean evaluation = new AtomicBoolean(false);
+    private AtomicInteger exitCode = new AtomicInteger();
     private CompletableFuture<Integer> runningProcess = null;
-    String userInfo;
+    private String userInfo;
 
     /**
      * Costruisce un ExecutionProgramTrig con comando e programma specificati e output desiderato.
@@ -71,6 +71,7 @@ public class ExecutionProgramTrig extends AbstractTrigger {
                 e.printStackTrace();
             }
         }
+        System.out.println(newEvaluation);
         return newEvaluation; // Process is still running or evaluation didn't change
     }
 
