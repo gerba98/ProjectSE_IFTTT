@@ -156,7 +156,8 @@ public class CreateRuleController {
     private String programCommand;
 
     HashMap<String, String> compositeTriggerNames = new HashMap<>();
-    HashMap<String, ObservableList<String>> compositeActionNamesHash = new HashMap<>();
+    HashMap<String, List<String>> compositeActionNamesHash = new HashMap<>();
+    List<String> listForHash = new ArrayList<String>();
 
     @FXML
     public void initialize() {
@@ -362,11 +363,12 @@ public class CreateRuleController {
         if(Objects.equals(compositeActionName.getText(), "") || compositeActionList.isEmpty()){
             CALabelError.setVisible(true);
         }else{
-            compositeActionNamesHash.put(compositeActionName.getText(), compositeActionList);
             actionsList.add(compositeActionName.getText());
             actionBox.setItems(actionsList);
+            compositeActionNamesHash.put(compositeActionName.getText(), listForHash);
             CALabelError.setVisible(false);
             clearCompositeAction();
+            System.out.println("Dizionarion dopo aver creato l'azione: " + compositeActionNamesHash.toString() + "\n" + compositeActionNamesHash);
         }
     }
 
@@ -378,13 +380,14 @@ public class CreateRuleController {
             CALabelError.setVisible(true);
         }else{
             String result = actionType + "#" + actionValue;
+            System.out.println("dizionarion quadno aggiungo una azione singola: " + compositeActionList.toString());
             if(compositeActionNamesHash.containsKey(actionType)){
-                ObservableList<String> concatenateActions = compositeActionNamesHash.get(actionType);
-                for(String s:concatenateActions){
-                    compositeActionList.add(s);
-                }
+                List<String> concatenateActions = compositeActionNamesHash.get(actionType);
+                compositeActionList.addAll(concatenateActions);
+                listForHash.addAll(concatenateActions);
             }else{
                 compositeActionList.add(result);
+                listForHash.add(result);
             }
 
             CAListView.setItems(compositeActionList);
@@ -465,12 +468,11 @@ public class CreateRuleController {
 
                 String actionDetails = collectActionDetails(actionPaneItems, actionBox);
                 if(Objects.equals(actionType, "composite")){
-                    ObservableList<String> list = compositeActionNamesHash.get(actionBox.getValue());
+                    List<String> list = compositeActionNamesHash.get(actionBox.getValue());
                     actionDetails = String.join(">>>", list);
                 }
 
 
-                System.out.println("ACTION DETAILS RULE:  "+actionDetails);
                 RuleBuilder builder = new RuleBuilder()
                         .setName(name)
                         .setTriggerType(triggerType)
@@ -494,7 +496,6 @@ public class CreateRuleController {
                 clearUI();
 
             } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
                 labelError.setVisible(true);
             }
         }
@@ -624,11 +625,9 @@ public class CreateRuleController {
                 break;
             default:
                 action = compositeActionNamesHash.get(box.getValue()) + " ";
-                System.out.println("AZIONE VACANTE:   "+action);
                 break;
 
         }
-        System.out.println(action);
         if(!action.isEmpty()){
             action = action.substring(0, action.length() - 1);
         }
@@ -1095,6 +1094,7 @@ public class CreateRuleController {
     public void clearCompositeAction(){
         CALabelError.setVisible(false);
         compositeActionName.clear();
+        compositeActionList.clear();
         CABox.setValue("");
     }
 
