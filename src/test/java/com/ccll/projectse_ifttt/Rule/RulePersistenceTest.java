@@ -1,104 +1,96 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import org.junit.After;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RulePersistenceTest {
+class RulePersistenceTest {
+    private RulePersistence rulePersistence;
+    private final String testCsvFilePath = "src/test/resources/com/ccll/projectse_ifttt/test_rules.csv";
 
-//    private RulePersistence rulePersistence;
-//    private static Path tempFilePath;
-//
-//    @BeforeEach
-//    public void setUp() throws IOException {
-//        // Creiamo un file temporaneo per testare le operazioni
-//        tempFilePath = Files.createTempFile("rules", ".csv");
-//        rulePersistence = new RulePersistence();
-//
-//        // Modifica il path nel test per usare il file temporaneo
-//        rulePersistence.setPath(tempFilePath.toString());
-//    }
-//
+    @BeforeEach
+    void setUp() {
+        rulePersistence = new RulePersistence();
+        rulePersistence.setPath(testCsvFilePath);
+
+        // Crea un file di test
+        try {
+            Files.createDirectories(Paths.get("src/test/resources/com/ccll/projectse_ifttt/"));
+            Files.createFile(Paths.get(testCsvFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Elimina il file di test alla fine di ogni test
+        try {
+            Files.deleteIfExists(Paths.get(testCsvFilePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testSetAndGetPath() {
+        rulePersistence.setPath(testCsvFilePath);
+        assertEquals(testCsvFilePath, rulePersistence.getPath(), "Il percorso del file CSV dovrebbe essere aggiornato correttamente.");
+    }
+
 //    @Test
-//    public void testSaveRules() throws IOException {
-//        // Creiamo un esempio di ObservableList con il formato richiesto
-//        ObservableList<String> rules = FXCollections.observableArrayList(
-//                "Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light",
-//                "Rule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan"
-//        );
+//    void testSaveRules() {
+//        RuleManager ruleManager = RuleManager.getInstance();
+//        ruleManager.addRule(new Rule("TestRule", "TestTriggerType", "TestTriggerValue", "TestActionType", "TestActionValue", "StandardRule"));
 //
-//        // Salva le regole nel file temporaneo
-//        rulePersistence.saveRules(rules);
+//        rulePersistence.saveRules();
 //
-//        // Leggi il contenuto del file per verificarne il contenuto
-//        List<String> lines = Files.readAllLines(tempFilePath);
-//        assertEquals(2, lines.size(), "Il numero di righe nel file non corrisponde");
-//
-//        // Verifica che ogni riga contenga il pattern corretto
-//        assertTrue(lines.get(0).contains("Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light"), "La prima riga non contiene i dati corretti");
-//        assertTrue(lines.get(1).contains("Rule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan"), "La seconda riga non contiene i dati corretti");
+//        try {
+//            List<String> lines = Files.readAllLines(Paths.get(testCsvFilePath));
+//            assertFalse(lines.isEmpty(), "Il file CSV non dovrebbe essere vuoto dopo il salvataggio.");
+//            assertTrue(lines.get(0).contains("TestRule"), "La riga salvata dovrebbe contenere il nome della regola salvata.");
+//        } catch (IOException e) {
+//            fail("Eccezione durante la lettura del file: " + e.getMessage());
+//        }
 //    }
-//
+
 //    @Test
-//    public void testLoadRules() throws IOException {
-//        // Scriviamo delle regole nel file temporaneo con il formato specificato
-//        Files.write(tempFilePath, "Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light\nRule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan".getBytes());
+//    void testLoadRules() {
+//        // Scrivi manualmente una regola nel file CSV di test
+//        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(testCsvFilePath))) {
+//            writer.write("TestRule;TestTriggerType;TestTriggerValue;TestActionType;TestActionValue;true;StandardRule\n");
+//        } catch (IOException e) {
+//            fail("Eccezione durante la scrittura del file: " + e.getMessage());
+//        }
 //
-//        // Carica le regole
-//        ObservableList<String> loadedRules = rulePersistence.loadRules();
+//        rulePersistence.loadRules();
 //
-//        // Verifica che le regole siano caricate correttamente
-//        assertEquals(2, loadedRules.size(), "Il numero di regole caricate non è corretto");
-//        assertEquals("Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light", loadedRules.get(0), "La prima regola non è corretta");
-//        assertEquals("Rule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan", loadedRules.get(1), "La seconda regola non è corretta");
+//        RuleManager ruleManager = RuleManager.getInstance();
+//        List<Rule> loadedRules = ruleManager.getRules();
+//        assertFalse(loadedRules.isEmpty(), "Dovrebbe caricare almeno una regola.");
+//        assertEquals("TestRule", loadedRules.get(0).getName(), "La regola caricata dovrebbe avere il nome 'TestRule'.");
 //    }
-//
+
 //    @Test
-//    public void testDeleteRules() throws IOException {
-//        // Scriviamo delle regole nel file temporaneo con il formato specificato
-//        Files.write(tempFilePath, "Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light\nRule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan\nRule3;ActivateAlarm;ButtonTrigger;Button;Pressed;Activate;Alarm;Siren".getBytes());
+//    void testDeleteRules() {
+//        RuleManager ruleManager = RuleManager.getInstance();
+//        ruleManager.addRule(new Rule("TestRule1", "TestTriggerType", "TestTriggerValue", "TestActionType", "TestActionValue", "StandardRule"));
+//        ruleManager.addRule(new Rule("TestRule2", "TestTriggerType", "TestTriggerValue", "TestActionType", "TestActionValue", "StandardRule"));
 //
-//        // Elimina la seconda riga (index 1)
-//        rulePersistence.deleteRules(1);
+//        rulePersistence.saveRules();
+//        rulePersistence.deleteRules(0); // Rimuove la prima regola
 //
-//        // Rileggiamo il file per verificare che la seconda riga sia stata eliminata
-//        List<String> lines = Files.readAllLines(tempFilePath);
-//        assertEquals(2, lines.size(), "Il numero di righe nel file non è corretto dopo la cancellazione");
-//
-//        // Verifica che le righe contengano i dati corretti dopo la cancellazione
-//        assertTrue(lines.contains("Rule1;TurnOnLight;TimeTrigger;Time;08:00;TurnOn;Switch;Light"), "La prima regola è stata erroneamente rimossa");
-//        assertTrue(lines.contains("Rule3;ActivateAlarm;ButtonTrigger;Button;Pressed;Activate;Alarm;Siren"), "La terza regola non è corretta");
-//        assertFalse(lines.contains("Rule2;TurnOffFan;MotionTrigger;Motion;Detected;TurnOff;Switch;Fan"), "La seconda regola non è stata eliminata correttamente");
-//    }
-//
-//    @Test
-//    public void testSaveEmptyRules() throws IOException {
-//        ObservableList<String> rules = FXCollections.observableArrayList();
-//
-//        // Salva una lista vuota
-//        rulePersistence.saveRules(rules);
-//
-//        // Verifica che il file sia vuoto
-//        List<String> lines = Files.readAllLines(tempFilePath);
-//        assertTrue(lines.isEmpty(), "Il file non dovrebbe contenere righe");
-//    }
-//
-//    @AfterAll
-//    public static void deleteTempFiles() throws IOException {
-//        File file = new File(tempFilePath+"");
-//        if (file.exists()) {
-//            file.delete();  // Se il file esiste già, lo rimuoviamo.
+//        try {
+//            List<String> lines = Files.readAllLines(Paths.get(testCsvFilePath));
+//            assertEquals(1, lines.size(), "Il file CSV dovrebbe contenere una sola regola dopo la cancellazione.");
+//            assertFalse(lines.get(0).contains("TestRule1"), "La riga cancellata non dovrebbe essere presente.");
+//        } catch (IOException e) {
+//            fail("Eccezione durante la lettura del file: " + e.getMessage());
 //        }
 //    }
 }

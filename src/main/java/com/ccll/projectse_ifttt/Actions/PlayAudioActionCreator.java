@@ -18,6 +18,7 @@ public class PlayAudioActionCreator extends ActionCreator {
      */
     @Override
     public Action createAction(String actionValue) {
+        System.out.println(actionValue);
         Path audioFilePath = Paths.get(actionValue);
         return new PlayAudioAction(audioFilePath);
     }

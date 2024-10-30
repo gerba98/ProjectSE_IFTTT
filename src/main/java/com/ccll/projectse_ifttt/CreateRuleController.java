@@ -178,6 +178,7 @@ public class CreateRuleController {
         CTBox2.setItems(triggersList);
 
         operatorBox.setItems(operators);
+        operatorBox.setPrefWidth(70);
 
         CABox.setItems(actionsList);
 
