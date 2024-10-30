@@ -105,6 +105,6 @@ public class FileDimensionTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "File dimension; " + filePath + " - " + dimension + " " + unitDim;
+        return "File dimension;" + filePath + " - " + dimension + " " + unitDim;
     }
 }

@@ -451,9 +451,8 @@ public class CreateRuleController {
                     actionType = "composite";
                 }
 
-                String actionDetails = collectActionDetails(compositeActionPaneItems, actionBox);
+                String actionDetails = collectActionDetails(actionPaneItems, actionBox);
                 if(Objects.equals(actionType, "composite")){
-                    actionDetails = "";
                     ObservableList<String> list = CompositeActionNamesHash.get(actionBox.getValue());
                     actionDetails = String.join(">>>", list);
                 }
@@ -480,6 +479,7 @@ public class CreateRuleController {
                 clearUI();
 
             } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
                 labelError.setVisible(true);
             }
         }
@@ -579,15 +579,24 @@ public class CreateRuleController {
         Iterator<Object> iterator;
         iterator = paneList.iterator();
         switch (box.getValue()) {
-            case "Remove file", "Copy File", "Write string", "Move file", "Play Audio", "Display message":
+            case "Remove file":
+            case "Copy File":
+            case "Write string":
+            case "Move file":
+            case "Play Audio":
+            case"Display message":
+                System.out.println("sono un textfield");
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
+
                         if (!((TextField) item).getText().isEmpty()) {
+                            System.out.println("Ho qualcosa: " + ((TextField) item).getText());
                             action += ((TextField) item).getText() + "-";
                         }
                     }
                 }
+
                 break;
             case "Execute Program":
                 while (iterator.hasNext()) {
@@ -870,7 +879,7 @@ public class CreateRuleController {
 
     @FXML
     private void createActionItem(Label label, String text, String value) {
-
+        System.out.println(value);
         switch (text) {
             case "Display message":
                 TextField msgField = new TextField();

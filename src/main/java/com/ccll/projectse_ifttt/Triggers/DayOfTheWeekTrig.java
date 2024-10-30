@@ -55,6 +55,6 @@ public class DayOfTheWeekTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "Day of the week; " + dayOfWeek;
+        return "Day of the week;" + dayOfWeek;
     }
 }

@@ -1,2 +1,1 @@
-gg;Time of the day;12:38;Composite;Display Message#gg>>>Display Message#ggerfsv;true;Rule
-vv;COMPOSITE;AND(Time of the day#12:38@Day of the week# WEDNESDAY);Composite;Display Message#gg>>>Display Message#ggerfsv;true;Rule
+gg;Time of the day;12:55;Display Message;gref;true;Rule

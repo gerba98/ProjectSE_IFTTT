@@ -54,6 +54,6 @@ public class SpecifiedDateTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "Date; " + date;
+        return "Date;" + date;
     }
 }
