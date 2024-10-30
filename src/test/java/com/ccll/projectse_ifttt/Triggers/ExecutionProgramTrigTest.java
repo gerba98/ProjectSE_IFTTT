@@ -19,7 +19,7 @@ class ExecutionProgramTrigTest {
             resourcePath = resourcePath.substring(1);
         }
 
-        String userInfo = "python-" + resourcePath + "-1";
+        String userInfo = "py-" + resourcePath + "-1";
         ExecutionProgramTrig executionProgramTrig = new ExecutionProgramTrig(userInfo);
 
         // Prima chiamata per avviare il processo
@@ -44,7 +44,7 @@ class ExecutionProgramTrigTest {
         }
         assertTrue(result, "Il trigger dovrebbe attivarsi quando l'output del programma specificato è uguale a quello desiderato");
 
-        userInfo = "python-" + resourcePath + "-0";
+        userInfo = "py-" + resourcePath + "-0";
 
         executionProgramTrig.setUserInfo(userInfo);
         assertFalse(executionProgramTrig.evaluate(), "Il trigger dovrebbe attivarsi quando l'output del programma specificato è uguale a quello desiderato");
@@ -59,7 +59,7 @@ class ExecutionProgramTrigTest {
             resourcePath = resourcePath.substring(1);
         }
 
-        String userInfo = "python-" + resourcePath + "-1";
+        String userInfo = "py-" + resourcePath + "-1";
         ExecutionProgramTrig executionProgramTrig = new ExecutionProgramTrig(userInfo);
 
         assertEquals(userInfo, executionProgramTrig.getUserInfo());
@@ -74,7 +74,7 @@ class ExecutionProgramTrigTest {
             resourcePath = resourcePath.substring(1);
         }
 
-        String userInfo = "python-" + resourcePath + "-1";
+        String userInfo = "py-" + resourcePath + "-1";
         TriggerCreator EP = new EPTrigCreator();
         Trigger trigger = EP.createTrigger(userInfo);
         assertInstanceOf(ExecutionProgramTrig.class, trigger);

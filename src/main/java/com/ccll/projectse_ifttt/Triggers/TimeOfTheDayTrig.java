@@ -56,6 +56,6 @@ public class TimeOfTheDayTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "Time of the day; " + time;
+        return "Time of the day;" + time;
     }
 }

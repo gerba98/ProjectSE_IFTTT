@@ -45,7 +45,7 @@ public class CopyFileActionTest {
         String destinationPath = tempDir.toString();
 
         ActionCreator creator = new CopyFileActionCreator();
-        Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
+        Action copyFileAction = creator.createAction(sourcePath + "-" + destinationPath);
 
         // Verifica che l'esecuzione sia riuscita e che il file di destinazione esista
         assertTrue(copyFileAction.execute(), "L'azione di copia deve essere eseguita correttamente");
@@ -59,7 +59,7 @@ public class CopyFileActionTest {
         String destinationPath = tempDir.toString();
 
         ActionCreator creator = new CopyFileActionCreator();
-        Action copyFileAction = creator.createAction(sourcePath + ";" + destinationPath);
+        Action copyFileAction = creator.createAction(sourcePath + "-" + destinationPath);
 
         // Verifica che l'azione fallisca se il file sorgente non esiste
         assertFalse(copyFileAction.execute(), "L'azione di copia deve fallire se il file sorgente non esiste");
@@ -72,7 +72,7 @@ public class CopyFileActionTest {
         String invalidDestinationPath = Paths.get(tempDir.toString(), "nonExistentDir").toString();
 
         ActionCreator creator = new CopyFileActionCreator();
-        Action copyFileAction = creator.createAction(sourcePath + ";" + invalidDestinationPath);
+        Action copyFileAction = creator.createAction(sourcePath + "-" + invalidDestinationPath);
 
         // Verifica che l'azione fallisca se il percorso di destinazione non esiste
         assertFalse(copyFileAction.execute(), "L'azione di copia deve fallire se il percorso di destinazione non è valido");
