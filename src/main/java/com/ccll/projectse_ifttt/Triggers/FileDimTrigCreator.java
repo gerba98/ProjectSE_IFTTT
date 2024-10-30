@@ -1,5 +1,6 @@
 package com.ccll.projectse_ifttt.Triggers;
 
+
 import java.util.Arrays;
 
 /**
@@ -23,10 +24,12 @@ public class FileDimTrigCreator extends TriggerCreator {
      */
     @Override
     public Trigger createTrigger(String dimension) {
-        String[] parts = dimension.split(":");
-        int value = Integer.parseInt(parts[0]); // Dimension threshold as an integer
-        String path = String.join(":", Arrays.copyOfRange(parts, 2, parts.length)); // Full file path from parts
-        return new FileDimensionTrig(value, parts[1], path);
+        String[] parts = dimension.split("-");
+        int value = Integer.parseInt(parts[1]);
+        String unitDim = parts[2];
+        String path = parts[0];
+        return new FileDimensionTrig(value, unitDim, path);
+
     }
 
     /**

@@ -38,9 +38,6 @@ public class DisplayMessageAction implements Action {
             return false;
         }
 
-        // Log del messaggio in console per tracciabilità
-        System.out.println("Displaying message: " + message);
-
         // Visualizzazione del messaggio in una finestra di dialogo informativa con JavaFX
         Platform.runLater(() -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -60,6 +57,6 @@ public class DisplayMessageAction implements Action {
      */
     @Override
     public String toString() {
-        return "Visualizza messaggio: " + message;
+        return "Display Message;" + message;
     }
 }

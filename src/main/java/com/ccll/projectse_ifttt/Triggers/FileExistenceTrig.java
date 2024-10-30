@@ -1,21 +1,22 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.File;
+import java.nio.file.Path;
 
 /**
  * Implementa un trigger che si attiva in base alla presenza di un file in un percorso specificato.
  * Questo trigger verifica se un determinato file esiste nel percorso fornito.
  */
 public class FileExistenceTrig extends AbstractTrigger {
-    private String filePath;
+    private File file;
 
     /**
      * Costruisce un trigger basato sull'esistenza di un file specifico.
      *
-     * @param filePath il percorso del file da monitorare per verificarne l'esistenza.
+     * @param file è il percorso del file da controllare
      */
-    public FileExistenceTrig(String filePath) {
-        this.filePath = filePath;
+    public FileExistenceTrig(File file) {
+        this.file = file;
     }
 
     /**
@@ -23,17 +24,17 @@ public class FileExistenceTrig extends AbstractTrigger {
      *
      * @return il percorso del file per il quale viene verificata l'esistenza.
      */
-    public String getFilePath() {
-        return filePath;
+    public File getFile() {
+        return file;
     }
 
     /**
      * Imposta un nuovo percorso del file da monitorare.
      *
-     * @param filePath il percorso del file per il quale deve essere verificata l'esistenza.
+     * @param file il percorso del file per il quale deve essere verificata l'esistenza.
      */
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setFile(File file) {
+        this.file = file;
     }
 
     /**
@@ -44,7 +45,7 @@ public class FileExistenceTrig extends AbstractTrigger {
      */
     @Override
     public boolean getCurrentEvaluation() {
-        return new File(filePath).exists();
+        return file.exists();
     }
 
     /**
@@ -54,6 +55,6 @@ public class FileExistenceTrig extends AbstractTrigger {
      */
     @Override
     public String toString() {
-        return "File existence; " + filePath;
+        return "File existence;" + file.getParent()+"-"+file.getName();
     }
 }

@@ -40,6 +40,7 @@ public class RemoveFileAction implements Action {
 
             // Se il file è stato cancellato con successo, restituisci true
             if (deleted) {
+                showAlert("Successo","File rimosso correttamente");
                 return true;
             } else {
                 // Il file non è stato cancellato per qualche motivo
@@ -76,6 +77,6 @@ public class RemoveFileAction implements Action {
      */
     @Override
     public String toString() {
-        return "Rimozione file";
+        return "Remove File;"+filePath;
     }
 }

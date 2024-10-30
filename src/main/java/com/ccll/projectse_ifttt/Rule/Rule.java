@@ -168,6 +168,6 @@ public class Rule {
      */
     @Override
     public String toString() {
-        return name.get() + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
+        return getName() + ";" + trigger + ";" + action + ";" + isState() + ";" + getType();
     }
 }

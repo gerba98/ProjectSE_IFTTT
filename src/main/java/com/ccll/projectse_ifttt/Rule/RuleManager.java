@@ -77,7 +77,10 @@ public class RuleManager {
      * @param ruleIndex L'indice della regola da rimuovere.
      */
     public void removeRule(int ruleIndex) {
-        Rule rule = rules.remove(ruleIndex);
+        Rule rule;
+        rulePersistence = new RulePersistence();
+        rule = rules.remove(ruleIndex);
+        rulePersistence.deleteRules(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }

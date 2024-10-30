@@ -151,6 +151,7 @@ public class CreateRuleController {
         CTBox2.setItems(triggersList);
 
         operatorBox.setItems(operators);
+        operatorBox.setPrefWidth(70);
 
         CTBox1.setOnAction(e -> handleTriggerSelection("composite1"));
         CTBox2.setOnAction(e -> handleTriggerSelection("composite2"));
@@ -394,6 +395,7 @@ public class CreateRuleController {
                 clearUI();
 
             } catch (IllegalArgumentException e) {
+                System.out.println(e);
                 labelError.setVisible(true);
             }
         }
@@ -484,7 +486,7 @@ public class CreateRuleController {
             default:
                 trigger = CompositeTriggerNames.get(box.getValue()) + " ";
         }
-        System.out.println(trigger);
+        //System.out.println(trigger);
         trigger = trigger.substring(0, trigger.length() - 1);
         return trigger;
     }
@@ -501,7 +503,7 @@ public class CreateRuleController {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
                         if (!((TextField) item).getText().isEmpty()) {
-                            action += ((TextField) item).getText() + " ";
+                            action += ((TextField) item).getText() + "-";
                         }
                     }
                 }
@@ -513,7 +515,7 @@ public class CreateRuleController {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
                         if (!((TextField) item).getText().isEmpty()) {
-                            action += ((TextField) item).getText() + ";";
+                            action += ((TextField) item).getText() + "-";
                         }
                     }
                 }
@@ -524,7 +526,7 @@ public class CreateRuleController {
                     if (item instanceof TextField) {
                         if (((TextField) item).getText().isEmpty() && triggerPaneItems.indexOf(item) == 1) {
                         } else if (!((TextField) item).getText().isEmpty()) {
-                            action += ((TextField) item).getText() + ";";
+                            action += ((TextField) item).getText() + "-";
                         }
                     }
                 }
@@ -613,7 +615,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, "normal")){
                     label.setText("Day of the week (Monday, etc..)");
-                    Utils.layoutCombo(dayOfWeek, 330, 142);
+                    Utils.layoutCombo(dayOfWeek, 285, 142);
 
                     rulePane.getChildren().add(dayOfWeek);
                     triggerPaneItems.add(dayOfWeek);
@@ -701,8 +703,9 @@ public class CreateRuleController {
                 ComboBox<String> unit = Utils.comboItem(FXCollections.observableArrayList("B", "KB", "MB", "GB"));
                 Label labFile = new Label("File path");
                 FileChooser.ExtensionFilter files = new FileChooser.ExtensionFilter("Files", "*.*");
-                Button browseFileButton = new Button("Browse...");
                 TextField pathFileField = new TextField();
+                Button browseFileButton = Utils.buttonFileItem(pathFileField,files);
+
                 unit.setValue("KB");
                 fileDimensionSpinner.setPromptText("Insert dimension");
                 if(Objects.equals(value, "normal")){
@@ -713,8 +716,8 @@ public class CreateRuleController {
                     Utils.layoutButton(browseFileButton, 550, 142);
                     Utils.layoutFiled(pathFileField, 50, 485, 142, "file choose");
 
-                    rulePane.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
-                    triggerPaneItems.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                    rulePane.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
+                    triggerPaneItems.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
 
                 }else if(Objects.equals(value, "composite1")){
                     Utils.layoutSpinner(fileDimensionSpinner, 330, 113, 70);
@@ -723,8 +726,8 @@ public class CreateRuleController {
                     Utils.layoutButton(browseFileButton, 550, 113);
                     Utils.layoutFiled(pathFileField, 50, 485, 113, "file choose");
 
-                    anchorPaneComposite.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
-                    compositeTrigPaneItems1.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                    anchorPaneComposite.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
+                    compositeTrigPaneItems1.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                 }else if(Objects.equals(value, "composite2")){
                     Utils.layoutSpinner(fileDimensionSpinner, 330, 276, 70);
                     Utils.layoutCombo(unit, 410, 276);
@@ -732,8 +735,8 @@ public class CreateRuleController {
                     Utils.layoutButton(browseFileButton, 550, 276);
                     Utils.layoutFiled(pathFileField, 50, 485, 276, "file choose");
 
-                    anchorPaneComposite.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
-                    compositeTrigPaneItems2.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                    anchorPaneComposite.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
+                    compositeTrigPaneItems2.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                 }
                 break;
             case "Status program":
@@ -754,9 +757,9 @@ public class CreateRuleController {
                 if(Objects.equals(value, "normal")){
                     Utils.layoutLabel(commandLabel, 285, 125);
                     Utils.layoutFiled(commandField, 50, 285, 142, "command");
-                    Utils.layoutButton(programBrowse, 350, 142);
+                    Utils.layoutButton(programBrowse, 350, 112);
                     Utils.layoutSimpleField(programField,350, 142);
-                    Utils.layoutLabel(outputLabel, 350, 125);
+                    Utils.layoutLabel(outputLabel, 500, 125);
                     Utils.layoutFiled(outputField, 140, 500, 142, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
@@ -866,8 +869,8 @@ public class CreateRuleController {
                 stringToWriteField.setLayoutX(285.0);
                 stringToWriteField.setLayoutY(265.0);
 
-                rulePane.getChildren().addAll(browseButton, stringToWriteField, fileField);
-                actionPaneItems.addAll(browseButton, stringToWriteField, fileField);
+                rulePane.getChildren().addAll(browseButton, fileField,stringToWriteField);
+                actionPaneItems.addAll(browseButton, fileField, stringToWriteField);
                 break;
 
             case "Copy File":

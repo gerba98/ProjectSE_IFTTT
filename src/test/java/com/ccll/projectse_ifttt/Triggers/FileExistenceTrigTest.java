@@ -1,70 +1,53 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 
-public class FileExistenceTrigTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    private static final String EXISTING_FILE_PATH = System.getProperty("java.io.tmpdir") + "/prova.txt";
-
-    private static final String NON_EXISTING_FILE_PATH = "C:\\Users\\camil\\Desktop\\non_existent_file.txt";
-
+class FileExistenceTrigTest {
+    private File testFile;
     private FileExistenceTrig trigger;
 
     @BeforeEach
-    public void setUp() {
-        // Assicurati che il file di test esista prima di eseguire i test
-        try {
-            File existingFile = new File(EXISTING_FILE_PATH);
-            if (!existingFile.exists()) {
-                existingFile.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    void setUp() throws IOException {
+        // Crea un file di test temporaneo
+        testFile = Files.createTempFile("testFile", ".txt").toFile();
+        trigger = new FileExistenceTrig(testFile);
+    }
+
+    @AfterEach
+    void tearDown() {
+        // Elimina il file di test
+        if (testFile != null && testFile.exists()) {
+            testFile.delete();
         }
-
-        // Inizializza il trigger con il percorso del file esistente
-        trigger = new FileExistenceTrig(EXISTING_FILE_PATH);
     }
 
     @Test
-    public void testConstructorAndGetFilePath() {
-        // Verifica che il costruttore funzioni correttamente
-        assertEquals(EXISTING_FILE_PATH, trigger.getFilePath());
+    void testGetCurrentEvaluation_FileExists() {
+        // Verifica che il trigger riconosca che il file esiste
+        assertTrue(trigger.getCurrentEvaluation(), "Il file dovrebbe esistere");
     }
 
     @Test
-    public void testSetFilePath() {
-        // Modifica il percorso del file
-        trigger.setFilePath(NON_EXISTING_FILE_PATH);
-        // Verifica che il percorso del file sia stato aggiornato
-        assertEquals(NON_EXISTING_FILE_PATH, trigger.getFilePath());
+    void testToString() {
+        // Verifica la rappresentazione stringa del trigger
+        String expected = "File existence;" + testFile.getParent() + "-" + testFile.getName();
+        assertEquals(expected, trigger.toString(), "La rappresentazione stringa del trigger non è corretta");
     }
 
     @Test
-    public void testEvaluateFileExists() {
-        // Verifica che il trigger ritorni true se il file esiste
-        assertTrue(trigger.evaluate());
-    }
-
-    @Test
-    public void testEvaluateFileDoesNotExist() {
-        // Cambia il percorso al file che non esiste
-        trigger.setFilePath(NON_EXISTING_FILE_PATH);
-        // Verifica che il trigger ritorni false se il file non esiste
-        assertFalse(trigger.evaluate());
-    }
-
-    @AfterAll
-    public static void testCleanUp() {
-        // Pulisci il file di test dopo i test
-        File file = new File(EXISTING_FILE_PATH);
-        if (file.exists()) {
-            file.delete();
-        }
+    void testSetFile() {
+        // Modifica il file e verifica la nuova impostazione
+        File newFile = new File("nonexistent.txt");
+        trigger.setFile(newFile);
+        assertEquals(newFile, trigger.getFile(), "Il file impostato non è corretto");
+        assertFalse(trigger.getCurrentEvaluation(), "Il file non dovrebbe esistere");
     }
 }
