@@ -68,7 +68,7 @@ public class CompositeAction implements Action {
 
     /**
      * Restituisce una rappresentazione testuale della composizione di azioni.
-     * Ogni azione è rappresentata dalla sua stringa, separata da ":".
+     * Ogni azione è rappresentata dalla sua stringa, separata da ">>>".
      *
      * @return una stringa che descrive la composizione di azioni
      */
@@ -87,6 +87,23 @@ public class CompositeAction implements Action {
         return sb.toString();
     }
 
+    /**
+     * Restituisce una rappresentazione in stringa dell'azione situata nella posizione specificata
+     * nella lista dei trigger. La stringa risultante varia a seconda che il trigger sia un
+     * CompositeAction o una action semplice.
+     *
+     * @param i L'indice della action nella lista delle action, la cui rappresentazione deve essere ottenuta.
+     *          Deve essere un valore valido compreso nell'intervallo della lista dei trigger.
+     *
+     * @return La rappresentazione in stringa della action:
+     *
+     *  <ul>
+     *      <li>Se la action è di tipo {@code CompositeAction}, la stringa restituita è priva della
+     *      parte iniziale contenente "COMPOSITE;".</li>
+     *      <li>Se la action è semplice, il delimitatore ";" viene sostituito con "#".</li>
+     *  </ul>
+     *
+     */
     private String getActionStr(int i) {
         Action action = actions.get(i);
 
