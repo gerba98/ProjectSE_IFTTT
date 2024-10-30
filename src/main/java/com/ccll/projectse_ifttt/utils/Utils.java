@@ -185,6 +185,25 @@ public class Utils {
         return browseDirButton;
     }
 
+    public static Button buttonFileAbsoluteItem(TextField textField, String value) {
+
+        Button browseFileButton = new Button("Browse...");
+
+        browseFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle(value);
+            File selectedFile = fileChooser.showOpenDialog(browseFileButton.getScene().getWindow());
+            if (selectedFile != null) { // Salva il percorso nella variabile di istanza
+                // Mostra un messaggio di conferma
+                textField.setText(selectedFile.getAbsolutePath());
+            }
+        });
+
+        return browseFileButton;
+
+    }
+
+
     /**
      * Crea un pulsante per selezionare un file.
      * Al click, apre una finestra di dialogo per la scelta di un file e aggiorna il campo di testo con il percorso selezionato.
@@ -203,7 +222,10 @@ public class Utils {
             }
             Stage stage = (Stage) browseFileButton.getScene().getWindow();
             File selectedFile = checkFileDimChooser.showOpenDialog(stage);
-            textField.setText(selectedFile.getPath());
+            if (selectedFile != null){
+                textField.setText(selectedFile.getPath());
+            }
+
         });
         return browseFileButton;
     }

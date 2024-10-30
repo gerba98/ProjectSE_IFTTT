@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import jdk.jshell.execution.Util;
 
 import java.io.File;
 import java.time.LocalTime;
@@ -41,9 +42,31 @@ public class CreateRuleController {
     private static final String REMOVE_FILE = "Remove file";
     private static final String EXECUTE_PROGRAM = "Execute Program";
 
+    private static final String COMPOSITE_FIRST = "composite first";
+    private static final String COMPOSITE_SECOND = "composite second";
+    private static final String NORMAL = "Normal";
+
+    private static final String COMPOSITE_ACTION = "composite action";
+
 
 
     // FXML injected fields
+    @FXML
+    private Label CTLabelError;
+    @FXML
+    private Label CALabelError;
+    @FXML
+    private ListView<String> CAListView;
+    @FXML
+    private Pane CAPaneResult;
+    @FXML
+    private TextField compositeActionName;
+    @FXML
+    private ComboBox<String> CABox;
+    @FXML
+    private AnchorPane anchorPaneCompositeAction;
+    @FXML
+    private Button compositeActionButton;
     @FXML
     private Button clearCompositePageBtn;
     @FXML
@@ -59,7 +82,7 @@ public class CreateRuleController {
     @FXML
     private ComboBox<String> operatorBox;
     @FXML
-    private AnchorPane anchorPaneComposite;
+    private AnchorPane anchorPaneCompositeTrigger;
     @FXML
     private Button compositeTriggerButton;
     @FXML
@@ -109,6 +132,8 @@ public class CreateRuleController {
             DISPLAY_MESSAGE, PLAY_AUDIO, WRITE_STRING, COPY_FILE, MOVE_FILE, REMOVE_FILE, EXECUTE_PROGRAM
     );
 
+    private ObservableList<String> compositeActionList = FXCollections.observableArrayList();
+
     @FXML
     private ObservableList<Object> triggerPaneItems = FXCollections.observableArrayList();
     @FXML
@@ -119,7 +144,8 @@ public class CreateRuleController {
     private ObservableList<Object> compositeTrigPaneItems1 = FXCollections.observableArrayList();
     @FXML
     private ObservableList<Object> compositeTrigPaneItems2 = FXCollections.observableArrayList();
-
+    @FXML
+    private ObservableList<Object> compositeActionPaneItems = FXCollections.observableArrayList();
     // Instance variables
     RuleManager ruleManager;
     private String filePath;
@@ -130,6 +156,7 @@ public class CreateRuleController {
     private String programCommand;
 
     HashMap<String, String> CompositeTriggerNames = new HashMap<>();
+    HashMap<String, ObservableList<String>> CompositeActionNamesHash = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -151,12 +178,14 @@ public class CreateRuleController {
         CTBox2.setItems(triggersList);
 
         operatorBox.setItems(operators);
-        operatorBox.setPrefWidth(70);
 
-        CTBox1.setOnAction(e -> handleTriggerSelection("composite1"));
-        CTBox2.setOnAction(e -> handleTriggerSelection("composite2"));
-        triggerBox.setOnAction(e -> handleTriggerSelection("normal"));
-        actionBox.setOnAction(e -> handleActionSelection());
+        CABox.setItems(actionsList);
+
+        CTBox1.setOnAction(e -> handleTriggerSelection(COMPOSITE_FIRST));
+        CTBox2.setOnAction(e -> handleTriggerSelection(COMPOSITE_SECOND));
+        triggerBox.setOnAction(e -> handleTriggerSelection(NORMAL));
+        actionBox.setOnAction(e -> handleActionSelection(NORMAL));
+        CABox.setOnAction(e -> handleActionSelection(COMPOSITE_ACTION));
     }
 
     private void setupCheckBoxes() {
@@ -174,25 +203,34 @@ public class CreateRuleController {
 
 
     private void handleTriggerSelection(String value) {
-        if(Objects.equals(value, "normal")){
+        if(Objects.equals(value, NORMAL)){
             if (!triggerBox.getValue().isEmpty()) {
                 compositeTriggerButton.setVisible(false);
             }
             clearPaneItems(triggerPaneItems, rulePane);
             createTriggerItem(labelTriggerSelected, triggerBox.getSelectionModel().getSelectedItem(), value);
-        }else if (Objects.equals(value, "composite1")){
-            clearPaneItems(compositeTrigPaneItems1, anchorPaneComposite);
+        }else if (Objects.equals(value, COMPOSITE_FIRST)){
+            clearPaneItems(compositeTrigPaneItems1, anchorPaneCompositeTrigger);
             createTriggerItem(labelTriggerSelected, CTBox1.getSelectionModel().getSelectedItem(), value);
-        }else if (Objects.equals(value, "composite2")){
-            clearPaneItems(compositeTrigPaneItems2, anchorPaneComposite);
+        }else if (Objects.equals(value, COMPOSITE_SECOND)){
+            clearPaneItems(compositeTrigPaneItems2, anchorPaneCompositeTrigger);
             createTriggerItem(labelTriggerSelected, CTBox2.getSelectionModel().getSelectedItem(), value);
         }
 
     }
 
-    private void handleActionSelection() {
-        clearPaneItems(actionPaneItems, rulePane);
-        createActionItem(labelActionSelected, actionBox.getSelectionModel().getSelectedItem());
+    private void handleActionSelection(String value) {
+
+        if(Objects.equals(value, NORMAL)){
+            if (!actionBox.getValue().isEmpty()) {
+                compositeActionButton.setVisible(false);
+            }
+            clearPaneItems(actionPaneItems, rulePane);
+            createActionItem(labelActionSelected, actionBox.getSelectionModel().getSelectedItem(), value);
+        }else if (Objects.equals(value, COMPOSITE_ACTION)){
+            clearPaneItems(compositeActionPaneItems, anchorPaneCompositeAction);
+            createActionItem(labelActionSelected, CABox.getSelectionModel().getSelectedItem(), value);
+        }
     }
 
     private void clearPaneItems(ObservableList<Object> items, Pane pane) {
@@ -212,14 +250,22 @@ public class CreateRuleController {
     @FXML
     private void CompositeTriggerManagement() {
         anchorPane.setVisible(false);
-        anchorPaneComposite.setVisible(true);
+        anchorPaneCompositeTrigger.setVisible(true);
+    }
+    @FXML
+    private void compositeActionManagement(){
+        anchorPane.setVisible(false);
+        anchorPaneCompositeAction.setVisible(true);
+        compositeActionName.clear();
     }
 
     @FXML
     private void backButton() {
         anchorPane.setVisible(true);
-        anchorPaneComposite.setVisible(false);
+        anchorPaneCompositeTrigger.setVisible(false);
+        anchorPaneCompositeAction.setVisible(false);
         clearCompositePage();
+        clearCompositeAction();
     }
 
     @FXML
@@ -228,6 +274,7 @@ public class CreateRuleController {
         operatorBox.setValue("");
         notOperator1.setSelected(false);
         notOperator2.setSelected(false);
+        CTLabelError.setVisible(false);
         CTBox1.setValue("");
         CTBox2.setValue("");
     }
@@ -284,18 +331,14 @@ public class CreateRuleController {
 
     @FXML
     public void createCompositeTrigger(ActionEvent actionEvent){
-
-
-
         String operator = operatorBox.getValue();
-
         String triggerType1 = CTBox1.getValue();
-
         String triggerDetails1 = collectTriggerDetails(compositeTrigPaneItems1, CTBox1);
-        boolean not1 = notOperator1.isSelected();
 
         String triggerType2 = CTBox2.getValue();
         String triggerDetails2 = collectTriggerDetails(compositeTrigPaneItems2, CTBox2);
+
+        boolean not1 = notOperator1.isSelected();
         boolean not2 = notOperator2.isSelected();
 
         String compositeString = CompositeTriggerFormatter.formatCompositeTrigger(
@@ -309,6 +352,36 @@ public class CreateRuleController {
         triggerBox.setItems(triggersList);
 
         clearCompositePage();
+        CTLabelError.setVisible(false);
+
+
+    }
+
+    @FXML
+    public void CACreateButton(){
+        if(Objects.equals(compositeActionName.getText(), "") || compositeActionList.isEmpty()){
+            CALabelError.setVisible(true);
+        }else{
+            actionsList.add(compositeActionName.getText());
+            actionBox.setItems(actionsList);
+            CALabelError.setVisible(false);
+            clearCompositeAction();
+        }
+    }
+
+    @FXML
+    public void CAAddButton() {
+        String actionType = CABox.getValue();
+        String actionValue = collectActionDetails(compositeActionPaneItems, CABox);
+        if(actionValue.equals("")){
+            CALabelError.setVisible(true);
+        }else{
+            String result = actionType + ";" + actionValue;
+            compositeActionList.add(result);
+            CompositeActionNamesHash.put(compositeActionName.getText(), compositeActionList);
+            CAListView.setItems(compositeActionList);
+            CALabelError.setVisible(false);
+        }
 
     }
 
@@ -348,7 +421,6 @@ public class CreateRuleController {
             if(result.startsWith("#")){
                 result = result.substring(1);
             }
-            System.out.println("risultato trigger finale: " + result);
             return result;
         }
     }
@@ -365,13 +437,18 @@ public class CreateRuleController {
                 if(CompositeTriggerNames.containsKey(triggerType)){
                     triggerType = "composite";
                 }
-                String actionType = actionBox.getValue();
+
                 String triggerDetails = collectTriggerDetails(triggerPaneItems, triggerBox);
                 if(triggerDetails.startsWith("composite")){
                     triggerDetails = triggerDetails.split(";")[1];
                 }
-                String actionDetails = collectActionDetails();
 
+                String actionType = actionBox.getValue();
+                if(CompositeActionNamesHash.containsKey(actionType)){
+                    actionType = "composite";
+                }
+
+                String actionDetails = collectActionDetails(compositeActionPaneItems, actionBox);
                 RuleBuilder builder = new RuleBuilder()
                         .setName(name)
                         .setTriggerType(triggerType)
@@ -395,7 +472,6 @@ public class CreateRuleController {
                 clearUI();
 
             } catch (IllegalArgumentException e) {
-                System.out.println(e);
                 labelError.setVisible(true);
             }
         }
@@ -486,16 +562,15 @@ public class CreateRuleController {
             default:
                 trigger = CompositeTriggerNames.get(box.getValue()) + " ";
         }
-        //System.out.println(trigger);
         trigger = trigger.substring(0, trigger.length() - 1);
         return trigger;
     }
 
-    private String collectActionDetails() {
+    private String collectActionDetails(ObservableList<Object> paneList, ComboBox<String> box) {
         String action = "";
-        Iterator<Object> iterator = actionPaneItems.iterator();
-        iterator = actionPaneItems.iterator();
-        switch (actionBox.getValue()) {
+        Iterator<Object> iterator;
+        iterator = paneList.iterator();
+        switch (box.getValue()) {
             case "Display message":
             case "Play Audio":
             case "Remove file":
@@ -524,7 +599,7 @@ public class CreateRuleController {
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
-                        if (((TextField) item).getText().isEmpty() && triggerPaneItems.indexOf(item) == 1) {
+                        if (((TextField) item).getText().isEmpty() && paneList.indexOf(item) == 1) {
                         } else if (!((TextField) item).getText().isEmpty()) {
                             action += ((TextField) item).getText() + "-";
                         }
@@ -532,7 +607,8 @@ public class CreateRuleController {
                 }
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + actionBox.getValue());
+                action = CompositeActionNamesHash.get(box.getValue()) + " ";
+                break;
 
         }
         if(!action.isEmpty()){
@@ -568,6 +644,10 @@ public class CreateRuleController {
         singleCheckBox.setSelected(false);
         periodicCheckBox.setSelected(false);
         labelError.setVisible(false);
+        compositeTriggerButton.setVisible(true);
+        compositeActionButton.setVisible(true);
+        CALabelError.setVisible(false
+        );
         clearPeriodicRule();
     }
 
@@ -590,21 +670,21 @@ public class CreateRuleController {
                 Spinner<Integer> hourSpinner = Utils.spinnerItem(0, 23, LocalTime.now().getHour());
                 Spinner<Integer> minuteSpinner = Utils.spinnerItem(0, 59, LocalTime.now().getMinute());
 
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     label.setText("Time of the Day (hh:mm)");
                     Utils.layoutSpinner(hourSpinner, 285, 142, 55);
                     Utils.layoutSpinner(minuteSpinner, 350, 142, 55);
                     rulePane.getChildren().addAll(hourSpinner, minuteSpinner);
                     triggerPaneItems.addAll(hourSpinner, minuteSpinner);
-                } else if (Objects.equals(value, "composite1")) {
+                } else if (Objects.equals(value, COMPOSITE_FIRST)) {
                     Utils.layoutSpinner(hourSpinner, 330, 113, 55);
                     Utils.layoutSpinner(minuteSpinner, 390, 113, 55);
-                    anchorPaneComposite.getChildren().addAll(hourSpinner, minuteSpinner);
+                    anchorPaneCompositeTrigger.getChildren().addAll(hourSpinner, minuteSpinner);
                     compositeTrigPaneItems1.addAll(hourSpinner, minuteSpinner);
-                }else if(Objects.equals(value, "composite2")){
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutSpinner(hourSpinner, 330, 276, 55);
                     Utils.layoutSpinner(minuteSpinner, 390, 276, 55);
-                    anchorPaneComposite.getChildren().addAll(hourSpinner, minuteSpinner);
+                    anchorPaneCompositeTrigger.getChildren().addAll(hourSpinner, minuteSpinner);
                     compositeTrigPaneItems2.addAll(hourSpinner, minuteSpinner);
                 }
                 break;
@@ -613,22 +693,22 @@ public class CreateRuleController {
 
                 ComboBox<String> dayOfWeek = Utils.comboItem(FXCollections.observableArrayList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
 
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     label.setText("Day of the week (Monday, etc..)");
                     Utils.layoutCombo(dayOfWeek, 285, 142);
 
                     rulePane.getChildren().add(dayOfWeek);
                     triggerPaneItems.add(dayOfWeek);
-                } else if (Objects.equals(value, "composite1")) {
+                } else if (Objects.equals(value, COMPOSITE_FIRST)) {
                     Utils.layoutCombo(dayOfWeek, 330, 113);
 
 
-                    anchorPaneComposite.getChildren().add(dayOfWeek);
+                    anchorPaneCompositeTrigger.getChildren().add(dayOfWeek);
                     compositeTrigPaneItems1.add(dayOfWeek);
-                }else if(Objects.equals(value, "composite2")){
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutCombo(dayOfWeek, 330, 276);
 
-                    anchorPaneComposite.getChildren().add(dayOfWeek);
+                    anchorPaneCompositeTrigger.getChildren().add(dayOfWeek);
                     compositeTrigPaneItems2.add(dayOfWeek);
                 }
                 break;
@@ -637,7 +717,7 @@ public class CreateRuleController {
 
                 DatePicker dayMonthField = Utils.datePickerItem();
 
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     if (text.equals("Day of the month")){
                         label.setText("Choose a day of the month");
                     }else{
@@ -647,16 +727,16 @@ public class CreateRuleController {
 
                     rulePane.getChildren().add(dayMonthField);
                     triggerPaneItems.add(dayMonthField);
-                } else if (Objects.equals(value, "composite1")) {
+                } else if (Objects.equals(value, COMPOSITE_FIRST)) {
                     Utils.layoutDatePicker(dayMonthField, 330, 113);
 
 
-                    anchorPaneComposite.getChildren().add(dayMonthField);
+                    anchorPaneCompositeTrigger.getChildren().add(dayMonthField);
                     compositeTrigPaneItems1.add(dayMonthField);
-                }else if(Objects.equals(value, "composite2")){
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutDatePicker(dayMonthField, 330, 276);
 
-                    anchorPaneComposite.getChildren().add(dayMonthField);
+                    anchorPaneCompositeTrigger.getChildren().add(dayMonthField);
                     compositeTrigPaneItems2.add(dayMonthField);
                 }
 
@@ -667,7 +747,7 @@ public class CreateRuleController {
                 Label fileNameLab = new Label("Write the file name");
                 Button browseDirButton = Utils.ButtonDirectoryItem(pathFolderField);
                 TextField fileNameField = new TextField();
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     label.setText("Directory path");
                     Utils.layoutFiled(pathFolderField, 100, 285, 142, "directory");
                     Utils.layoutButton(browseDirButton, 515, 142);
@@ -677,21 +757,21 @@ public class CreateRuleController {
                     rulePane.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     triggerPaneItems.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
 
-                } else if (Objects.equals(value, "composite1")) {
+                } else if (Objects.equals(value, COMPOSITE_FIRST)) {
                     Utils.layoutFiled(pathFolderField, 100, 330, 113, "directory");
                     Utils.layoutButton(browseDirButton, 540, 113);
                     Utils.layoutLabel(fileNameLab,435,99);
                     Utils.layoutFiled(fileNameField, 100, 435, 113, "file name");
 
-                    anchorPaneComposite.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
+                    anchorPaneCompositeTrigger.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     compositeTrigPaneItems1.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
-                }else if(Objects.equals(value, "composite2")){
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutFiled(pathFolderField, 100, 330, 276, "directory");
                     Utils.layoutButton(browseDirButton, 540, 276);
                     Utils.layoutLabel(fileNameLab,435,262);
                     Utils.layoutFiled(fileNameField, 100, 435, 276, "file name");
 
-                    anchorPaneComposite.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
+                    anchorPaneCompositeTrigger.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     compositeTrigPaneItems2.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                 }
 
@@ -704,11 +784,11 @@ public class CreateRuleController {
                 Label labFile = new Label("File path");
                 FileChooser.ExtensionFilter files = new FileChooser.ExtensionFilter("Files", "*.*");
                 TextField pathFileField = new TextField();
-                Button browseFileButton = Utils.buttonFileItem(pathFileField,files);
+                Button browseFileButton = Utils.buttonFileItem(pathFileField, files);
 
                 unit.setValue("KB");
                 fileDimensionSpinner.setPromptText("Insert dimension");
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     label.setText("Insert file dimension");
                     Utils.layoutSpinner(fileDimensionSpinner, 285, 142, 100);
                     Utils.layoutCombo(unit, 400, 142);
@@ -719,23 +799,23 @@ public class CreateRuleController {
                     rulePane.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                     triggerPaneItems.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
 
-                }else if(Objects.equals(value, "composite1")){
+                }else if(Objects.equals(value, COMPOSITE_FIRST)){
                     Utils.layoutSpinner(fileDimensionSpinner, 330, 113, 70);
                     Utils.layoutCombo(unit, 410, 113);
                     Utils.layoutLabel(labFile,485,99);
                     Utils.layoutButton(browseFileButton, 550, 113);
                     Utils.layoutFiled(pathFileField, 50, 485, 113, "file choose");
 
-                    anchorPaneComposite.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
-                    compositeTrigPaneItems1.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
-                }else if(Objects.equals(value, "composite2")){
+                    anchorPaneCompositeTrigger.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                    compositeTrigPaneItems1.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutSpinner(fileDimensionSpinner, 330, 276, 70);
                     Utils.layoutCombo(unit, 410, 276);
                     Utils.layoutLabel(labFile,485,262);
                     Utils.layoutButton(browseFileButton, 550, 276);
                     Utils.layoutFiled(pathFileField, 50, 485, 276, "file choose");
 
-                    anchorPaneComposite.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
+                    anchorPaneCompositeTrigger.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                     compositeTrigPaneItems2.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                 }
                 break;
@@ -753,19 +833,18 @@ public class CreateRuleController {
                 TextField outputField = new TextField();
                 outputField.setPromptText("Insert desired output");
 
-
-                if(Objects.equals(value, "normal")){
+                if(Objects.equals(value, NORMAL)){
                     Utils.layoutLabel(commandLabel, 285, 125);
                     Utils.layoutFiled(commandField, 50, 285, 142, "command");
-                    Utils.layoutButton(programBrowse, 350, 112);
+                    Utils.layoutButton(programBrowse, 350, 115);
                     Utils.layoutSimpleField(programField,350, 142);
                     Utils.layoutLabel(outputLabel, 500, 125);
-                    Utils.layoutFiled(outputField, 140, 500, 142, "command");
+                    Utils.layoutFiled(outputField, 70, 500, 142, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
                     rulePane.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                     triggerPaneItems.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
-                }else if(Objects.equals(value, "composite1")){
+                }else if(Objects.equals(value, COMPOSITE_FIRST)){
                     Utils.layoutLabel(commandLabel, 330, 99);
                     Utils.layoutFiled(commandField, 50, 330, 113, "command");
                     Utils.layoutButton(programBrowse, 385, 113);
@@ -774,9 +853,9 @@ public class CreateRuleController {
                     Utils.layoutFiled(outputField, 60, 540, 113, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
-                    anchorPaneComposite.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
+                    anchorPaneCompositeTrigger.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                     compositeTrigPaneItems1.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
-                }else if(Objects.equals(value, "composite2")){
+                }else if(Objects.equals(value, COMPOSITE_SECOND)){
                     Utils.layoutLabel(commandLabel, 330, 262);
                     Utils.layoutFiled(commandField, 50, 330, 276, "command");
                     Utils.layoutButton(programBrowse, 385, 276);
@@ -785,7 +864,7 @@ public class CreateRuleController {
                     Utils.layoutFiled(outputField, 60, 540, 276, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
-                    anchorPaneComposite.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
+                    anchorPaneCompositeTrigger.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                     compositeTrigPaneItems2.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
                 }
 
@@ -794,232 +873,186 @@ public class CreateRuleController {
     }
 
     @FXML
-    private void createActionItem(Label label, String text) {
+    private void createActionItem(Label label, String text, String value) {
 
         switch (text) {
             case "Display message":
-                label.setText("Message to show");
-
                 TextField msgField = new TextField();
                 msgField.setPromptText("Message...");
-                msgField.setLayoutX(285.0);
-                msgField.setLayoutY(225.0);
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Message to show");
+                    Utils.layoutSimpleField(msgField, 285, 225);
 
+                    rulePane.getChildren().add(msgField);
+                    actionPaneItems.add(msgField);
+                }else{
+                    Utils.layoutSimpleField(msgField, 34, 245);
 
-                rulePane.getChildren().add(msgField);
-                actionPaneItems.add(msgField);
+                    anchorPaneCompositeAction.getChildren().add(msgField);
+                    compositeActionPaneItems.add(msgField);
+                }
 
                 break;
             case "Play Audio":
-                label.setText("Audio to reproduce");
-
-                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files", "*.mp3", "*.aac");
-                Button browseAudioButton = new Button("Browse...");
 
                 TextField pathAudioField = new TextField();
-                pathAudioField.setLayoutX(285);
-                pathAudioField.setLayoutY(225);
                 pathAudioField.setFocusTraversable(false);
                 pathAudioField.setEditable(false);
                 pathAudioField.setDisable(false);
-                pathAudioField.setPromptText("Chosen audio file");
+                FileChooser.ExtensionFilter audio = new FileChooser.ExtensionFilter("Audio files", "*.mp3", "*.aac");
 
-                browseAudioButton.setLayoutX(450.0);
-                browseAudioButton.setLayoutY(225);
+                Button browseAudioButton = Utils.buttonFileItem(pathAudioField, audio);
 
-                browseAudioButton.setOnAction(e -> {
-                    FileChooser playFileChooser = new FileChooser();
-                    playFileChooser.setTitle("File audio...");
-                    playFileChooser.getExtensionFilters().add(audio);
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Audio to reproduce");
+                    Utils.layoutButton(browseAudioButton, 450, 225);
+                    Utils.layoutSimpleField(pathAudioField, 285, 225);
 
-                    Stage stage = (Stage) browseAudioButton.getScene().getWindow();
-                    File selectedFile = playFileChooser.showOpenDialog(stage);
-                    pathAudioField.setText(selectedFile.getPath());
-                });
 
-                rulePane.getChildren().addAll(browseAudioButton, pathAudioField);
-                actionPaneItems.addAll(browseAudioButton, pathAudioField);
+                    rulePane.getChildren().addAll(browseAudioButton, pathAudioField);
+                    actionPaneItems.addAll(browseAudioButton, pathAudioField);
+                }else{
 
+                    Utils.layoutButton(browseAudioButton, 190, 245);
+                    Utils.layoutSimpleField(pathAudioField, 34, 245);
+
+                    anchorPaneCompositeAction.getChildren().addAll(browseAudioButton, pathAudioField);
+                    compositeActionPaneItems.addAll(browseAudioButton, pathAudioField);
+                }
                 break;
             case "Write string":
                 label.setText("Choose a file");
-
-                Button browseButton = new Button("Browse...");
-                browseButton.setLayoutX(285.0);
-                browseButton.setLayoutY(225.0);
-
                 TextField fileField = new TextField();
-                fileField.setLayoutY(225);
-                fileField.setLayoutX(370);
-                fileField.setPrefWidth(180.0);
-                fileField.setPromptText("Chosen File");
-
-                browseButton.setOnAction(e -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Select a file");
-                    File selectedFile = fileChooser.showOpenDialog(browseButton.getScene().getWindow());
-                    if (selectedFile != null) { // Salva il percorso nella variabile di istanza
-                        // Mostra un messaggio di conferma
-                        fileField.setText(selectedFile.getAbsolutePath());
-                    }
-                });
-
+                Button browseButton = Utils.buttonFileAbsoluteItem(fileField, "Choose a file");
                 TextField stringToWriteField = new TextField();
                 stringToWriteField.setPromptText("String to write...");
-                stringToWriteField.setLayoutX(285.0);
-                stringToWriteField.setLayoutY(265.0);
 
-                rulePane.getChildren().addAll(browseButton, fileField,stringToWriteField);
-                actionPaneItems.addAll(browseButton, fileField, stringToWriteField);
+                if(Objects.equals(value, NORMAL)){
+                    Utils.layoutButton(browseButton, 285, 225);
+                    Utils.layoutSimpleField(fileField, 350, 225);
+                    Utils.layoutSimpleField(stringToWriteField, 285, 265);
+
+                    rulePane.getChildren().addAll(browseButton, stringToWriteField, fileField);
+                    actionPaneItems.addAll(browseButton, stringToWriteField, fileField);
+                }else{
+                    Utils.layoutButton(browseButton, 190, 245);
+                    Utils.layoutSimpleField(fileField, 34, 245);
+                    Utils.layoutSimpleField(stringToWriteField, 34, 275);
+
+                    anchorPaneCompositeAction.getChildren().addAll(browseButton, fileField, stringToWriteField);
+                    compositeActionPaneItems.addAll(browseButton, fileField, stringToWriteField);
+                }
+
                 break;
 
             case "Copy File":
-                label.setText("Choose a file to copy");
-                Button fileSelectButton = new Button("Select File...");
-                fileSelectButton.setLayoutX(285.0);
-                fileSelectButton.setLayoutY(225.0);
 
                 TextField fileSelectedField = new TextField();
-                fileSelectedField.setLayoutY(225.0);
-                fileSelectedField.setLayoutX(430.0);
-                fileSelectedField.setPromptText("File to copy");
-                fileSelectedField.setPrefWidth(180.0);
-
-                fileSelectButton.setOnAction(e -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Select a file to copy");
-                    File file = fileChooser.showOpenDialog(null);
-                    if (file != null) {
-                        fileSelectedField.setText(file.getAbsolutePath());
-                    }
-                });
-                Button destSelectButton = new Button("Select Destination...");
-                destSelectButton.setLayoutX(285.0);
-                destSelectButton.setLayoutY(265.0);
-
+                fileSelectedField.setPromptText("Select a file");
+                Button fileSelectButton = Utils.buttonFileAbsoluteItem(fileSelectedField, "Select a file");
                 TextField destSelectedField = new TextField();
-                destSelectedField.setLayoutY(265.0);
-                destSelectedField.setLayoutX(430.0);
-                destSelectedField.setPrefWidth(180.0);
-                destSelectedField.setPromptText("Destination Path");
+                destSelectedField.setPromptText("Select a destination directory");
+                Button destSelectButton = Utils.buttonFileAbsoluteItem(destSelectedField, "Select a destination directory");
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Select file and destination directory");
+                    Utils.layoutSimpleField(fileSelectedField, 365, 225);
+                    Utils.layoutSimpleField(destSelectedField, 410, 265);
+                    Utils.layoutButton(fileSelectButton, 285, 225);
+                    Utils.layoutButton(destSelectButton, 285, 265);
 
-                destSelectButton.setOnAction(e -> {
-                    DirectoryChooser directoryChooser = new DirectoryChooser();
-                    directoryChooser.setTitle("Select destination directory");
-                    File dir = directoryChooser.showDialog(null);
-                    if (dir != null) {
-                        destSelectedField.setText(dir.getAbsolutePath());
-                    }
-                });
-                rulePane.getChildren().addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
-                actionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                    rulePane.getChildren().addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                    actionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                }else{
+                    Utils.layoutSimpleField(fileSelectedField, 34, 245);
+                    Utils.layoutSimpleField(destSelectedField, 34, 275);
+                    Utils.layoutButton(fileSelectButton, 190, 245);
+                    Utils.layoutButton(destSelectButton, 190, 275);
+
+                    anchorPaneCompositeAction.getChildren().addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                    compositeActionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
+                }
                 break;
 
             case "Move file":
-                label.setText("Choose a file to move");
-                Button fileSelectButton1 = new Button("Select File...");
-                fileSelectButton1.setLayoutX(285.0);
-                fileSelectButton1.setLayoutY(225.0);
 
                 TextField fileSelectedField1 = new TextField();
-                fileSelectedField1.setLayoutY(225.0);
-                fileSelectedField1.setLayoutX(430.0);
-                fileSelectedField1.setPrefWidth(180.0);
-                fileSelectedField1.setPromptText("Chosen File");
-
-                fileSelectButton1.setOnAction(e -> {
-                    FileChooser fileChooser = new FileChooser();
-                    fileChooser.setTitle("Select a file to move");
-                    File file = fileChooser.showOpenDialog(null);
-                    if (file != null) {
-                        fileSelectedField1.setText(file.getAbsolutePath());
-                    }
-                });
-
-                Button destSelectButton1 = new Button("Select Destination...");
-                destSelectButton1.setLayoutX(285.0);
-                destSelectButton1.setLayoutY(265.0);
+                fileSelectedField1.setPromptText("Select a file");
+                Button fileSelectButton1 = Utils.buttonFileAbsoluteItem(fileSelectedField1, "Select a file");
 
                 TextField destSelectedField1 = new TextField();
-                destSelectedField1.setLayoutY(265.0);
-                destSelectedField1.setLayoutX(430.0);
-                destSelectedField1.setPrefWidth(180.0);
-                destSelectedField1.setPromptText("Destination Path");
+                destSelectedField1.setPromptText("Select a destination directory");
+                Button destSelectButton1 = Utils.buttonFileAbsoluteItem(destSelectedField1, "Select a destination directory");
 
-                destSelectButton1.setOnAction(e -> {
-                    DirectoryChooser directoryChooser = new DirectoryChooser();
-                    directoryChooser.setTitle("Select destination directory");
-                    File dir = directoryChooser.showDialog(null);
-                    if (dir != null) {
-                        destSelectedField1.setText(dir.getAbsolutePath());
-                    }
-                });
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Select file and destination directory");
+                    Utils.layoutButton(fileSelectButton1, 285, 225);
+                    Utils.layoutButton(destSelectButton1, 285, 265);
+                    Utils.layoutSimpleField(fileSelectedField1, 365, 225);
+                    Utils.layoutSimpleField(destSelectedField1, 410, 265);
 
-                rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
-                actionPaneItems.addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
+                    rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
+                    actionPaneItems.addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
+                }else{
+                    Utils.layoutSimpleField(fileSelectedField1, 34, 245);
+                    Utils.layoutSimpleField(destSelectedField1, 34, 275);
+                    Utils.layoutButton(fileSelectButton1, 190, 245);
+                    Utils.layoutButton(destSelectButton1, 190, 275);
+
+                    anchorPaneCompositeAction.getChildren().addAll(fileSelectedField1, destSelectedField1, fileSelectButton1, destSelectButton1);
+                    compositeActionPaneItems.addAll(fileSelectedField1, destSelectedField1, fileSelectButton1, destSelectButton1);
+                }
                 break;
             case "Remove file":
-                label.setText("Choose a file to remove");
-                Button browseRemButton = new Button("Browse...");
-
-                browseRemButton.setLayoutX(285.0);
-                browseRemButton.setLayoutY(225.0);
 
                 TextField fileRemovedField = new TextField();
-                fileRemovedField.setLayoutY(225.0);
-                fileRemovedField.setLayoutX(370.0);
-                fileRemovedField.setPrefWidth(180.0);
-                fileRemovedField.setPromptText("Remove File");
+                fileRemovedField.setPromptText("Select a file to remove");
+                Button browseRemButton = Utils.buttonFileAbsoluteItem(fileRemovedField, "Select a file to remove");
 
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Select the file to remove");
+                    Utils.layoutSimpleField(fileRemovedField, 350, 225);
+                    Utils.layoutButton(browseRemButton, 285, 225);
 
-                browseRemButton.setOnAction(e -> {
-                    FileChooser removeFileChooser = new FileChooser();
-                    removeFileChooser.setTitle("Select file to remove...");
+                    rulePane.getChildren().addAll(browseRemButton, fileRemovedField);
+                    actionPaneItems.addAll(browseRemButton, fileRemovedField);
+                }else{
+                    Utils.layoutButton(browseRemButton, 190, 245);
+                    Utils.layoutSimpleField(fileRemovedField, 34, 245);
 
-                    Stage stage = (Stage) browseRemButton.getScene().getWindow();
-                    File selectedFile = removeFileChooser.showOpenDialog(stage);
-                    if (selectedFile != null) {
-                        fileRemovedField.setText(selectedFile.getAbsolutePath()); // Salva il percorso nella variabile di istanza
-                    }
-                });
-
-                rulePane.getChildren().addAll(browseRemButton, fileRemovedField);
-                actionPaneItems.addAll(browseRemButton, fileRemovedField);
+                    anchorPaneCompositeAction.getChildren().addAll(browseRemButton, fileRemovedField);
+                    compositeActionPaneItems.addAll(browseRemButton, fileRemovedField);
+                }
                 break;
             case "Execute Program":
-                label.setText("Choose the program to execute");
+
 
                 TextField programPathField = new TextField();
                 programPathField.setPromptText("Insert the application file (.exe)");
-                programPathField.setLayoutX(285.0);
-                programPathField.setLayoutY(225);
-
-                Button browseProgramButton = new Button("Browse...");
-                browseProgramButton.setLayoutX(450.0);
-                browseProgramButton.setLayoutY(225);
-
-                browseProgramButton.setOnAction(e -> {
-                    FileChooser programChooser = new FileChooser();
-                    programChooser.setTitle("Select a program to execute");
-                    File selectedFile = programChooser.showOpenDialog(browseProgramButton.getScene().getWindow());
-                    if (selectedFile != null) {
-                        programPathField.setText(selectedFile.getAbsolutePath());
-                    }
-                });
+                Button browseProgramButton = Utils.buttonFileAbsoluteItem(programPathField, "Select a program to execute");
 
                 TextField commandField = new TextField();
                 commandField.setPromptText("Insert command...");
-                commandField.setLayoutX(285.0);
-                commandField.setLayoutY(265.0);
-
-                rulePane.getChildren().addAll(programPathField, browseProgramButton, commandField);
-                actionPaneItems.addAll(programPathField, browseProgramButton, commandField);
 
                 // Salva il comando inserito
                 commandField.textProperty().addListener((observable, oldValue, newValue) -> {
                     programCommand = newValue;
                 });
 
+                if(Objects.equals(value, NORMAL)){
+                    label.setText("Choose the program to execute");
+                    Utils.layoutSimpleField(programPathField, 285, 225);
+                    Utils.layoutButton(browseProgramButton, 450, 225);
+                    Utils.layoutSimpleField(commandField, 285, 265);
+                    rulePane.getChildren().addAll(programPathField, browseProgramButton, commandField);
+                    actionPaneItems.addAll(programPathField, browseProgramButton, commandField);
+                }else{
+                    Utils.layoutButton(browseProgramButton, 190, 245);
+                    Utils.layoutSimpleField(programPathField, 34, 245);
+                    Utils.layoutSimpleField(commandField, 34, 275);
+
+                    anchorPaneCompositeAction.getChildren().addAll(programPathField, browseProgramButton, commandField);
+                    compositeActionPaneItems.addAll(programPathField, browseProgramButton, commandField);
+                }
                 break;
         }
     }
@@ -1034,10 +1067,19 @@ public class CreateRuleController {
         singleCheckBox.setSelected(false);
         periodicCheckBox.setSelected(false);
         compositeTriggerButton.setVisible(true);
-
+        compositeActionButton.setVisible(true);
+        labelError.setVisible(false);
+        CTLabelError.setVisible(false);
         clearPeriodicRule();
 
     }
 
+    @FXML
+    public void clearCompositeAction(){
+        CALabelError.setVisible(false);
+        compositeActionName.clear();
+        CABox.setValue("");
+        compositeActionList.clear();
+    }
 
 }
