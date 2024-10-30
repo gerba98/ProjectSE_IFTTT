@@ -180,7 +180,9 @@ public class Utils {
             checkDirChooser.setTitle("Choose directory...");
             Stage stage = (Stage) browseDirButton.getScene().getWindow();
             File selectedFile = checkDirChooser.showDialog(stage);
-            textField.setText(selectedFile.getPath());
+            if (selectedFile!=null) {
+                textField.setText(selectedFile.getPath());
+            }
         });
         return browseDirButton;
     }

@@ -149,4 +149,24 @@ class CompositeTriggerTest {
         boolean evaluationAfterReset = compositeTrigger.evaluate();
         assertTrue(evaluationAfterReset, "La valutazione dopo il reset dovrebbe essere true");
     }
+    @Test
+    void testTriggerCreation1() {
+
+        Trigger t1 = RuleManager.createTrigger("time of the day", "11:30");
+
+        Trigger t2 = RuleManager.createTrigger("day of the month", "10-29");
+
+
+        CompositeTrigger t3 = new CompositeTrigger(LogicalOperator.AND);
+        CompositeTrigger t5 = new CompositeTrigger(LogicalOperator.NOT);
+        t5.addTrigger(t2);
+
+        t3.addTrigger(t1);
+        t3.addTrigger(t5);
+
+
+        Trigger t = RuleManager.createTrigger("composite", t3.toString().split(";")[1]);
+        assertEquals(t3.toString(), t.toString(), "il risultato del toString dei due trigger dovrebbe corrispondere");
+        System.out.println(t);
+    }
 }

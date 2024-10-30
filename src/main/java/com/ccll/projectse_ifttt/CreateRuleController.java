@@ -155,8 +155,8 @@ public class CreateRuleController {
     private String selectedProgramPath;
     private String programCommand;
 
-    HashMap<String, String> CompositeTriggerNames = new HashMap<>();
-    HashMap<String, ObservableList<String>> CompositeActionNamesHash = new HashMap<>();
+    HashMap<String, String> compositeTriggerNames = new HashMap<>();
+    HashMap<String, ObservableList<String>> compositeActionNamesHash = new HashMap<>();
 
     @FXML
     public void initialize() {
@@ -336,7 +336,6 @@ public class CreateRuleController {
         String operator = operatorBox.getValue();
         String triggerType1 = CTBox1.getValue();
         String triggerDetails1 = collectTriggerDetails(compositeTrigPaneItems1, CTBox1);
-
         String triggerType2 = CTBox2.getValue();
         String triggerDetails2 = collectTriggerDetails(compositeTrigPaneItems2, CTBox2);
 
@@ -345,11 +344,10 @@ public class CreateRuleController {
 
         String compositeString = CompositeTriggerFormatter.formatCompositeTrigger(
                 operator, not1, triggerType1, triggerDetails1,
-                operator, not2, triggerType2, triggerDetails2
+                operator, not2, triggerType2, triggerDetails2,compositeTriggerNames
         );
         // Set the formatted string as the trigger
-
-        CompositeTriggerNames.put(compositeTrigName.getText(), "composite;"+compositeString);
+        compositeTriggerNames.put(compositeTrigName.getText(), "composite;"+compositeString);
         triggersList.add(compositeTrigName.getText());
         triggerBox.setItems(triggersList);
 
@@ -364,6 +362,7 @@ public class CreateRuleController {
         if(Objects.equals(compositeActionName.getText(), "") || compositeActionList.isEmpty()){
             CALabelError.setVisible(true);
         }else{
+            compositeActionNamesHash.put(compositeActionName.getText(), compositeActionList);
             actionsList.add(compositeActionName.getText());
             actionBox.setItems(actionsList);
             CALabelError.setVisible(false);
@@ -375,14 +374,19 @@ public class CreateRuleController {
     public void CAAddButton() {
         String actionType = CABox.getValue();
         String actionValue = collectActionDetails(compositeActionPaneItems, CABox);
-        System.out.println("Action value " + actionValue);
         if(actionValue.equals("")){
             CALabelError.setVisible(true);
         }else{
             String result = actionType + "#" + actionValue;
-            compositeActionList.add(result);
-            CompositeActionNamesHash.put(compositeActionName.getText(), compositeActionList);
-            System.out.println("hash list: " + CompositeActionNamesHash);
+            if(compositeActionNamesHash.containsKey(actionType)){
+                ObservableList<String> concatenateActions = compositeActionNamesHash.get(actionType);
+                for(String s:concatenateActions){
+                    compositeActionList.add(s);
+                }
+            }else{
+                compositeActionList.add(result);
+            }
+
             CAListView.setItems(compositeActionList);
             CALabelError.setVisible(false);
         }
@@ -395,21 +399,20 @@ public class CreateRuleController {
          * Example output: AND(AND(NOTTime of the day#19:45@Day of the week#SUNDAY)@Day of the Month#10-27)
          */
         public static String formatCompositeTrigger(String operator1, boolean not1, String triggerType1, String triggerDetails1,
-                                                    String operator2, boolean not2, String triggerType2, String triggerDetails2) {
+                                                    String operator2, boolean not2, String triggerType2, String triggerDetails2, HashMap<String,String> dict) {
+            String trigger1 = formatSingleTrigger(triggerType1, triggerDetails1, not1, dict);
 
-            String trigger1 = formatSingleTrigger(triggerType1, triggerDetails1, not1);
 
-
-            String trigger2 = formatSingleTrigger(triggerType2, triggerDetails2, not2);
+            String trigger2 = formatSingleTrigger(triggerType2, triggerDetails2, not2, dict);
 
 
             // Combine using the operators
             return String.format("%s(%s@%s)", operator1, trigger1, trigger2);
         }
 
-        private static String formatSingleTrigger(String triggerType, String details, boolean not) {
+        private static String formatSingleTrigger(String triggerType, String details, boolean not,HashMap<String,String> dict) {
             String notPrefix = not ? "NOT" : "";
-            if(triggerType.startsWith("composite")){
+            if(dict.containsKey(triggerType)){
                 triggerType = "";
             }
             if(details.startsWith("composite;")){
@@ -417,9 +420,17 @@ public class CreateRuleController {
             }
             String result = "";
             if(details.startsWith("AND") || details.startsWith("OR")){
-                result = String.format("%s%s%s", notPrefix, triggerType, details);
+                if(notPrefix=="NOT") {
+                    result = String.format("%s(%s%s)", notPrefix, triggerType, details);
+                }else{
+                    result = String.format("%s%s%s", notPrefix, triggerType, details);
+                }
             }else{
-                result = String.format("%s%s#%s", notPrefix, triggerType, details);
+                if(notPrefix=="NOT"){
+                    result = String.format("%s(%s#%s)", notPrefix, triggerType, details);
+                }else{
+                    result = String.format("%s%s#%s", notPrefix, triggerType, details);
+                }
             }
 
             if(result.startsWith("#")){
@@ -438,7 +449,7 @@ public class CreateRuleController {
                 // Recupera gli input dalla UI
                 String name = ruleNameTxtField.getText();
                 String triggerType = triggerBox.getValue();
-                if(CompositeTriggerNames.containsKey(triggerType)){
+                if(compositeTriggerNames.containsKey(triggerType)){
                     triggerType = "composite";
                 }
 
@@ -448,15 +459,18 @@ public class CreateRuleController {
                 }
 
                 String actionType = actionBox.getValue();
-                if(CompositeActionNamesHash.containsKey(actionType)){
+                if(compositeActionNamesHash.containsKey(actionType)){
                     actionType = "composite";
                 }
 
                 String actionDetails = collectActionDetails(actionPaneItems, actionBox);
                 if(Objects.equals(actionType, "composite")){
-                    ObservableList<String> list = CompositeActionNamesHash.get(actionBox.getValue());
+                    ObservableList<String> list = compositeActionNamesHash.get(actionBox.getValue());
                     actionDetails = String.join(">>>", list);
                 }
+
+
+                System.out.println("ACTION DETAILS RULE:  "+actionDetails);
                 RuleBuilder builder = new RuleBuilder()
                         .setName(name)
                         .setTriggerType(triggerType)
@@ -569,7 +583,7 @@ public class CreateRuleController {
                 }
                 break;
             default:
-                trigger = CompositeTriggerNames.get(box.getValue()) + " ";
+                trigger = compositeTriggerNames.get(box.getValue()) + " ";
         }
         trigger = trigger.substring(0, trigger.length() - 1);
         return trigger;
@@ -586,13 +600,11 @@ public class CreateRuleController {
             case "Move file":
             case "Play Audio":
             case"Display message":
-                System.out.println("sono un textfield");
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
 
                         if (!((TextField) item).getText().isEmpty()) {
-                            System.out.println("Ho qualcosa: " + ((TextField) item).getText());
                             action += ((TextField) item).getText() + "-";
                         }
                     }
@@ -611,8 +623,8 @@ public class CreateRuleController {
                 }
                 break;
             default:
-                System.out.println("ecsdcsd  " + CompositeActionNamesHash);
-                action = CompositeActionNamesHash.get(box.getValue()) + " ";
+                action = compositeActionNamesHash.get(box.getValue()) + " ";
+                System.out.println("AZIONE VACANTE:   "+action);
                 break;
 
         }
@@ -880,7 +892,6 @@ public class CreateRuleController {
 
     @FXML
     private void createActionItem(Label label, String text, String value) {
-        System.out.println(value);
         switch (text) {
             case "Display message":
                 TextField msgField = new TextField();
