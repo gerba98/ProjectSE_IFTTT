@@ -72,12 +72,12 @@ public class CompositeAction implements Action {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("CompositeAction;");
+        sb.append("Composite;");
 
         for (int i = 0; i < actions.size(); i++) {
-            sb.append(actions.get(i).toString().replace(';', ':'));
+            sb.append(actions.get(i).toString().replace(';', '#'));
             if (i < actions.size() - 1) {
-                sb.append(":");
+                sb.append(">>>");
             }
         }
 

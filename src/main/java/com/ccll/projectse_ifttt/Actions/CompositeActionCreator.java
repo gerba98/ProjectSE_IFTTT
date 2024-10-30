@@ -14,20 +14,19 @@ public class CompositeActionCreator extends ActionCreator {
      * ogni azione componente. La stringa deve essere formattata come "tipo:valore", con coppie
      * di tipo e valore per ogni azione da aggiungere.
      *
-     * @param actionsValue una stringa formattata contenente coppie di tipo e valore per ogni azione
+     * @param actionValue una stringa formattata contenente coppie di tipo e valore per ogni azione
      * @return un'istanza di CompositeAction contenente tutte le azioni specificate
      * @throws ArrayIndexOutOfBoundsException se la stringa {@code actionsValue} non è formattata correttamente
      */
     @Override
-    public Action createAction(String actionsValue) {
-        String[] parts = actionsValue.split(";");
+    public Action createAction(String actionValue) {
+        String[] parts = actionValue.split(">>>");
         CompositeAction compositeAction = new CompositeAction();
 
         // Per ogni coppia tipo-valore, creiamo e aggiungiamo l'action
-        for (int i = 0; i < parts.length; i += 2) {
-            String actionType = parts[i];
-            String actionValue = parts[i + 1];
-            Action action = RuleManager.createAction(actionType, actionValue);
+        for (String part : parts) {
+            String[] actionTypeValue = part.split("#");
+            Action action = RuleManager.createAction(actionTypeValue[0], actionTypeValue[1]);
             compositeAction.addAction(action);
         }
 

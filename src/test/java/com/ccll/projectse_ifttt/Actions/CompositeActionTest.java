@@ -1,10 +1,17 @@
 package com.ccll.projectse_ifttt.Actions;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import com.ccll.projectse_ifttt.Rule.RuleManager;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class CompositeActionTest {
 
@@ -49,15 +56,33 @@ public class CompositeActionTest {
     @DisplayName("Aggiunta e rimozione di un'azione")
     public void testAddAndRemoveAction() {
         compositeAction.addAction(action1);
-        assertEquals("Dovrebbe esserci 1 azione dopo l'aggiunta", 1, compositeAction.getChildren().size());
+        Assert.assertEquals("Dovrebbe esserci 1 azione dopo l'aggiunta", 1, compositeAction.getChildren().size());
 
         compositeAction.removeAction(action1);
-        assertEquals("Dovrebbe esserci 0 azioni dopo la rimozione", 0, compositeAction.getChildren().size());
+        Assert.assertEquals("Dovrebbe esserci 0 azioni dopo la rimozione", 0, compositeAction.getChildren().size());
     }
 
     @Test
     @DisplayName("Esecuzione senza azioni aggiunte")
     public void testExecuteNoActions() {
         assertTrue("L'esecuzione deve avere successo anche quando non ci sono azioni, poiché non c'è nulla che possa fallire", compositeAction.execute());
+    }
+
+    @Test
+    public void testActionCreation(){
+        Action action1 = new DisplayMessageAction("test");
+        Action action2 = new DisplayMessageAction("test");
+        Path audioPath = Paths.get("C:\\Users\\lucag\\IdeaProjects\\ProjectSE_IFTTT\\src\\main\\resources\\com\\ccll\\projectse_ifttt\\cat.mp3");
+        Action action3 = new PlayAudioAction(audioPath);
+
+        CompositeAction cA = new CompositeAction();
+        cA.addAction(action1);
+        cA.addAction(action2);
+        cA.addAction(action3);
+
+        Action cA2 = RuleManager.createAction("composite",cA.toString().split(";")[1]);
+
+        assertEquals(cA.toString(), cA2.toString(), "il risultato del toString delle due actions dovrebbe corrispondere");
+
     }
 }
