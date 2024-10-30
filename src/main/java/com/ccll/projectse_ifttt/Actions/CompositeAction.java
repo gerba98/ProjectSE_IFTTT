@@ -1,5 +1,8 @@
 package com.ccll.projectse_ifttt.Actions;
 
+import com.ccll.projectse_ifttt.Triggers.CompositeTrigger;
+import com.ccll.projectse_ifttt.Triggers.Trigger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,12 +78,24 @@ public class CompositeAction implements Action {
         sb.append("Composite;");
 
         for (int i = 0; i < actions.size(); i++) {
-            sb.append(actions.get(i).toString().replace(';', '#'));
+            sb.append(getActionStr(i));
             if (i < actions.size() - 1) {
                 sb.append(">>>");
             }
         }
         System.out.println("composite action: " + sb.toString());
         return sb.toString();
+    }
+
+    private String getActionStr(int i) {
+        Action action = actions.get(i);
+
+        String triggerStr = action.toString();
+        if (action instanceof CompositeAction) {
+            triggerStr = triggerStr.split(";")[1];
+        } else {
+            triggerStr = triggerStr.replace(";", "#");
+        }
+        return triggerStr;
     }
 }

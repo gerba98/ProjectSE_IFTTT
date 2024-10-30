@@ -75,12 +75,21 @@ public class CompositeActionTest {
         Path audioPath = Paths.get("C:\\Users\\lucag\\IdeaProjects\\ProjectSE_IFTTT\\src\\main\\resources\\com\\ccll\\projectse_ifttt\\cat.mp3");
         Action action3 = new PlayAudioAction(audioPath);
 
+        CompositeAction cb = new CompositeAction();
+        Action action4 = new DisplayMessageAction("test123123");
+        Action action5 = new DisplayMessageAction("test123asdasd123");
+        cb.addAction(action4);
+        cb.addAction(action5);
+
         CompositeAction cA = new CompositeAction();
         cA.addAction(action1);
         cA.addAction(action2);
         cA.addAction(action3);
+        cA.addAction(cb);
 
         Action cA2 = RuleManager.createAction("composite",cA.toString().split(";")[1]);
+
+        System.out.println("tritolo" + cA2);
 
         assertEquals(cA.toString(), cA2.toString(), "il risultato del toString delle due actions dovrebbe corrispondere");
 
