@@ -257,6 +257,7 @@ public class CreateRuleController {
         anchorPane.setVisible(false);
         anchorPaneCompositeAction.setVisible(true);
         compositeActionName.clear();
+        compositeActionList.clear();
     }
 
     @FXML
@@ -373,12 +374,14 @@ public class CreateRuleController {
     public void CAAddButton() {
         String actionType = CABox.getValue();
         String actionValue = collectActionDetails(compositeActionPaneItems, CABox);
+        System.out.println("Action value " + actionValue);
         if(actionValue.equals("")){
             CALabelError.setVisible(true);
         }else{
-            String result = actionType + ";" + actionValue;
+            String result = actionType + "#" + actionValue;
             compositeActionList.add(result);
             CompositeActionNamesHash.put(compositeActionName.getText(), compositeActionList);
+            System.out.println("hash list: " + CompositeActionNamesHash);
             CAListView.setItems(compositeActionList);
             CALabelError.setVisible(false);
         }
@@ -449,6 +452,11 @@ public class CreateRuleController {
                 }
 
                 String actionDetails = collectActionDetails(compositeActionPaneItems, actionBox);
+                if(Objects.equals(actionType, "composite")){
+                    actionDetails = "";
+                    ObservableList<String> list = CompositeActionNamesHash.get(actionBox.getValue());
+                    actionDetails = String.join(">>>", list);
+                }
                 RuleBuilder builder = new RuleBuilder()
                         .setName(name)
                         .setTriggerType(triggerType)
@@ -571,21 +579,7 @@ public class CreateRuleController {
         Iterator<Object> iterator;
         iterator = paneList.iterator();
         switch (box.getValue()) {
-            case "Display message":
-            case "Play Audio":
-            case "Remove file":
-                while (iterator.hasNext()) {
-                    Object item = iterator.next();
-                    if (item instanceof TextField) {
-                        if (!((TextField) item).getText().isEmpty()) {
-                            action += ((TextField) item).getText() + "-";
-                        }
-                    }
-                }
-                break;
-            case "Copy File":
-            case "Write string":
-            case "Move file":
+            case "Remove file", "Copy File", "Write string", "Move file", "Play Audio", "Display message":
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if (item instanceof TextField) {
@@ -607,10 +601,12 @@ public class CreateRuleController {
                 }
                 break;
             default:
+                System.out.println("ecsdcsd  " + CompositeActionNamesHash);
                 action = CompositeActionNamesHash.get(box.getValue()) + " ";
                 break;
 
         }
+        System.out.println(action);
         if(!action.isEmpty()){
             action = action.substring(0, action.length() - 1);
         }
@@ -1079,7 +1075,6 @@ public class CreateRuleController {
         CALabelError.setVisible(false);
         compositeActionName.clear();
         CABox.setValue("");
-        compositeActionList.clear();
     }
 
 }
