@@ -70,6 +70,7 @@ public class ExecutionProgramTrig extends AbstractTrigger {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            System.out.println();
         }
         return newEvaluation; // Process is still running or evaluation didn't change
     }

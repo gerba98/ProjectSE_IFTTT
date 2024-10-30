@@ -201,6 +201,7 @@ public class RuleManager {
             case "move file" -> new MoveFileActionCreator();
             case "remove file" -> new RemoveFileActionCreator();
             case "execute program" -> new ExecuteProgramActionCreator();
+            //case "composite" -> new CompositeAction();
             default -> throw new IllegalStateException("Unsupported action type: " + actionType);
         };
         return actionCreator.createAction(actionValue);

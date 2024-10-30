@@ -2,9 +2,10 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="399.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.CreateRuleController">
-   <AnchorPane fx:id="anchorPaneComposite" prefHeight="399.0" prefWidth="646.0" visible="false">
+   <AnchorPane fx:id="anchorPaneCompositeTrigger" prefHeight="399.0" prefWidth="646.0" visible="false">
       <Button fx:id="backRuleButton" layoutX="14.0" layoutY="359.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <ComboBox fx:id="CTBox1" layoutX="103.0" layoutY="113.0" prefHeight="26.0" prefWidth="220.0" />
       <ComboBox fx:id="operatorBox" layoutX="103.0" layoutY="195.0" prefHeight="26.0" prefWidth="67.0" />
@@ -19,6 +20,7 @@
       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="221.0" layoutY="7.0" prefHeight="26.0" prefWidth="203.0" style="-fx-font-size: 18; -fx-text-fill: red; -fx-font-weight: bold;" text="COMPOSITE TRIGGER" />
       <Label layoutX="103.0" layoutY="34.0" text="Composite trigger name" />
       <TextField fx:id="compositeTrigName" layoutX="103.0" layoutY="52.0" />
+      <Label fx:id="CTLabelError" layoutX="424.0" layoutY="363.0" text="Missing info" textFill="RED" visible="false" />
    </AnchorPane>
    <AnchorPane fx:id="anchorPane" prefHeight="399.0" prefWidth="646.0">
       <Pane fx:id="rulePane" prefHeight="399.0" prefWidth="646.0" AnchorPane.bottomAnchor="-199.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-446.0" AnchorPane.topAnchor="0.0">
@@ -37,6 +39,32 @@
          <CheckBox fx:id="periodicCheckBox" layoutX="25.0" layoutY="343.0" mnemonicParsing="false" text="Periodic rule" />
          <CheckBox fx:id="singleCheckBox" layoutX="25.0" layoutY="279.0" mnemonicParsing="false" text="Single rule" />
          <Button fx:id="compositeTriggerButton" layoutX="260.0" layoutY="142.0" mnemonicParsing="false" onAction="#CompositeTriggerManagement" text="Create composite trigger" />
+         <Button fx:id="compositeActionButton" layoutX="260.0" layoutY="225.0" mnemonicParsing="false" onAction="#compositeActionManagement" text="Create composite action" />
+         <Label layoutX="279.0" layoutY="14.0" style="-fx-font-weight: bold;" text="RULE MANAGER" textFill="RED">
+            <font>
+               <Font size="18.0" />
+            </font>
+         </Label>
       </Pane>
+   </AnchorPane>
+   <AnchorPane fx:id="anchorPaneCompositeAction" prefHeight="399.0" prefWidth="646.0" visible="false">
+      <Label layoutX="235.0" prefHeight="40.0" prefWidth="176.0" style="-fx-font-weight: bold;" text="COMPOSITE ACTION" textFill="RED">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="34.0" layoutY="91.0" prefHeight="18.0" prefWidth="130.0" text="Composite action name" />
+      <TextField fx:id="compositeActionName" layoutX="34.0" layoutY="109.0" prefHeight="26.0" prefWidth="130.0" />
+      <Label layoutX="34.0" layoutY="186.0" text="Select an action" />
+      <ComboBox fx:id="CABox" layoutX="34.0" layoutY="204.0" prefWidth="150.0" />
+      <Button fx:id="CAAddButton" layoutX="215.0" layoutY="204.0" mnemonicParsing="false" onAction="#CAAddButton" text="Add" />
+      <Pane fx:id="CAPaneResult" layoutX="411.0" layoutY="61.0" prefHeight="285.0" prefWidth="176.0" style="-fx-border-color: grey;">
+         <ListView fx:id="CAListView" prefHeight="286.0" prefWidth="176.0" />
+      </Pane>
+      <Button layoutX="407.0" layoutY="359.0" mnemonicParsing="false" onAction="#CACreateButton" text="Create" />
+      <Button layoutX="473.0" layoutY="359.0" mnemonicParsing="false" onAction="#clearCompositeAction" text="Clear" />
+      <Button layoutX="14.0" layoutY="359.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
+      <Button layoutX="531.0" layoutY="359.0" mnemonicParsing="false" text="Remove" />
+      <Label fx:id="CALabelError" layoutX="276.0" layoutY="208.0" text="Missing info" textFill="RED" visible="false" />
    </AnchorPane>
 </AnchorPane>

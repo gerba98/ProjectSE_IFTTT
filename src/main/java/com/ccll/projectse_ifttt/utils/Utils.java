@@ -111,6 +111,25 @@ public class Utils {
         return browseDirButton;
     }
 
+    public static Button buttonFileAbsoluteItem(TextField textField, String value) {
+
+        Button browseFileButton = new Button("Browse...");
+
+        browseFileButton.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle(value);
+            File selectedFile = fileChooser.showOpenDialog(browseFileButton.getScene().getWindow());
+            if (selectedFile != null) { // Salva il percorso nella variabile di istanza
+                // Mostra un messaggio di conferma
+                textField.setText(selectedFile.getAbsolutePath());
+            }
+        });
+
+        return browseFileButton;
+
+    }
+
+
     public static Button buttonFileItem(TextField textField, FileChooser.ExtensionFilter files) {
 
         Button browseFileButton = new Button("Browse...");
@@ -125,7 +144,10 @@ public class Utils {
 
             Stage stage = (Stage) browseFileButton.getScene().getWindow();
             File selectedFile = checkFileDimChooser.showOpenDialog(stage);
-            textField.setText(selectedFile.getPath());
+            if (selectedFile != null){
+                textField.setText(selectedFile.getPath());
+            }
+
         });
 
         return browseFileButton;
