@@ -960,13 +960,13 @@ public class CreateRuleController {
                 }
                 break;
             case "Write string":
-                label.setText("Choose a file");
                 TextField fileField = new TextField();
                 Button browseButton = Utils.buttonFileAbsoluteItem(fileField, "Choose a file");
                 TextField stringToWriteField = new TextField();
                 stringToWriteField.setPromptText("String to write...");
 
                 if(Objects.equals(value, NORMAL)){
+                    label.setText("Choose a file to write a string");
                     Utils.layoutButton(browseButton, 285, 225);
                     Utils.layoutSimpleField(fileField, 360, 225);
                     Utils.layoutSimpleField(stringToWriteField, 285, 265);
