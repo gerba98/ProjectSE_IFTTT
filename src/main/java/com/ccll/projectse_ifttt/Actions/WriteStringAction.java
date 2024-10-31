@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * La classe {@code WriteStringAction} implementa l'interfaccia {@link Action}
@@ -18,6 +20,8 @@ import java.nio.file.StandardOpenOption;
  * scrivere nel file. Se il file non esiste, l'azione restituisce {@code false}.
  */
 public class WriteStringAction implements Action {
+
+    private static final Logger logger = Logger.getLogger(WriteStringAction.class.getName());
 
     private final String filePath;
     private final String contentToWrite;
@@ -38,7 +42,7 @@ public class WriteStringAction implements Action {
      * Esegue l'azione di scrittura nel file.
      * Se il file specificato non esiste, l'azione non verrà eseguita e
      * verrà restituito {@code false}. In caso di errore durante la scrittura,
-     * viene stampato un messaggio di errore.
+     * viene mostrato un messaggio d'errore all'utente.
      *
      * @return {@code true} se la scrittura è avvenuta con successo,
      *         {@code false} altrimenti
@@ -49,21 +53,23 @@ public class WriteStringAction implements Action {
 
         // Verifica se il file esiste
         if (!Files.exists(path)) {
-            return false; // Se il file non esiste, restituisci false
+            showErrorAlert("File non trovato", "Il file specificato non esiste. Verifica il percorso del file.");
+            logger.log(Level.WARNING, "File non trovato: {0}", filePath);
+            return false;
         }
 
         // Scrivi nel file
         try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
             writer.write(contentToWrite);
             writer.newLine();
-
-            // Mostra l'alert di successo
             showSuccessAlert();
             return true;
 
         } catch (IOException e) {
-            System.err.println("Errore durante la scrittura nel file: " + e.getMessage());
-            e.printStackTrace();
+            String errorMessage = "Errore durante la scrittura nel file. " +
+                    "Assicurati di avere i permessi necessari e che il file non sia in uso.";
+            logger.log(Level.SEVERE, errorMessage + " Dettagli: {0}", e);
+            showErrorAlert("Errore di scrittura", errorMessage);
             return false;
         }
     }
@@ -77,6 +83,22 @@ public class WriteStringAction implements Action {
             alert.setTitle("Operazione completata");
             alert.setHeaderText(null);
             alert.setContentText("L'operazione è avvenuta con successo!");
+            alert.showAndWait();
+        });
+    }
+
+    /**
+     * Mostra un alert per informare l'utente che si è verificato un errore.
+     *
+     * @param title   il titolo dell'alert
+     * @param message il messaggio di errore da mostrare all'utente
+     */
+    private void showErrorAlert(String title, String message) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
             alert.showAndWait();
         });
     }

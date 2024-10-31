@@ -1,4 +1,3 @@
-
 package com.ccll.projectse_ifttt;
 
 import com.ccll.projectse_ifttt.Rule.PeriodicRule;
@@ -24,8 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.*;
-
+import java.util.Objects;
 /**
  * Controller per la gestione della vista principale dell'applicazione.
  */

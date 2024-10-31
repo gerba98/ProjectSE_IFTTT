@@ -1,6 +1,8 @@
 package com.ccll.projectse_ifttt.Actions;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Rappresenta un'azione per eseguire un'applicazione esterna con comandi specificati.
@@ -8,8 +10,10 @@ import java.io.IOException;
  * di aprire applicazioni e di passare comandi opzionali.
  */
 public class ExecuteProgramAction implements Action {
-    private final String programPath; // Il percorso dell'applicazione o del file da eseguire
-    private final String command; // I comandi da passare all'applicazione
+    private static final Logger logger = Logger.getLogger(ExecuteProgramAction.class.getName());
+
+    private final String programPath;
+    private final String command;
 
     /**
      * Costruttore per inizializzare l'azione di esecuzione dell'applicazione.
@@ -67,9 +71,16 @@ public class ExecuteProgramAction implements Action {
 
             int exitCode = process.waitFor();
             return exitCode == 0; // Ritorna true se il programma è stato eseguito con successo
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return false; // Ritorna false in caso di errore
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Errore di I/O durante l'esecuzione del programma: " + programPath, e);
+            return false;
+        } catch (InterruptedException e) {
+            logger.log(Level.WARNING, "L'esecuzione del programma è stata interrotta: " + programPath, e);
+            Thread.currentThread().interrupt();
+            return false;
+        } catch (UnsupportedOperationException e) {
+            logger.log(Level.SEVERE, "Sistema operativo non supportato: " + System.getProperty("os.name"), e);
+            return false;
         }
     }
 
@@ -80,6 +91,6 @@ public class ExecuteProgramAction implements Action {
      */
     @Override
     public String toString() {
-        return "Execute program;"+programPath+"-"+command;
+        return "Execute program;" + programPath + "-" + command;
     }
 }
