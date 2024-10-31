@@ -376,7 +376,6 @@ public class CreateRuleController {
             compositeActionNamesHash.put(compositeActionName.getText(), listForHash);
             CALabelError.setVisible(false);
             clearCompositeAction();
-            System.out.println("Dizionarion dopo aver creato l'azione: " + compositeActionNamesHash.toString() + "\n" + compositeActionNamesHash);
         }
     }
 
@@ -920,7 +919,6 @@ public class CreateRuleController {
 
     @FXML
     private void createActionItem(Label label, String text, String value) {
-        System.out.println(value);
         label.setVisible(false);
         switch (text) {
             case "Display message":

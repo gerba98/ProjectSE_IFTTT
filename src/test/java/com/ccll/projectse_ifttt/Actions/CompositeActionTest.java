@@ -89,7 +89,6 @@ public class CompositeActionTest {
 
         Action cA2 = RuleManager.createAction("composite",cA.toString().split(";")[1]);
 
-        System.out.println("tritolo" + cA2);
 
         assertEquals(cA.toString(), cA2.toString(), "il risultato del toString delle due actions dovrebbe corrispondere");
 

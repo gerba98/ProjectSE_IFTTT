@@ -38,7 +38,6 @@ public class CopyFileAction implements Action {
     @Override
     public boolean execute() {
         try {
-            System.out.println("Copia");
             Files.copy(Paths.get(sourcePath),
                     Paths.get(destinationPath, new File(sourcePath).getName()),
                     StandardCopyOption.REPLACE_EXISTING);
