@@ -343,7 +343,8 @@ public class CreateRuleController {
         String operator = operatorBox.getValue();
         String triggerType1 = CTBox1.getValue();
         String triggerType2 = CTBox2.getValue();
-        if(operator==null || triggerType1==null || triggerType2==null) {
+        String compositeName = compositeTrigName.getText();
+        if(operator==null || triggerType1==null || triggerType2==null || compositeName == null || compositeName.isEmpty()) {
             CTLabelError.setVisible(true);
 
 
