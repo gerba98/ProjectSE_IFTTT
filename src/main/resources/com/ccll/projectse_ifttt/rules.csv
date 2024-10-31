@@ -1,0 +1,4 @@
+regrte;COMPOSITE;OR(Time of the day#19:23@AND(Time of the day#19:20@Day of the week#WEDNESDAY));Display Message;wf4;true;Rule
+ge;COMPOSITE;AND(Time of the day#19:05@Day of the week#MONDAY);Display Message;asdw;true;Rule
+dqdwds;Time of the day;19:33;Composite;Display Message#eqf>>>Play Audio#C:\Users\camil\Music\Abel_Pittaro_Kalangas_HARD_BASS_NO_COPYRIGHT_.hd (mp3cut.net).mp3;true;Rule
+adsf;COMPOSITE;OR(AND(Time of the day#22:57@Day of the week#MONDAY)@Day of the week#WEDNESDAY);Display Message;r3g3;true;Rule

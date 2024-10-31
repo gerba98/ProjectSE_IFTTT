@@ -24,7 +24,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Controller per la gestione della vista principale dell'applicazione.
@@ -70,11 +72,29 @@ public class IndexController {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         triggerColumn.setCellValueFactory(cellData -> {
                     String trigger = cellData.getValue().getTrigger().toString();
-                    return new SimpleStringProperty(trigger.split(";")[0]+" '"+trigger.split(";")[1]+"'");
+                    if(trigger.contains("COMPOSITE")){
+                        String concatTrigs="";
+                        String val=trigger.split(";")[1];
+//                        concatTrigs=stringTriggerFormatter(val);
+                        return new SimpleStringProperty(val);
+                    }else{
+                        return new SimpleStringProperty(trigger.split(";")[0]+ " " +trigger.split(";")[1]);
+                    }
                 });
         actionColumn.setCellValueFactory(cellData -> {
             String action = cellData.getValue().getAction().toString();
-            return new SimpleStringProperty(action.split(";")[0]+" '"+action.split(";")[1]+"'");
+            if(action.contains("Composite")){
+                String concatActions="";
+                String val=action.split(";")[1];
+                String[] trigs = val.split(">>>");
+                for(String s:trigs){
+                    concatActions = concatActions + s.split("#")[1]+" + ";
+                }
+                concatActions=concatActions.substring(0,concatActions.length()-3);
+                return new SimpleStringProperty(concatActions);
+            }else{
+                return new SimpleStringProperty(action.split(";")[0]+" "+action.split(";")[1]);
+            }
         });
         stateColumn.setCellValueFactory(cellData -> statePropertyFunction(cellData));
         typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));  // Aggiunto per la colonna "Tipologia"
@@ -89,6 +109,55 @@ public class IndexController {
         rulesList.addAll(ruleManager.getRules());
         rulesTable.setItems(ruleManager.getRules());
     }
+
+//    private String stringTriggerFormatter(String input){
+//        String output="";
+//        List<String> operators= new ArrayList<>();
+//        List<String> triggersValues= new ArrayList<>();
+//        String[] blocks = input.split("\\(");
+//        for(int j=0;j<=blocks.length-1;j++){
+//            int i=j;
+//            if (!blocks[i].contains("@")) {
+//                if(i++ <= blocks.length-1){
+//                    if(!blocks[i].contains("@")){
+//                        operators.add(blocks[i] + " ");
+//                    }else{
+//                        String operatorTemp=blocks[i--];
+//                        if(Objects.equals(operatorTemp, "OR") || Objects.equals(operatorTemp, "AND") || Objects.equals(operatorTemp, "NOT")) {
+//                            operators.add(blocks[i].split("@")[1]);
+//                        }
+//                    }
+//                }
+//                operators.add(blocks[j] + " ");
+//
+//            }else{
+//                String operator2 = blocks[i].split("@")[1];
+//                if(Objects.equals(operator2, "OR") || Objects.equals(operator2, "AND") || Objects.equals(operator2, "NOT")) {
+//                    operators.add(operator2);
+//                }
+//            }
+//        }
+//        System.out.println("operatori:  "+operators);
+//
+//        String[] triggers = input.split("@");
+//        for(int i=0;i<=triggers.length-1;i++){
+//            String value = triggers[i].split("#")[1];
+//            if (value.endsWith("))")) {
+//                value = value.substring(0, value.length() - 2);
+//            }else if (value.endsWith(")")){
+//                value = value.substring(0, value.length() - 1);
+//            }
+//            triggersValues.add(value);
+//        }
+//        System.out.println("valori trigger:  "+triggersValues);
+//
+//        for(int count=0;count<triggersValues.size()-1;count++){
+//            output = output + " " +triggersValues.get(count) + " " + operators.get(count);
+//        }
+//        output = output + " " + triggersValues.getLast();
+//        System.out.println("Output:  "+output);
+//        return output;
+//    }
 
     private ObservableStringValue statePropertyFunction(TableColumn.CellDataFeatures<Rule, String> cellData) {
         Rule rule = cellData.getValue();
