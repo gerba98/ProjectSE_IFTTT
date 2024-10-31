@@ -18,7 +18,7 @@ public class RuleManager {
     private final ObservableList<Rule> rules;
     private CheckRule ruleChecker;
     private RulePersistence rulePersistence;
-
+    private boolean isLoaded;
     /**
      * Costruttore privato per inizializzare {@code RuleManager} e la lista delle regole.
      * Configura l'ObservableList per tracciare i cambiamenti alle proprietà di stato delle regole.
@@ -30,6 +30,7 @@ public class RuleManager {
                 return new javafx.beans.Observable[]{rule.stateProperty()};
             }
         });
+        this.isLoaded = false;
     }
 
     /**
@@ -78,9 +79,10 @@ public class RuleManager {
      */
     public void removeRule(int ruleIndex) {
         Rule rule;
-        rulePersistence = new RulePersistence();
+
+        //rulePersistence = new RulePersistence();
         rule = rules.remove(ruleIndex);
-        rulePersistence.deleteRules(ruleIndex);
+        //rulePersistence.deleteRules(ruleIndex);
         if (rules.isEmpty() && ruleChecker != null) {
             ruleChecker.stop();
         }
@@ -93,9 +95,10 @@ public class RuleManager {
      * @return L'observable list contenente le regole.
      */
     public synchronized ObservableList<Rule> getRules() {
-        if (rules.isEmpty()) {
+        if (rules.isEmpty() && !isLoaded) {
             rulePersistence = new RulePersistence();
             rulePersistence.loadRules();
+            isLoaded = true;
         }
         return rules;
     }
