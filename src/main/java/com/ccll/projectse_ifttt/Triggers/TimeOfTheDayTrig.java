@@ -1,60 +1,61 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 /**
- * Rappresenta un trigger che si attiva a un'ora specifica del giorno.
- * Questo trigger valuta se l'ora corrente corrisponde o supera l'ora specificata.
+ * Classe che implementa un trigger basato sull'orario specifico del giorno.
+ * Questo trigger si attiva quando l'ora corrente corrisponde all'orario impostato durante la costruzione dell'istanza.
  */
-public class TimeOfTheDayTrig implements Trigger {
+public class TimeOfTheDayTrig extends AbstractTrigger {
+
     private LocalTime time;
 
     /**
-     * Costruisce un TimeOfTheDayTrig con l'ora specificata.
+     * Costruisce un trigger che si attiva all'orario specificato.
      *
-     * @param time l'ora specifica per cui questo trigger deve attivarsi.
+     * @param time l'orario specifico in cui questo trigger deve attivarsi, senza secondi né frazioni di secondo.
      */
     public TimeOfTheDayTrig(LocalTime time) {
-        this.time = time;
+        this.time = time.withSecond(0).withNano(0);  // Assicura che l'orario sia impostato senza secondi né nanosecondi.
     }
 
     /**
-     * Restituisce l'ora specifica per questo trigger.
+     * Restituisce l'orario impostato per l'attivazione di questo trigger.
      *
-     * @return l'ora alla quale questo trigger si attiva.
+     * @return l'orario per il quale il trigger è configurato ad attivarsi.
      */
     public LocalTime getTime() {
-        return time;
+        return this.time;
     }
 
     /**
-     * Imposta una nuova ora specifica per questo trigger.
+     * Imposta un nuovo orario per l'attivazione di questo trigger.
      *
-     * @param time la nuova ora alla quale questo trigger deve attivarsi.
+     * @param time il nuovo orario specificato per l'attivazione del trigger.
      */
     public void setTime(LocalTime time) {
-        this.time = time.withSecond(0).withNano(0);
+        this.time = time.withSecond(0).withNano(0);  // Assicura che l'orario sia impostato senza secondi né nanosecondi.
     }
 
     /**
      * Valuta se la condizione del trigger è soddisfatta.
-     * Questo trigger si attiva se l'ora corrente è uguale all'ora specificata.
+     * La condizione è considerata soddisfatta se l'ora corrente, troncata ai minuti, corrisponde all'ora impostata.
      *
-     * @return true se il trigger è attivo, false altrimenti.
+     * @return true se l'ora corrente corrisponde all'ora impostata, false altrimenti.
      */
     @Override
-    public boolean evaluate() {
-        LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);
-        return currentTime.equals(time);  //
+    public boolean getCurrentEvaluation() {
+        return time.equals(LocalTime.now().truncatedTo(ChronoUnit.MINUTES));
     }
 
     /**
-     * Restituisce una rappresentazione stringa del trigger.
+     * Fornisce una rappresentazione in stringa di questo trigger.
      *
-     * @return una stringa che indica l'ora alla quale il trigger si attiva.
+     * @return una stringa che descrive il tipo di trigger e l'orario impostato, separati da un punto e virgola.
      */
     @Override
     public String toString() {
-        return "Trigger attivato a: " + time;
+        return "Time of the day;" + time;
     }
 }

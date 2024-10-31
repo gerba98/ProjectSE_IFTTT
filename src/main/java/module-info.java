@@ -10,9 +10,12 @@ module com.ccll.projectse_ifttt {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires javafx.media;
-    requires java.logging;
     requires java.desktop;
+    requires javafx.swing;
+    requires jdk.jshell;
+    requires java.logging;
 
     opens com.ccll.projectse_ifttt to javafx.fxml;
+    opens com.ccll.projectse_ifttt.Rule to javafx.base;
     exports com.ccll.projectse_ifttt;
 }

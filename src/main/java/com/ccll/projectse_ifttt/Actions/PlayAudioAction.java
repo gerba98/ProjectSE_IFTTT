@@ -2,7 +2,7 @@ package com.ccll.projectse_ifttt.Actions;
 
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonBar;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -25,61 +25,27 @@ public class PlayAudioAction implements Action {
     private static final Logger LOGGER = Logger.getLogger(PlayAudioAction.class.getName());
 
     /**
-     * Il percorso del file audio che verrà riprodotto
+     * Il percorso del file audio che verrà riprodotto.
      */
     private final Path audioFilePath;
 
     /**
-     * Il MediaPlayer utilizzato per riprodurre l'audio
-     */
-    private MediaPlayer mediaPlayer;
-
-    /**
-     * Indica se l'audio è attualmente in riproduzione
-     */
-    private boolean isPlaying = false;
-
-    /**
-     * Indica se la riproduzione è stata interrotta
-     */
-    private boolean isStopped = false;
-
-    /**
      * Costruttore che inizializza l'azione con il percorso del file audio da riprodurre.
      *
-     * @param audioFilePath Il percorso del file audio.
+     * @param audioFilePath il percorso del file audio
      */
     public PlayAudioAction(Path audioFilePath) {
         this.audioFilePath = audioFilePath;
     }
 
     /**
-     * Restituisce il percorso del file audio associato a questa azione.
+     * Esegue l'azione di riproduzione del file audio. Se il file non esiste, mostra un avviso
+     * all'utente. Se il file esiste, avvia la riproduzione e permette all'utente di interromperla tramite un prompt.
      *
-     * @return Il percorso del file audio.
-     */
-    public Path getAudioFilePath() {
-        return audioFilePath;
-    }
-
-    /**
-     * Esegue l'azione di riproduzione del file audio. Se la riproduzione è già in corso o se l'audio
-     * è stato fermato in precedenza, l'azione non verrà eseguita nuovamente.
-     *
-     * @return true se l'audio viene riprodotto correttamente, false in caso di errore.
+     * @return {@code true} se l'audio viene riprodotto correttamente, {@code false} in caso di errore
      */
     @Override
     public boolean execute() {
-        if (isStopped) {
-            // Se l'audio è stato fermato, non eseguire l'azione
-            return false;
-        }
-
-        if (isPlaying) {
-            // Se la musica è già in riproduzione, non riprodurre di nuovo e non mostrare un altro alert
-            return true;
-        }
-
         File file = new File(this.audioFilePath.toString());
         if (!file.exists()) {
             LOGGER.log(Level.WARNING, "Il file audio non esiste.");
@@ -89,13 +55,11 @@ public class PlayAudioAction implements Action {
 
         try {
             Media media = new Media(file.toURI().toString());
-            mediaPlayer = new MediaPlayer(media);
+            MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.seek(mediaPlayer.getStartTime()));
 
             mediaPlayer.play();
-            isPlaying = true;  // Imposta lo stato come 'in riproduzione'
-
-            showStopMusicAlert();  // Mostra l'alert per fermare la musica
+            showStopMusicAlert(mediaPlayer);  // Mostra l'alert per fermare la musica
             return true;
 
         } catch (Exception e) {
@@ -107,39 +71,38 @@ public class PlayAudioAction implements Action {
 
     /**
      * Mostra un alert che chiede all'utente se desidera fermare la riproduzione della musica.
-     * Se l'utente sceglie di fermare la musica, la riproduzione viene interrotta e lo stato viene aggiornato.
+     * Se l'utente sceglie di fermare la musica, la riproduzione viene interrotta.
+     *
+     * @param mediaPlayer il {@link MediaPlayer} da fermare se richiesto
      */
-    private void showStopMusicAlert() {
+    private void showStopMusicAlert(MediaPlayer mediaPlayer) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.NONE);
+            Alert alert = new Alert(AlertType.NONE);
             alert.setTitle("Stop Sveglia");
             alert.setHeaderText("Vuoi stoppare la sveglia?");
-            ButtonType stopButton = new ButtonType("Stop", ButtonBar.ButtonData.OK_DONE);
+            ButtonType stopButton = new ButtonType("Stop", ButtonType.OK.getButtonData());
             alert.getButtonTypes().setAll(stopButton);
 
-            alert.setOnHidden(event -> {
-                if (mediaPlayer != null) {
+            alert.showAndWait().ifPresent(response -> {
+                if (response == stopButton && mediaPlayer != null) {
                     mediaPlayer.stop();
-                    isPlaying = false;  // Imposta lo stato come 'non in riproduzione'
-                    isStopped = true;   // Segna che la riproduzione è stata fermata definitivamente
                 }
             });
-
-            alert.showAndWait();
         });
     }
 
     /**
      * Mostra un alert di avviso all'utente con un titolo e un messaggio specifici.
      *
-     * @param title   Il titolo dell'alert.
-     * @param message Il messaggio dell'alert.
+     * @param title   il titolo dell'alert
+     * @param message il messaggio dell'alert
      */
     private void showAlert(String title, String message) {
         Platform.runLater(() -> {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
+            Alert alert = new Alert(AlertType.WARNING);
             alert.setTitle(title);
-            alert.setHeaderText(message);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
             alert.showAndWait();
         });
     }
@@ -147,10 +110,10 @@ public class PlayAudioAction implements Action {
     /**
      * Restituisce una rappresentazione in formato stringa di questa azione.
      *
-     * @return Una stringa che descrive l'azione, inclusa il nome del file audio.
+     * @return una stringa che descrive l'azione, inclusa il nome del file audio
      */
     @Override
     public String toString() {
-        return "Riproduci audio: " + audioFilePath.getFileName();
+        return "Play Audio;" + audioFilePath;
     }
 }

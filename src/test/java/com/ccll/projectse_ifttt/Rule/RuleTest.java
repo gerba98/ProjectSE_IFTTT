@@ -1,7 +1,7 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import com.ccll.projectse_ifttt.Actions.Action;
-import com.ccll.projectse_ifttt.Triggers.Trigger;
+import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
+import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class RuleTest {
-    private TestTrigger testTrigger;
-    private TestAction testAction;
+    private TriggerTestUtils testTrigger;
+    private ActionTestUtils testAction;
     private Rule rule;
 
     @BeforeEach
     void setUp() {
-        testTrigger = new TestTrigger(false);
-        testAction = new TestAction();
-        rule = new Rule(testTrigger, testAction, "Regola di Test");
+        testTrigger = new TriggerTestUtils(false);
+        testAction = new ActionTestUtils();
+        rule = new Rule("Regola di Test", testTrigger, testAction);
     }
 
     @Test
@@ -26,8 +26,8 @@ class RuleTest {
         assertSame(testTrigger, rule.getTrigger(), "Il trigger dovrebbe essere lo stesso oggetto");
         assertSame(testAction, rule.getAction(), "L'azione dovrebbe essere lo stesso oggetto");
 
-        TestTrigger testTrigger1 = new TestTrigger(true);
-        TestAction testAction1 = new TestAction();
+        TriggerTestUtils testTrigger1 = new TriggerTestUtils(true);
+        ActionTestUtils testAction1 = new ActionTestUtils();
         rule.setTrigger(testTrigger1);
         rule.setAction(testAction1);
         rule.setName("Nuova Regola di Test");
@@ -48,42 +48,5 @@ class RuleTest {
         String ruleString = rule.toString();
         assertNotNull(ruleString, "toString non dovrebbe restituire null");
         assertFalse(ruleString.isEmpty(), "toString non dovrebbe restituire una stringa vuota");
-    }
-
-    // Implementazione di test per Trigger
-    private class TestTrigger implements Trigger {
-        private boolean shouldTrigger;
-
-        public TestTrigger(boolean shouldTrigger) {
-            this.shouldTrigger = shouldTrigger;
-        }
-
-        @Override
-        public boolean evaluate() {
-            return shouldTrigger;
-        }
-
-        public void setShouldTrigger(boolean shouldTrigger) {
-            this.shouldTrigger = shouldTrigger;
-        }
-    }
-
-    // Implementazione di test per Action
-    private class TestAction implements Action {
-        private boolean executed = false;
-
-        @Override
-        public boolean execute() {
-            executed = true;
-            return true;
-        }
-
-        public boolean wasExecuted() {
-            return executed;
-        }
-
-        public void reset() {
-            executed = false;
-        }
     }
 }

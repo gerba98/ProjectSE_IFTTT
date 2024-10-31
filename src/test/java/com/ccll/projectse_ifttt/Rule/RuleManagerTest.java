@@ -1,12 +1,15 @@
 package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.Actions.Action;
+import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
+import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
 import com.ccll.projectse_ifttt.Triggers.Trigger;
 import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,13 +41,13 @@ class RuleManagerTest {
     @Test
     @DisplayName("Verifica Aggiunta Regole")
     void testMultipleRuleAdditions() {
-        CheckRuleTest.TestTrigger trigger1 = new CheckRuleTest.TestTrigger(true);
-        CheckRuleTest.TestAction action1 = new CheckRuleTest.TestAction();
-        Rule rule1 = new Rule(trigger1, action1, "Regola 1");
+        TriggerTestUtils trigger1 = new TriggerTestUtils(true);
+        ActionTestUtils action1 = new ActionTestUtils();
+        Rule rule1 = new Rule("Regola 1", trigger1, action1);
 
-        CheckRuleTest.TestTrigger trigger2 = new CheckRuleTest.TestTrigger(false);
-        CheckRuleTest.TestAction action2 = new CheckRuleTest.TestAction();
-        Rule rule2 = new Rule(trigger2, action2, "Regola 2");
+        TriggerTestUtils trigger2 = new TriggerTestUtils(false);
+        ActionTestUtils action2 = new ActionTestUtils();
+        Rule rule2 = new Rule("Regola 2", trigger2, action2);
 
         testRuleManager.addRule(rule1);
         testRuleManager.addRule(rule2);
@@ -58,14 +61,14 @@ class RuleManagerTest {
     @Test
     @DisplayName("Verifica creazione regola")
     void testCreateRule() {
-        Rule resultRule1 = testRuleManager.createRule("time of the day", "12:00", "display message", "Hello World", "Regola Test 1");
+        Rule resultRule1 = testRuleManager.createRule("Regola Test 1", "time of the day", "12:00", "display message", "Hello World");
 
         assertNotNull(resultRule1, "La regola creata non dovrebbe essere null");
         assertEquals("Regola Test 1", resultRule1.getName(), "Il nome della regola dovrebbe corrispondere");
         assertInstanceOf(Trigger.class, resultRule1.getTrigger(), "Il trigger dovrebbe essere un'istanza di Trigger");
         assertInstanceOf(Action.class, resultRule1.getAction(), "L'azione dovrebbe essere un'istanza di Action");
 
-        Rule resultRule2 = testRuleManager.createRule("time of the day", "15:30", "play audio", "/Users/Desktop/cat.mp3", "Regola Test 2");
+        Rule resultRule2 = testRuleManager.createRule("Regola Test 2", "time of the day", "15:30", "play audio", "/Users/Desktop/cat.mp3");
 
         assertNotNull(resultRule2, "La regola creata non dovrebbe essere null");
         assertEquals("Regola Test 2", resultRule2.getName(), "Il nome della regola dovrebbe corrispondere");
@@ -75,14 +78,18 @@ class RuleManagerTest {
     @Test
     @DisplayName("Verifica Rimozione Regola")
     void testRemoveRule() {
-        // Creiamo e aggiungiamo due regole
-        CheckRuleTest.TestTrigger trigger1 = new CheckRuleTest.TestTrigger(true);
-        CheckRuleTest.TestAction action1 = new CheckRuleTest.TestAction();
-        Rule rule1 = new Rule(trigger1, action1, "Regola 1");
+        String TEST_CSV_PATH = "src/main/resources/com/ccll/projectse_ifttt/rules.csv";
+        File testFile = new File(TEST_CSV_PATH);
+        if (testFile.exists()) {
+            testFile.delete();
+        }
+        TriggerTestUtils trigger1 = new TriggerTestUtils(true);
+        ActionTestUtils action1 = new ActionTestUtils();
+        Rule rule1 = new Rule("Regola 1", trigger1, action1);
 
-        CheckRuleTest.TestTrigger trigger2 = new CheckRuleTest.TestTrigger(false);
-        CheckRuleTest.TestAction action2 = new CheckRuleTest.TestAction();
-        Rule rule2 = new Rule(trigger2, action2, "Regola 2");
+        TriggerTestUtils trigger2 = new TriggerTestUtils(false);
+        ActionTestUtils action2 = new ActionTestUtils();
+        Rule rule2 = new Rule("Regola 2", trigger2, action2);
 
         testRuleManager.addRule(rule1);
         testRuleManager.addRule(rule2);
@@ -105,49 +112,4 @@ class RuleManagerTest {
         assertTrue(testRuleManager.getRules().isEmpty(), "Non dovrebbero esserci più regole dopo la rimozione dell'ultima");
     }
 
-    private static class TestTrigger implements Trigger {
-        private boolean shouldTrigger;
-
-        public TestTrigger(boolean shouldTrigger) {
-            this.shouldTrigger = shouldTrigger;
-        }
-
-        @Override
-        public boolean evaluate() {
-            return shouldTrigger;
-        }
-
-        public void setShouldTrigger(boolean shouldTrigger) {
-            this.shouldTrigger = shouldTrigger;
-        }
-
-        @Override
-        public String toString() {
-            return "TestTrigger{shouldTrigger=" + shouldTrigger + '}';
-        }
-    }
-
-
-    private static class TestAction implements Action {
-        private boolean executed = false;
-
-        @Override
-        public boolean execute() {
-            executed = true;
-            return true;
-        }
-
-        public boolean wasExecuted() {
-            return executed;
-        }
-
-        public void reset() {
-            executed = false;
-        }
-
-        @Override
-        public String toString() {
-            return "TestAction{executed=" + executed + '}';
-        }
-    }
 }
