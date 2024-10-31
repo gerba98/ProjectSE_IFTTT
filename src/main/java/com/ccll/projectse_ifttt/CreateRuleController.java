@@ -396,6 +396,26 @@ public class CreateRuleController {
 
     }
 
+    @FXML
+    public void CARemoveButton() {
+        String selectedAction = CAListView.getSelectionModel().getSelectedItem();
+
+        if (selectedAction != null) {
+            compositeActionList.remove(selectedAction);
+
+            CAListView.setItems(compositeActionList);
+
+            String actionName = compositeActionName.getText();
+            if (compositeActionNamesHash.containsKey(actionName)) {
+                compositeActionNamesHash.get(actionName).remove(selectedAction);
+
+                if (compositeActionNamesHash.get(actionName).isEmpty()) {
+                    compositeActionNamesHash.remove(actionName);
+                }
+            }
+        }
+    }
+
     public static class CompositeTriggerFormatter {
         /**
          * Formats trigger components into a composite trigger string.
@@ -678,7 +698,6 @@ public class CreateRuleController {
         }
     }
 
-    @FXML
     private void createTriggerItem(Label label, String text, String value) {
 
         switch (text) {
@@ -694,13 +713,13 @@ public class CreateRuleController {
                     rulePane.getChildren().addAll(hourSpinner, minuteSpinner);
                     triggerPaneItems.addAll(hourSpinner, minuteSpinner);
                 } else if (Objects.equals(value, COMPOSITE_FIRST)) {
-                    Utils.layoutSpinner(hourSpinner, 330, 113, 55);
-                    Utils.layoutSpinner(minuteSpinner, 390, 113, 55);
+                    Utils.layoutSpinner(hourSpinner, 350, 150, 55);
+                    Utils.layoutSpinner(minuteSpinner, 420, 150, 55);
                     anchorPaneCompositeTrigger.getChildren().addAll(hourSpinner, minuteSpinner);
                     compositeTrigPaneItems1.addAll(hourSpinner, minuteSpinner);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutSpinner(hourSpinner, 330, 276, 55);
-                    Utils.layoutSpinner(minuteSpinner, 390, 276, 55);
+                    Utils.layoutSpinner(hourSpinner, 350, 276, 55);
+                    Utils.layoutSpinner(minuteSpinner, 420, 276, 55);
                     anchorPaneCompositeTrigger.getChildren().addAll(hourSpinner, minuteSpinner);
                     compositeTrigPaneItems2.addAll(hourSpinner, minuteSpinner);
                 }
@@ -717,13 +736,13 @@ public class CreateRuleController {
                     rulePane.getChildren().add(dayOfWeek);
                     triggerPaneItems.add(dayOfWeek);
                 } else if (Objects.equals(value, COMPOSITE_FIRST)) {
-                    Utils.layoutCombo(dayOfWeek, 330, 113);
+                    Utils.layoutCombo(dayOfWeek, 350, 153);
 
 
                     anchorPaneCompositeTrigger.getChildren().add(dayOfWeek);
                     compositeTrigPaneItems1.add(dayOfWeek);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutCombo(dayOfWeek, 330, 276);
+                    Utils.layoutCombo(dayOfWeek, 350, 276);
 
                     anchorPaneCompositeTrigger.getChildren().add(dayOfWeek);
                     compositeTrigPaneItems2.add(dayOfWeek);
@@ -745,13 +764,13 @@ public class CreateRuleController {
                     rulePane.getChildren().add(dayMonthField);
                     triggerPaneItems.add(dayMonthField);
                 } else if (Objects.equals(value, COMPOSITE_FIRST)) {
-                    Utils.layoutDatePicker(dayMonthField, 330, 113);
+                    Utils.layoutDatePicker(dayMonthField, 360, 152);
 
 
                     anchorPaneCompositeTrigger.getChildren().add(dayMonthField);
                     compositeTrigPaneItems1.add(dayMonthField);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutDatePicker(dayMonthField, 330, 276);
+                    Utils.layoutDatePicker(dayMonthField, 360, 274);
 
                     anchorPaneCompositeTrigger.getChildren().add(dayMonthField);
                     compositeTrigPaneItems2.add(dayMonthField);
@@ -759,34 +778,33 @@ public class CreateRuleController {
 
                 break;
             case "File existence":
-
                 TextField pathFolderField = new TextField();
-                Label fileNameLab = new Label("Write the file name");
+                Label fileNameLab = new Label("Insert file name");
                 Button browseDirButton = Utils.ButtonDirectoryItem(pathFolderField);
                 TextField fileNameField = new TextField();
                 if(Objects.equals(value, NORMAL)){
-                    label.setText("Directory path");
-                    Utils.layoutFiled(pathFolderField, 100, 285, 142, "directory");
-                    Utils.layoutButton(browseDirButton, 515, 142);
-                    Utils.layoutLabel(fileNameLab,405,125);
-                    Utils.layoutFiled(fileNameField, 100, 405, 142, "file name");
+                    label.setText("Choose a directory");
+                    Utils.layoutFiled(pathFolderField, 100, 358, 142, "directory");
+                    Utils.layoutButton(browseDirButton, 285, 142);
+                    Utils.layoutLabel(fileNameLab,460,125);
+                    Utils.layoutFiled(fileNameField, 100, 460, 142, "file name");
 
                     rulePane.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     triggerPaneItems.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
 
                 } else if (Objects.equals(value, COMPOSITE_FIRST)) {
-                    Utils.layoutFiled(pathFolderField, 100, 330, 113, "directory");
-                    Utils.layoutButton(browseDirButton, 540, 113);
-                    Utils.layoutLabel(fileNameLab,435,99);
-                    Utils.layoutFiled(fileNameField, 100, 435, 113, "file name");
+                    Utils.layoutFiled(pathFolderField, 100, 420, 153, "directory");
+                    Utils.layoutButton(browseDirButton, 345, 153);
+                    Utils.layoutLabel(fileNameLab,526,135);
+                    Utils.layoutFiled(fileNameField, 100, 525, 153, "file name");
 
                     anchorPaneCompositeTrigger.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     compositeTrigPaneItems1.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutFiled(pathFolderField, 100, 330, 276, "directory");
-                    Utils.layoutButton(browseDirButton, 540, 276);
-                    Utils.layoutLabel(fileNameLab,435,262);
-                    Utils.layoutFiled(fileNameField, 100, 435, 276, "file name");
+                    Utils.layoutFiled(pathFolderField, 100, 420, 276, "directory");
+                    Utils.layoutButton(browseDirButton, 345, 276);
+                    Utils.layoutLabel(fileNameLab,526,259);
+                    Utils.layoutFiled(fileNameField, 100, 525, 276, "file name");
 
                     anchorPaneCompositeTrigger.getChildren().addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
                     compositeTrigPaneItems2.addAll(pathFolderField,fileNameField,browseDirButton,fileNameLab);
@@ -801,36 +819,37 @@ public class CreateRuleController {
                 Label labFile = new Label("File path");
                 FileChooser.ExtensionFilter files = new FileChooser.ExtensionFilter("Files", "*.*");
                 TextField pathFileField = new TextField();
+                pathFileField.setPromptText("Chosen file");
                 Button browseFileButton = Utils.buttonFileItem(pathFileField, files);
 
                 unit.setValue("KB");
                 fileDimensionSpinner.setPromptText("Insert dimension");
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Insert file dimension");
-                    Utils.layoutSpinner(fileDimensionSpinner, 285, 142, 100);
-                    Utils.layoutCombo(unit, 400, 142);
-                    Utils.layoutLabel(labFile,485,125);
-                    Utils.layoutButton(browseFileButton, 550, 142);
-                    Utils.layoutFiled(pathFileField, 50, 485, 142, "file choose");
+                    Utils.layoutSpinner(fileDimensionSpinner, 285, 142, 80);
+                    Utils.layoutCombo(unit, 350, 146);
+                    Utils.layoutLabel(labFile,510,125);
+                    Utils.layoutButton(browseFileButton, 430, 146);
+                    Utils.layoutFiled(pathFileField, 100, 510, 146, "file choose");
 
                     rulePane.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                     triggerPaneItems.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
 
                 }else if(Objects.equals(value, COMPOSITE_FIRST)){
-                    Utils.layoutSpinner(fileDimensionSpinner, 330, 113, 70);
-                    Utils.layoutCombo(unit, 410, 113);
-                    Utils.layoutLabel(labFile,485,99);
-                    Utils.layoutButton(browseFileButton, 550, 113);
-                    Utils.layoutFiled(pathFileField, 50, 485, 113, "file choose");
+                    Utils.layoutSpinner(fileDimensionSpinner, 350, 152, 70);
+                    Utils.layoutCombo(unit, 420, 155);
+                    Utils.layoutLabel(labFile,570,135);
+                    Utils.layoutButton(browseFileButton, 495, 155);
+                    Utils.layoutFiled(pathFileField, 80, 570, 155, "file choose");
 
                     anchorPaneCompositeTrigger.getChildren().addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
                     compositeTrigPaneItems1.addAll(fileDimensionSpinner, unit,labFile,pathFileField,browseFileButton);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutSpinner(fileDimensionSpinner, 330, 276, 70);
-                    Utils.layoutCombo(unit, 410, 276);
-                    Utils.layoutLabel(labFile,485,262);
-                    Utils.layoutButton(browseFileButton, 550, 276);
-                    Utils.layoutFiled(pathFileField, 50, 485, 276, "file choose");
+                    Utils.layoutSpinner(fileDimensionSpinner, 350, 276, 70);
+                    Utils.layoutCombo(unit, 420, 278);
+                    Utils.layoutLabel(labFile,570,259);
+                    Utils.layoutButton(browseFileButton, 495, 278);
+                    Utils.layoutFiled(pathFileField, 80, 570, 278, "file choose");
 
                     anchorPaneCompositeTrigger.getChildren().addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
                     compositeTrigPaneItems2.addAll(pathFileField,fileDimensionSpinner, unit,labFile,browseFileButton);
@@ -842,43 +861,43 @@ public class CreateRuleController {
                 commandLabel.setText("Command");
                 TextField commandField = new TextField();
                 TextField programField = new TextField();
+                programField.setPromptText("Program path");
                 Button programBrowse = Utils.buttonFileItem(programField, null);
 
 
                 Label outputLabel = new Label();
                 outputLabel.setText("Output");
                 TextField outputField = new TextField();
-                outputField.setPromptText("Insert desired output");
 
                 if(Objects.equals(value, NORMAL)){
                     Utils.layoutLabel(commandLabel, 285, 125);
                     Utils.layoutFiled(commandField, 50, 285, 142, "command");
-                    Utils.layoutButton(programBrowse, 350, 115);
-                    Utils.layoutSimpleField(programField,350, 142);
+                    Utils.layoutButton(programBrowse, 350, 112);
+                    Utils.layoutFiled(programField,100,350, 142, "program");
                     Utils.layoutLabel(outputLabel, 500, 125);
-                    Utils.layoutFiled(outputField, 70, 500, 142, "command");
+                    Utils.layoutFiled(outputField, 30, 460, 142, "output");
+                    Utils.layoutLabel(outputLabel,460,125);
 
-                    //rulePane.getChildren().add(statusProgramField);
                     rulePane.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                     triggerPaneItems.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
                 }else if(Objects.equals(value, COMPOSITE_FIRST)){
-                    Utils.layoutLabel(commandLabel, 330, 99);
-                    Utils.layoutFiled(commandField, 50, 330, 113, "command");
-                    Utils.layoutButton(programBrowse, 385, 113);
-                    Utils.layoutFiled(programField, 150,385, 113, "command");
-                    Utils.layoutLabel(outputLabel, 540, 99);
-                    Utils.layoutFiled(outputField, 60, 540, 113, "command");
+                    Utils.layoutLabel(commandLabel, 347, 135);
+                    Utils.layoutFiled(commandField, 50, 350, 153, "command");
+                    Utils.layoutButton(programBrowse, 410, 123);
+                    Utils.layoutFiled(programField, 150,410, 153, "command");
+                    Utils.layoutLabel(outputLabel, 567, 135);
+                    Utils.layoutFiled(outputField, 40, 567, 153, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
                     anchorPaneCompositeTrigger.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
                     compositeTrigPaneItems1.addAll(commandField, programField, outputField, commandLabel, outputLabel, programBrowse);
                 }else if(Objects.equals(value, COMPOSITE_SECOND)){
-                    Utils.layoutLabel(commandLabel, 330, 262);
-                    Utils.layoutFiled(commandField, 50, 330, 276, "command");
-                    Utils.layoutButton(programBrowse, 385, 276);
-                    Utils.layoutFiled(programField,150, 385, 276, "command");
-                    Utils.layoutLabel(outputLabel, 540, 262);
-                    Utils.layoutFiled(outputField, 60, 540, 276, "command");
+                    Utils.layoutLabel(commandLabel, 347, 262);
+                    Utils.layoutFiled(commandField, 50, 350, 276, "command");
+                    Utils.layoutButton(programBrowse, 410, 246);
+                    Utils.layoutFiled(programField,150, 410, 276, "command");
+                    Utils.layoutLabel(outputLabel, 567, 262);
+                    Utils.layoutFiled(outputField, 40, 567, 276, "command");
 
                     //rulePane.getChildren().add(statusProgramField);
                     anchorPaneCompositeTrigger.getChildren().addAll(commandLabel, commandField, programBrowse, programField, outputLabel, outputField);
@@ -891,6 +910,7 @@ public class CreateRuleController {
 
     @FXML
     private void createActionItem(Label label, String text, String value) {
+        System.out.println(value);
         switch (text) {
             case "Display message":
                 TextField msgField = new TextField();
@@ -903,6 +923,7 @@ public class CreateRuleController {
                     actionPaneItems.add(msgField);
                 }else{
                     Utils.layoutSimpleField(msgField, 34, 245);
+                    msgField.setPromptText("Message to display");
 
                     anchorPaneCompositeAction.getChildren().add(msgField);
                     compositeActionPaneItems.add(msgField);
@@ -923,14 +944,16 @@ public class CreateRuleController {
                     label.setText("Audio to reproduce");
                     Utils.layoutButton(browseAudioButton, 450, 225);
                     Utils.layoutSimpleField(pathAudioField, 285, 225);
+                    pathAudioField.setPromptText("Chosen audio file");
 
 
                     rulePane.getChildren().addAll(browseAudioButton, pathAudioField);
                     actionPaneItems.addAll(browseAudioButton, pathAudioField);
                 }else{
 
-                    Utils.layoutButton(browseAudioButton, 190, 245);
+                    Utils.layoutButton(browseAudioButton, 200, 245);
                     Utils.layoutSimpleField(pathAudioField, 34, 245);
+                    pathAudioField.setPromptText("Chosen audio file");
 
                     anchorPaneCompositeAction.getChildren().addAll(browseAudioButton, pathAudioField);
                     compositeActionPaneItems.addAll(browseAudioButton, pathAudioField);
@@ -945,15 +968,18 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     Utils.layoutButton(browseButton, 285, 225);
-                    Utils.layoutSimpleField(fileField, 350, 225);
+                    Utils.layoutSimpleField(fileField, 360, 225);
                     Utils.layoutSimpleField(stringToWriteField, 285, 265);
+                    fileField.setPromptText("Chosen File");
 
-                    rulePane.getChildren().addAll(browseButton, stringToWriteField, fileField);
-                    actionPaneItems.addAll(browseButton, stringToWriteField, fileField);
+                    rulePane.getChildren().addAll(browseButton, fileField, stringToWriteField);
+                    actionPaneItems.addAll(browseButton, fileField, stringToWriteField);
                 }else{
-                    Utils.layoutButton(browseButton, 190, 245);
+                    Utils.layoutButton(browseButton, 200, 245);
                     Utils.layoutSimpleField(fileField, 34, 245);
+                    fileField.setPromptText("Chosen File");
                     Utils.layoutSimpleField(stringToWriteField, 34, 275);
+                    stringToWriteField.setPromptText("String to write...");
 
                     anchorPaneCompositeAction.getChildren().addAll(browseButton, fileField, stringToWriteField);
                     compositeActionPaneItems.addAll(browseButton, fileField, stringToWriteField);
@@ -967,12 +993,14 @@ public class CreateRuleController {
                 fileSelectedField.setPromptText("Select a file");
                 Button fileSelectButton = Utils.buttonFileAbsoluteItem(fileSelectedField, "Select a file");
                 TextField destSelectedField = new TextField();
-                destSelectedField.setPromptText("Select a destination directory");
-                Button destSelectButton = Utils.buttonFileAbsoluteItem(destSelectedField, "Select a destination directory");
+                destSelectedField.setPromptText("Destination Path");
+                Button destSelectButton = Utils.ButtonDirectoryItem(destSelectedField);
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select file and destination directory");
-                    Utils.layoutSimpleField(fileSelectedField, 365, 225);
-                    Utils.layoutSimpleField(destSelectedField, 410, 265);
+                    Utils.layoutSimpleField(fileSelectedField, 360, 225);
+                    Utils.layoutSimpleField(destSelectedField, 360, 265);
+                    fileSelectedField.setPrefWidth(160.0);
+                    destSelectedField.setPrefWidth(160.0);
                     Utils.layoutButton(fileSelectButton, 285, 225);
                     Utils.layoutButton(destSelectButton, 285, 265);
 
@@ -980,9 +1008,11 @@ public class CreateRuleController {
                     actionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
                 }else{
                     Utils.layoutSimpleField(fileSelectedField, 34, 245);
+                    fileSelectedField.setPromptText("Select a file");
+                    destSelectedField.setPromptText("Destination Path");
                     Utils.layoutSimpleField(destSelectedField, 34, 275);
-                    Utils.layoutButton(fileSelectButton, 190, 245);
-                    Utils.layoutButton(destSelectButton, 190, 275);
+                    Utils.layoutButton(fileSelectButton, 200, 245);
+                    Utils.layoutButton(destSelectButton, 200, 275);
 
                     anchorPaneCompositeAction.getChildren().addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
                     compositeActionPaneItems.addAll(fileSelectButton, destSelectButton, fileSelectedField, destSelectedField);
@@ -992,27 +1022,32 @@ public class CreateRuleController {
             case "Move file":
 
                 TextField fileSelectedField1 = new TextField();
+                fileSelectedField1.setPromptText("Chosen File");
+                fileSelectedField1.setPrefWidth(160.0);
                 fileSelectedField1.setPromptText("Select a file");
                 Button fileSelectButton1 = Utils.buttonFileAbsoluteItem(fileSelectedField1, "Select a file");
 
                 TextField destSelectedField1 = new TextField();
-                destSelectedField1.setPromptText("Select a destination directory");
-                Button destSelectButton1 = Utils.buttonFileAbsoluteItem(destSelectedField1, "Select a destination directory");
+                destSelectedField1.setPrefWidth(160.0);
+                destSelectedField1.setPromptText("Destination Path");
+                Button destSelectButton1 = Utils.ButtonDirectoryItem(destSelectedField1);
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select file and destination directory");
                     Utils.layoutButton(fileSelectButton1, 285, 225);
                     Utils.layoutButton(destSelectButton1, 285, 265);
-                    Utils.layoutSimpleField(fileSelectedField1, 365, 225);
-                    Utils.layoutSimpleField(destSelectedField1, 410, 265);
+                    Utils.layoutSimpleField(fileSelectedField1, 360, 225);
+                    Utils.layoutSimpleField(destSelectedField1, 360, 265);
 
                     rulePane.getChildren().addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
                     actionPaneItems.addAll(fileSelectButton1, destSelectButton1, fileSelectedField1, destSelectedField1);
                 }else{
                     Utils.layoutSimpleField(fileSelectedField1, 34, 245);
                     Utils.layoutSimpleField(destSelectedField1, 34, 275);
-                    Utils.layoutButton(fileSelectButton1, 190, 245);
-                    Utils.layoutButton(destSelectButton1, 190, 275);
+                    Utils.layoutButton(fileSelectButton1, 200, 245);
+                    fileSelectedField1.setPromptText("Select a file");
+                    destSelectedField1.setPromptText("Destination Path");
+                    Utils.layoutButton(destSelectButton1, 200, 275);
 
                     anchorPaneCompositeAction.getChildren().addAll(fileSelectedField1, destSelectedField1, fileSelectButton1, destSelectButton1);
                     compositeActionPaneItems.addAll(fileSelectedField1, destSelectedField1, fileSelectButton1, destSelectButton1);
@@ -1021,18 +1056,20 @@ public class CreateRuleController {
             case "Remove file":
 
                 TextField fileRemovedField = new TextField();
-                fileRemovedField.setPromptText("Select a file to remove");
+                fileRemovedField.setPrefWidth(160.0);
+                fileRemovedField.setPromptText("Remove File");
                 Button browseRemButton = Utils.buttonFileAbsoluteItem(fileRemovedField, "Select a file to remove");
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select the file to remove");
-                    Utils.layoutSimpleField(fileRemovedField, 350, 225);
+                    Utils.layoutSimpleField(fileRemovedField, 360, 225);
                     Utils.layoutButton(browseRemButton, 285, 225);
 
                     rulePane.getChildren().addAll(browseRemButton, fileRemovedField);
                     actionPaneItems.addAll(browseRemButton, fileRemovedField);
                 }else{
-                    Utils.layoutButton(browseRemButton, 190, 245);
+                    Utils.layoutButton(browseRemButton, 200, 245);
+                    fileRemovedField.setPromptText("Remove File");
                     Utils.layoutSimpleField(fileRemovedField, 34, 245);
 
                     anchorPaneCompositeAction.getChildren().addAll(browseRemButton, fileRemovedField);
@@ -1062,8 +1099,9 @@ public class CreateRuleController {
                     rulePane.getChildren().addAll(programPathField, browseProgramButton, commandField);
                     actionPaneItems.addAll(programPathField, browseProgramButton, commandField);
                 }else{
-                    Utils.layoutButton(browseProgramButton, 190, 245);
+                    Utils.layoutButton(browseProgramButton, 200, 245);
                     Utils.layoutSimpleField(programPathField, 34, 245);
+                    programPathField.setPromptText("Chosen program");
                     Utils.layoutSimpleField(commandField, 34, 275);
 
                     anchorPaneCompositeAction.getChildren().addAll(programPathField, browseProgramButton, commandField);

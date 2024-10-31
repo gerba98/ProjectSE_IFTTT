@@ -5,7 +5,7 @@ package com.ccll.projectse_ifttt.Actions;
  * e fornisce un modo per creare un'istanza di {@link WriteStringAction}.
  * Questa classe implementa il metodo {@code createAction} per accettare
  * un valore di azione che deve contenere un percorso di file e una stringa
- * da scrivere, separati da un punto e virgola (';').
+ * da scrivere, separati da un trattino ('-').
  */
 public class WriteStringActionCreator extends ActionCreator {
 
@@ -14,11 +14,11 @@ public class WriteStringActionCreator extends ActionCreator {
      * fornito.
      *
      * @param actionValue il valore dell'azione che contiene il percorso del file
-     *                    e la stringa da scrivere, separati da ';'
+     *                    e la stringa da scrivere, separati da '-'
      * @return una nuova istanza di {@link WriteStringAction} con il percorso del file
      *         e la stringa da scrivere
      * @throws IllegalArgumentException se {@code actionValue} non contiene
-     *                                  un separatore ';' oppure se il percorso del file
+     *                                  un separatore '-' oppure se il percorso del file
      *                                  o la stringa da scrivere non sono forniti
      */
     @Override

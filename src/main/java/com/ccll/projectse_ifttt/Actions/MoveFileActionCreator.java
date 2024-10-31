@@ -9,7 +9,7 @@ public class MoveFileActionCreator extends ActionCreator {
 
     /**
      * Crea un'istanza di {@link MoveFileAction} a partire da una stringa che contiene i percorsi del file sorgente
-     * e della directory di destinazione separati da un punto e virgola.
+     * e della directory di destinazione separati da un trattino.
      *
      * @param actionValue una stringa contenente il percorso del file sorgente e della directory di destinazione
      *                    nel formato "sourceFilePath;destinationDirectoryPath"

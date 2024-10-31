@@ -9,10 +9,10 @@ public class CopyFileActionCreator extends ActionCreator {
 
     /**
      * Crea un'istanza di {@link CopyFileAction} utilizzando una stringa contenente i percorsi
-     * del file sorgente e della directory di destinazione, separati da un punto e virgola.
+     * del file sorgente e della directory di destinazione, separati da un trattino.
      *
      * @param actionValue la stringa contenente il percorso del file sorgente e quello della
-     *                    directory di destinazione, separati da un punto e virgola
+     *                    directory di destinazione, separati da un trattino
      * @return un'istanza di {@link CopyFileAction} configurata con i percorsi forniti
      * @throws ArrayIndexOutOfBoundsException se la stringa {@code actionValue} non contiene
      *                                        entrambi i percorsi richiesti

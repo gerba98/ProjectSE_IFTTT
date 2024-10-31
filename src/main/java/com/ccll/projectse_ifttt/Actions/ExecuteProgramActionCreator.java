@@ -10,11 +10,11 @@ public class ExecuteProgramActionCreator extends ActionCreator {
 
     /**
      * Crea un'istanza di {@link ExecuteProgramAction} basata sul valore dell'azione fornito.
-     * Il valore dell'azione deve contenere il percorso del programma e i comandi, separati da un punto e virgola,
-     * nel formato "programPath;command".
+     * Il valore dell'azione deve contenere il percorso del programma e i comandi, separati da un trattino,
+     * nel formato "programPath-command".
      *
      * @param actionValue una stringa contenente il percorso del programma e i comandi
-     *                    separati da un punto e virgola, nel formato "programPath;command"
+     *                    separati da un trattino, nel formato "programPath-command"
      * @return un'istanza di {@link ExecuteProgramAction} configurata con il percorso e i comandi forniti
      * @throws IllegalArgumentException se il valore dell'azione non è valido
      *                                  (non contiene esattamente due parti)

@@ -189,11 +189,16 @@ public class IndexController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Create Rule");
             stage.setScene(new Scene(root1));
+
+            stage.setWidth(660);
+            stage.setHeight(410);
+
             stage.show();
         } catch (IOException ex) {
             System.out.println("I/O error");
         }
     }
+
 
     /*
     Cancella la regola tramite il rule manager, l'interfaccia è sincronizzata su quella lista
