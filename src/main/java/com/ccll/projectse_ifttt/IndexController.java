@@ -106,55 +106,6 @@ public class IndexController {
         rulesTable.setItems(ruleManager.getRules());
     }
 
-//    private String stringTriggerFormatter(String input){
-//        String output="";
-//        List<String> operators= new ArrayList<>();
-//        List<String> triggersValues= new ArrayList<>();
-//        String[] blocks = input.split("\\(");
-//        for(int j=0;j<=blocks.length-1;j++){
-//            int i=j;
-//            if (!blocks[i].contains("@")) {
-//                if(i++ <= blocks.length-1){
-//                    if(!blocks[i].contains("@")){
-//                        operators.add(blocks[i] + " ");
-//                    }else{
-//                        String operatorTemp=blocks[i--];
-//                        if(Objects.equals(operatorTemp, "OR") || Objects.equals(operatorTemp, "AND") || Objects.equals(operatorTemp, "NOT")) {
-//                            operators.add(blocks[i].split("@")[1]);
-//                        }
-//                    }
-//                }
-//                operators.add(blocks[j] + " ");
-//
-//            }else{
-//                String operator2 = blocks[i].split("@")[1];
-//                if(Objects.equals(operator2, "OR") || Objects.equals(operator2, "AND") || Objects.equals(operator2, "NOT")) {
-//                    operators.add(operator2);
-//                }
-//            }
-//        }
-//        System.out.println("operatori:  "+operators);
-//
-//        String[] triggers = input.split("@");
-//        for(int i=0;i<=triggers.length-1;i++){
-//            String value = triggers[i].split("#")[1];
-//            if (value.endsWith("))")) {
-//                value = value.substring(0, value.length() - 2);
-//            }else if (value.endsWith(")")){
-//                value = value.substring(0, value.length() - 1);
-//            }
-//            triggersValues.add(value);
-//        }
-//        System.out.println("valori trigger:  "+triggersValues);
-//
-//        for(int count=0;count<triggersValues.size()-1;count++){
-//            output = output + " " +triggersValues.get(count) + " " + operators.get(count);
-//        }
-//        output = output + " " + triggersValues.getLast();
-//        System.out.println("Output:  "+output);
-//        return output;
-//    }
-
     private ObservableStringValue statePropertyFunction(TableColumn.CellDataFeatures<Rule, String> cellData) {
         Rule rule = cellData.getValue();
         if (Objects.equals(cellData.getValue().getType(), "PeriodicRule")) {
@@ -187,7 +138,7 @@ public class IndexController {
             stage.setScene(new Scene(root1));
 
             stage.setWidth(660);
-            stage.setHeight(410);
+            stage.setHeight(420);
 
             stage.show();
         } catch (IOException ex) {
