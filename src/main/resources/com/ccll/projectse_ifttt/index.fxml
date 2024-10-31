@@ -15,15 +15,13 @@
             <children>
                 <TableView fx:id="rulesTable" layoutX="-7.0" layoutY="-8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="-8.0">
                     <columns>
-                        <TableColumn fx:id="nameColumn" maxWidth="150.0" prefWidth="150.0" text="Nome" />
-                        <TableColumn fx:id="triggerColumn" maxWidth="150.0" prefWidth="150.0" text="Trigger" />
-                        <TableColumn fx:id="actionColumn" maxWidth="150.0" prefWidth="150.0" text="Azione" />
-                        <TableColumn fx:id="stateColumn" maxWidth="150.0" prefWidth="150.0" text="Stato" />
-                        <TableColumn fx:id="typeColumn" maxWidth="150.0" prefWidth="150.0" text="Tipologia" />
+                        <TableColumn fx:id="nameColumn" maxWidth="500.0" prefWidth="150.0" text="Nome" />
+                        <TableColumn fx:id="triggerColumn" maxWidth="500.0" prefWidth="150.0" text="Trigger" />
+                        <TableColumn fx:id="actionColumn" maxWidth="500.0" prefWidth="150.0" text="Azione" />
+                        <TableColumn fx:id="stateColumn" maxWidth="500.0" prefWidth="150.0" text="Stato" />
+                        <TableColumn fx:id="typeColumn" maxWidth="500.0" prefWidth="150.0" text="Tipologia" />
                     </columns>
                 </TableView>
-                <Separator orientation="VERTICAL" prefHeight="200.0" />
-                <Pane prefHeight="200.0" prefWidth="200.0" />
             </children>
         </AnchorPane>
     </SplitPane>
