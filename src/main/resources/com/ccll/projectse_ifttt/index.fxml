@@ -30,7 +30,7 @@
         <Button fx:id="createRuleButton" layoutX="210.0" layoutY="2.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
         <Button fx:id="deleteRuleButton" layoutX="324.0" layoutY="2.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" textFill="WHITE" />
         <Label fx:id="errorLabel" layoutX="475.0" layoutY="47.0" prefHeight="17.0" prefWidth="82.0" text="Select a Rule" visible="false" />
-        <Button fx:id="activateButton" layoutX="190.0" layoutY="41.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="27.0" prefWidth="99.0" text="Activate rule" textFill="#cdcdcd" />
+        <Button fx:id="activateButton" layoutX="193.0" layoutY="41.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="27.0" prefWidth="99.0" text="Activate rule" textFill="#cdcdcd" />
         <Button fx:id="deactivateButton" layoutX="324.0" layoutY="41.0" mnemonicParsing="false" onAction="#onDeactivateButtonClick" text="Deactivate rule" />
     </AnchorPane>
 </VBox>
