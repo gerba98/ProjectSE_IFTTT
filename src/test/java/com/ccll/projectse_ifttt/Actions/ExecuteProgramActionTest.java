@@ -8,7 +8,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class ExecuteProgramActionTest {
-
     private String validProgramPath;
     private String validCommand;
 
@@ -16,33 +15,33 @@ public class ExecuteProgramActionTest {
     public void setUp() {
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("mac") || os.contains("linux")) {
-            validProgramPath = "\"/bin/bash\", \"-c\"";  // Usa /bin/echo per test semplici
-            validCommand = "echo Hello World";    // Comando semplice da eseguire
+            validProgramPath = "/bin/bash";
+            validCommand = "echo 'Hello World'";
         } else if (os.contains("win")) {
             validProgramPath = "cmd.exe";
-            validCommand = "/c echo Hello World";
+            validCommand = "echo Hello World";
         }
     }
-
 
     @Test
     @DisplayName("Test esecuzione programma valida")
     public void testExecuteProgramActionSuccess() {
         // Crea l'azione utilizzando il comando valido per il sistema operativo
         ActionCreator creator = new ExecuteProgramActionCreator();
-        Action executeProgramAction = creator.createAction(validProgramPath + "-" + validCommand);
+        // Costruisce il comando nel formato richiesto: programPath-command
+        String fullCommand = validProgramPath + "-" + validCommand;
+        Action executeProgramAction = creator.createAction(fullCommand);
 
         // Verifica che l'azione venga eseguita correttamente
         assertTrue(executeProgramAction.execute());
     }
-
 
     @Test
     @DisplayName("Test esecuzione fallita con comando non valido")
     public void testExecuteProgramActionFailure() {
         // Fornire un comando o un percorso di programma non valido
         ActionCreator creator = new ExecuteProgramActionCreator();
-        Action executeProgramAction = creator.createAction("path/to/nowhere"+ "-" + "invalidCommand");
+        Action executeProgramAction = creator.createAction("path/to/nowhere-invalidCommand");
 
         // Verifica che l'esecuzione fallisca
         assertFalse(executeProgramAction.execute());
