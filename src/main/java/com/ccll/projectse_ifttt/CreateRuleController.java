@@ -503,6 +503,7 @@ public class CreateRuleController {
                 if (periodicCheckBox.isSelected()) {
 
                     String period = collectPeriodDetails(); // Metodo per raccogliere i dettagli del periodo
+                    System.out.println("PERIODO:"+period);
                     builder.setPeriodic(period);
                 } else if (singleCheckBox.isSelected()) {
                     builder.setSingle();

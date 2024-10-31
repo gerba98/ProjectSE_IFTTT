@@ -47,14 +47,6 @@ public class RulePersistence {
                     StringBuilder sb = new StringBuilder();
                     sb.append(rule.toString());
 
-                    if (rule instanceof PeriodicRule) {
-                        PeriodicRule newPeriodicRule = (PeriodicRule) rule;
-                        sb.append("-");
-                        sb.append(newPeriodicRule.getStrPeriod());
-                        sb.append(";");
-                        sb.append(newPeriodicRule.isReactivated());
-                    }
-
                     writer.write(sb.toString());
                     writer.newLine();
                 }

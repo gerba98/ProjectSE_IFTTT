@@ -121,7 +121,7 @@ public class PeriodicRule extends Rule {
      */
     @Override
     public String toString() {
-        return super.getName() + ";" + super.getTrigger() + ";" + super.getAction() + ";" + isState() + ";" + getType() + "-" + strPeriod + ";" + reactivated;
+        return super.toString() + "-" + strPeriod + ";" + isReactivated();
     }
 
     /**

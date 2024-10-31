@@ -84,7 +84,7 @@ public class IndexController {
                 String val=action.split(";")[1];
                 String[] trigs = val.split(">>>");
                 for(String s:trigs){
-                    concatActions = concatActions + s.split("#")[1]+" + ";
+                    concatActions = concatActions + s.split("#")[1]+" >>> ";
                 }
                 concatActions=concatActions.substring(0,concatActions.length()-3);
                 return new SimpleStringProperty(concatActions);
