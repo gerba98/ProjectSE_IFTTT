@@ -18,8 +18,8 @@ public class ExecuteProgramActionTest {
             validProgramPath = "/bin/bash";
             validCommand = "echo 'Hello World'";
         } else if (os.contains("win")) {
-            validProgramPath = "cmd.exe";
-            validCommand = "echo Hello World";
+            validProgramPath = "src/main/resources/com/ccll/projectse_ifttt/programs/test.exe";
+            validCommand = "start";
         }
     }
 

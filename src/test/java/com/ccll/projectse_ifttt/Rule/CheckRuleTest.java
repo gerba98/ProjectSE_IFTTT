@@ -1,12 +1,14 @@
 package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
+import com.ccll.projectse_ifttt.TestUtilsClasses.TestUtils;
 import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.lang.reflect.Field;
 
 import static com.ccll.projectse_ifttt.TestUtilsClasses.TestUtils.waitCheckRule;
@@ -91,6 +93,40 @@ class CheckRuleTest {
         waitCheckRule();
 
         Assertions.assertTrue(action1.wasExecuted(), "L'azione dovrebbe essere stata eseguita dopo il cambiamento del trigger");
+    }
+
+    @Test
+    @DisplayName("Verifica esecuzione di una regola aggiunta dopo che sono state rimosse altre regole")
+    void testRulesExecutionAfterRestart() {
+        String TEST_CSV_PATH = "src/main/resources/com/ccll/projectse_ifttt/rules.csv";
+        TriggerTestUtils trigger1 = new TriggerTestUtils(true);
+        ActionTestUtils action1 = new ActionTestUtils();
+
+        File testFile = new File(TEST_CSV_PATH);
+        if (testFile.exists()) {
+            testFile.delete();
+        }
+
+        Rule rule1 = new Rule("Regola 1",trigger1, action1);
+
+        testRuleManager.addRule(rule1);
+
+        TestUtils.waitCheckRule();
+
+        Assertions.assertTrue(action1.wasExecuted(), "L'azione 1 dovrebbe essere stata eseguita");
+        testRuleManager.removeRule(0);
+        Assertions.assertTrue(testRuleManager.getRules().isEmpty(), "Non dovrebbero esserci più regole dopo la rimozione dell'ultima");
+
+        TestUtils.waitCheckRule();
+
+        TriggerTestUtils trigger2 = new TriggerTestUtils(true);
+        ActionTestUtils action2 = new ActionTestUtils();
+        Rule rule2 = new Rule("Regola 2",trigger2, action2);
+        testRuleManager.addRule(rule2);
+
+        TestUtils.waitCheckRule();
+
+        Assertions.assertTrue(action2.wasExecuted(), "L'azione 2 dovrebbe essere stata eseguita");
     }
 
 

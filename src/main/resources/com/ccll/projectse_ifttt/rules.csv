@@ -1,2 +1,2 @@
-tegg;Time of the day;14:48;Display Message;egrtg;true;Rule
-qdfd;COMPOSITE;AND(Time of the day#14:40@Day of the week#WEDNESDAY);Composite;Display Message#qwdwqd;true;Rule
+Rule 1;Time of the day;12:00;Display Message;Message 1;true;Rule
+Rule 2;Time of the day;15:00;Display Message;Message 2;true;Rule

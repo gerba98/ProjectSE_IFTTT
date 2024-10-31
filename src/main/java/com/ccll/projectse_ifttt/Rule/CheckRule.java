@@ -47,7 +47,7 @@ public class CheckRule {
             }
             isRunning = true;
             scheduler.scheduleAtFixedRate(() -> {
-                for (Rule rule : ruleManager.getRules()) {
+                for (Rule rule : RuleManager.getInstance().getRules()) {
                     if (rule.evaluateTrigger()) {
                         rule.executeAction();
                     }

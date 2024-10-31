@@ -38,7 +38,6 @@ public class RulePersistence {
      * riattivazione.
      */
     public void saveRules() {
-        ruleManager.getInstance();
         List<Rule> rules = ruleManager.getRules();
 
         try {

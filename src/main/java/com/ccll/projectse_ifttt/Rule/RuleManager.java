@@ -92,7 +92,7 @@ public class RuleManager {
      *
      * @return L'observable list contenente le regole.
      */
-    public ObservableList<Rule> getRules() {
+    public synchronized ObservableList<Rule> getRules() {
         if (rules.isEmpty()) {
             rulePersistence = new RulePersistence();
             rulePersistence.loadRules();

@@ -191,7 +191,13 @@ public class CreateRuleController {
     }
 
     private void setupCheckBoxes() {
-        periodicCheckBox.setOnAction(e -> createPeriodicRule());
+        periodicCheckBox.setOnAction(e -> {
+            if (periodicCheckBox.isSelected()) {
+                createPeriodicRule();
+            } else {
+                clearPeriodicRule();
+            }
+        });
 
         // Mutual exclusion for checkboxes
         periodicCheckBox.selectedProperty().addListener((obs, old, newVal) ->

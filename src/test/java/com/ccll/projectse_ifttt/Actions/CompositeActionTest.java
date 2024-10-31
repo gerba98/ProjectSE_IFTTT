@@ -72,7 +72,7 @@ public class CompositeActionTest {
     public void testActionCreation(){
         Action action1 = new DisplayMessageAction("test");
         Action action2 = new DisplayMessageAction("test");
-        Path audioPath = Paths.get("C:\\Users\\lucag\\IdeaProjects\\ProjectSE_IFTTT\\src\\main\\resources\\com\\ccll\\projectse_ifttt\\cat.mp3");
+        Path audioPath = Paths.get("src/main/resources/com/ccll/projectse_ifttt/cat.mp3");
         Action action3 = new PlayAudioAction(audioPath);
 
         CompositeAction cb = new CompositeAction();
