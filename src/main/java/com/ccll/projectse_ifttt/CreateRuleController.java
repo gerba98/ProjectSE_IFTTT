@@ -911,10 +911,13 @@ public class CreateRuleController {
     @FXML
     private void createActionItem(Label label, String text, String value) {
         System.out.println(value);
+        label.setVisible(false);
         switch (text) {
             case "Display message":
                 TextField msgField = new TextField();
                 msgField.setPromptText("Message...");
+                label.setText("Message to show");
+                label.setVisible(true);
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Message to show");
                     Utils.layoutSimpleField(msgField, 285, 225);
@@ -942,6 +945,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Audio to reproduce");
+                    label.setVisible(true);
                     Utils.layoutButton(browseAudioButton, 450, 225);
                     Utils.layoutSimpleField(pathAudioField, 285, 225);
                     pathAudioField.setPromptText("Chosen audio file");
@@ -967,6 +971,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Choose a file to write a string");
+                    label.setVisible(true);
                     Utils.layoutButton(browseButton, 285, 225);
                     Utils.layoutSimpleField(fileField, 360, 225);
                     Utils.layoutSimpleField(stringToWriteField, 285, 265);
@@ -997,6 +1002,7 @@ public class CreateRuleController {
                 Button destSelectButton = Utils.ButtonDirectoryItem(destSelectedField);
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select file and destination directory");
+                    label.setVisible(true);
                     Utils.layoutSimpleField(fileSelectedField, 360, 225);
                     Utils.layoutSimpleField(destSelectedField, 360, 265);
                     fileSelectedField.setPrefWidth(160.0);
@@ -1034,6 +1040,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select file and destination directory");
+                    label.setVisible(true);
                     Utils.layoutButton(fileSelectButton1, 285, 225);
                     Utils.layoutButton(destSelectButton1, 285, 265);
                     Utils.layoutSimpleField(fileSelectedField1, 360, 225);
@@ -1062,6 +1069,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Select the file to remove");
+                    label.setVisible(true);
                     Utils.layoutSimpleField(fileRemovedField, 360, 225);
                     Utils.layoutButton(browseRemButton, 285, 225);
 
@@ -1093,6 +1101,7 @@ public class CreateRuleController {
 
                 if(Objects.equals(value, NORMAL)){
                     label.setText("Choose the program to execute");
+                    label.setVisible(true);
                     Utils.layoutSimpleField(programPathField, 285, 225);
                     Utils.layoutButton(browseProgramButton, 450, 225);
                     Utils.layoutSimpleField(commandField, 285, 265);
