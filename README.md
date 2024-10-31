@@ -2,17 +2,13 @@
 
 ## Definition of Done (DoD)
 
-È stato definito un documento che descrive la Definition of Done dell'applicazione, consultabile al
-seguente [link](https://docs.google.com/document/d/1lXJ42cxmDTjbMDgV7HQHfl32ohTDAJ-osD8ShoRdMDc/edit?usp=sharing).
+È stato redatto un documento che definisce la Definition of Done dell'applicazione, contenente i criteri minimi e le condizioni per considerare ogni feature e componente come completati. Il documento è disponibile al seguente  [link](https://docs.google.com/document/d/1lXJ42cxmDTjbMDgV7HQHfl32ohTDAJ-osD8ShoRdMDc/edit?usp=sharing).
 
 ## Architettura Software
 
-Per lo sviluppo del software, è stato scelto di utilizzare il pattern MVC (Model-View-Controller) poiché rappresenta la
-soluzione più efficace per creare applicazioni che interagiscono con l’utente tramite un’interfaccia grafica (GUI)...
-(Da completare)
+Per lo sviluppo dell’applicazione, è stato adottato il pattern MVC (Model-View-Controller), che permette di separare la logica di business dalla gestione dei dati e dall'interfaccia utente. Questo approccio, particolarmente efficace per applicazioni con interfaccia grafica (GUI), consente di mantenere il codice modulare e facilmente manutenibile. Grazie all’architettura scelta, il team ha potuto lavorare in modo parallelo sulle diverse componenti, facilitando l'implementazione e garantendo un'efficace divisione dei task.
 
-L'architettura è disponibile al
-seguente [link](https://drive.google.com/file/d/1hhqeFDN8rKD4tyfaaNaiMWKuRV1bmZwr/view?usp=sharing).
+La documentazione dettagliata dell'architettura software è disponibile al seguente [link](https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Design%20Organization.drawio#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1NuIz0HDjhvtHbWyqHon1qxUJg4nBVtQr%26export%3Ddownload).
 
 ## Product Backlog
 
@@ -34,6 +30,8 @@ stimata la velocità della sprint.
 È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=496373581#gid=496373581).
 
 ### Sprint Backlog #3
+Nel terzo Sprint Backlog sono state selezionate le User Stories delle user epic quattro e cinque. A causa di problemi emersi successivamente, legati al salvataggio delle regole e al funzionamento delle azioni composte, il team ha dato priorità alla risoluzione dei debiti tecnici. La velocità della sprint è stata quindi adattata alle nuove esigenze. È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=496373581#gid=49637358)
+
 
 ## Organizzazione del Team
 
