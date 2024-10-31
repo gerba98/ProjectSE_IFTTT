@@ -336,25 +336,33 @@ public class CreateRuleController {
     public void createCompositeTrigger(ActionEvent actionEvent){
         String operator = operatorBox.getValue();
         String triggerType1 = CTBox1.getValue();
-        String triggerDetails1 = collectTriggerDetails(compositeTrigPaneItems1, CTBox1);
         String triggerType2 = CTBox2.getValue();
-        String triggerDetails2 = collectTriggerDetails(compositeTrigPaneItems2, CTBox2);
+        if(operator==null || triggerType1==null || triggerType2==null) {
+            CTLabelError.setVisible(true);
 
-        boolean not1 = notOperator1.isSelected();
-        boolean not2 = notOperator2.isSelected();
 
-        String compositeString = CompositeTriggerFormatter.formatCompositeTrigger(
-                operator, not1, triggerType1, triggerDetails1,
-                operator, not2, triggerType2, triggerDetails2,compositeTriggerNames
-        );
-        // Set the formatted string as the trigger
-        compositeTriggerNames.put(compositeTrigName.getText(), "composite;"+compositeString);
-        triggersList.add(compositeTrigName.getText());
-        triggerBox.setItems(triggersList);
+        }else{
+            String triggerDetails2 = collectTriggerDetails(compositeTrigPaneItems2, CTBox2);
+            String triggerDetails1 = collectTriggerDetails(compositeTrigPaneItems1, CTBox1);
+            if(!triggerDetails1.isEmpty() && !triggerDetails2.isEmpty()) {
+                boolean not1 = notOperator1.isSelected();
+                boolean not2 = notOperator2.isSelected();
 
-        clearCompositePage();
-        CTLabelError.setVisible(false);
+                String compositeString = CompositeTriggerFormatter.formatCompositeTrigger(
+                        operator, not1, triggerType1, triggerDetails1,
+                        operator, not2, triggerType2, triggerDetails2, compositeTriggerNames
+                );
+                // Set the formatted string as the trigger
+                compositeTriggerNames.put(compositeTrigName.getText(), "composite;" + compositeString);
+                triggersList.add(compositeTrigName.getText());
+                triggerBox.setItems(triggersList);
 
+                clearCompositePage();
+                CTLabelError.setVisible(false);
+            }else{
+                CTLabelError.setVisible(true);
+            }
+        }
 
     }
 
@@ -368,7 +376,6 @@ public class CreateRuleController {
             compositeActionNamesHash.put(compositeActionName.getText(), listForHash);
             CALabelError.setVisible(false);
             clearCompositeAction();
-            System.out.println("Dizionarion dopo aver creato l'azione: " + compositeActionNamesHash.toString() + "\n" + compositeActionNamesHash);
         }
     }
 
@@ -376,11 +383,10 @@ public class CreateRuleController {
     public void CAAddButton() {
         String actionType = CABox.getValue();
         String actionValue = collectActionDetails(compositeActionPaneItems, CABox);
-        if(actionValue.equals("")){
+        if(actionValue.equals("") || actionType.isEmpty()){
             CALabelError.setVisible(true);
         }else{
             String result = actionType + "#" + actionValue;
-            System.out.println("dizionarion quadno aggiungo una azione singola: " + compositeActionList.toString());
             if(compositeActionNamesHash.containsKey(actionType)){
                 List<String> concatenateActions = compositeActionNamesHash.get(actionType);
                 compositeActionList.addAll(concatenateActions);
@@ -415,6 +421,7 @@ public class CreateRuleController {
             }
         }
     }
+
 
     public static class CompositeTriggerFormatter {
         /**
@@ -503,7 +510,6 @@ public class CreateRuleController {
                 if (periodicCheckBox.isSelected()) {
 
                     String period = collectPeriodDetails(); // Metodo per raccogliere i dettagli del periodo
-                    System.out.println("PERIODO:"+period);
                     builder.setPeriodic(period);
                 } else if (singleCheckBox.isSelected()) {
                     builder.setSingle();
@@ -542,7 +548,7 @@ public class CreateRuleController {
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if(item instanceof ComboBox<?>){
-                        if (!((ComboBox<?>) item).getValue().toString().isEmpty()) {
+                        if (((ComboBox<?>) item).getValue()!=null) {
                             trigger += ((ComboBox<?>) item).getValue() + " ";
                         }
                     }
@@ -553,7 +559,7 @@ public class CreateRuleController {
                 while (iterator.hasNext()) {
                     Object item = iterator.next();
                     if (item instanceof DatePicker) {
-                        if (!((DatePicker) item).getValue().toString().isEmpty()) {
+                        if (((DatePicker) item).getValue()!=null) {
                             trigger += ((DatePicker) item).getValue() + " ";
                         }
                     }
@@ -607,7 +613,9 @@ public class CreateRuleController {
             default:
                 trigger = compositeTriggerNames.get(box.getValue()) + " ";
         }
-        trigger = trigger.substring(0, trigger.length() - 1);
+        if(!trigger.isEmpty()) {
+            trigger = trigger.substring(0, trigger.length() - 1);
+        }
         return trigger;
     }
 
@@ -669,6 +677,7 @@ public class CreateRuleController {
             ruleType = "periodicrule-" + stringToWrite;
 
         }
+
         return ruleType;
     }
 
@@ -684,8 +693,7 @@ public class CreateRuleController {
         labelError.setVisible(false);
         compositeTriggerButton.setVisible(true);
         compositeActionButton.setVisible(true);
-        CALabelError.setVisible(false
-        );
+        CALabelError.setVisible(false);
         clearPeriodicRule();
     }
 
@@ -911,7 +919,6 @@ public class CreateRuleController {
 
     @FXML
     private void createActionItem(Label label, String text, String value) {
-        System.out.println(value);
         label.setVisible(false);
         switch (text) {
             case "Display message":

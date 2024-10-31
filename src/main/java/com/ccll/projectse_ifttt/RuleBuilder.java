@@ -110,7 +110,6 @@ public class RuleBuilder {
 
         RuleManager ruleManager = RuleManager.getInstance();
         if (isPeriodic) {
-            //System.out.println(name + triggerType+ triggerDetails+ actionType+ actionDetails+ "periodicrule-" + period);
             return ruleManager.createRule(name, triggerType, triggerDetails, actionType, actionDetails, period);
         } else if (isSingle) {
             return ruleManager.createRule(name, triggerType, triggerDetails, actionType, actionDetails, "singlerule");

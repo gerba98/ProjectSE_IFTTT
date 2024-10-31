@@ -168,17 +168,22 @@ public class IndexController {
     @FXML
     public void onActivateButtonClick(ActionEvent actionEvent) {
         Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
-        if(Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null){
-
-            PeriodicRule rule = (PeriodicRule) selectedRule;
-            rule.setReactivated(true);
-            selectedRule.setState(true);
-
-        }else if (selectedRule != null) {
-            selectedRule.setState(true);  // Imposta lo stato su true (Active)
-            rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+        if(selectedRule!=null) {
             errorLabel.setVisible(false);
-        } else {
+            if (Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null) {
+
+                PeriodicRule rule = (PeriodicRule) selectedRule;
+                rule.setReactivated(true);
+                selectedRule.setState(true);
+
+            } else if (selectedRule != null) {
+                selectedRule.setState(true);  // Imposta lo stato su true (Active)
+                rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+                errorLabel.setVisible(false);
+            } else {
+                errorLabel.setVisible(true);
+            }
+        }else{
             errorLabel.setVisible(true);
         }
     }
@@ -186,17 +191,23 @@ public class IndexController {
     @FXML
     public void onDeactivateButtonClick(ActionEvent actionEvent) {
         Rule selectedRule = rulesTable.getSelectionModel().getSelectedItem();
-        if(Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null){
-
-            PeriodicRule rule = (PeriodicRule) selectedRule;
-            rule.setReactivated(false);
-            selectedRule.setState(false);
-
-        }else if (selectedRule != null) {
-            selectedRule.setState(false);  // Imposta lo stato su false (Inactive)
-            rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+        if(selectedRule!=null) {
             errorLabel.setVisible(false);
-        } else {
+            if (Objects.equals(selectedRule.getType(), "PeriodicRule") && selectedRule != null) {
+
+                selectedRule.setState(false);
+                PeriodicRule rule = (PeriodicRule) selectedRule;
+                rule.setReactivated(false);
+
+
+            } else if (selectedRule != null) {
+                selectedRule.setState(false);  // Imposta lo stato su false (Inactive)
+                rulesTable.refresh();  // Aggiorna la tabella per riflettere il cambiamento
+                errorLabel.setVisible(false);
+            } else {
+                errorLabel.setVisible(true);
+            }
+        }else{
             errorLabel.setVisible(true);
         }
 

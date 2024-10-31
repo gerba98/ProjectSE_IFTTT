@@ -80,7 +80,6 @@ public class CompositeAction implements Action {
                 sb.append(">>>");
             }
         }
-        System.out.println("composite action: " + sb);
         return sb.toString();
     }
 

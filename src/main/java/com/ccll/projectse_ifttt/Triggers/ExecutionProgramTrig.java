@@ -74,7 +74,6 @@ public class ExecutionProgramTrig extends AbstractTrigger {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println();
         }
         return newEvaluation;
     }

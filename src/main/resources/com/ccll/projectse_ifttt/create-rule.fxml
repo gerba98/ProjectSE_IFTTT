@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="382.0" prefWidth="614.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.CreateRuleController">
+<AnchorPane prefHeight="490.0" prefWidth="744.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ccll.projectse_ifttt.CreateRuleController">
    <AnchorPane fx:id="anchorPaneCompositeTrigger" prefHeight="393.0" prefWidth="630.0" visible="false">
       <Button fx:id="backRuleButton" layoutX="20.0" layoutY="336.0" mnemonicParsing="false" onAction="#backButton" text="Back" />
       <ComboBox fx:id="CTBox1" layoutX="117.0" layoutY="153.0" prefHeight="26.0" prefWidth="220.0" />
@@ -17,16 +17,16 @@
       <Label layoutX="117.0" layoutY="260.0" text="Second trigger" />
       <CheckBox fx:id="notOperator1" layoutX="55.0" layoutY="156.0" mnemonicParsing="false" text="NOT" />
       <CheckBox fx:id="notOperator2" layoutX="55.0" layoutY="280.0" mnemonicParsing="false" text="NOT" />
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="236.0" layoutY="14.0" prefHeight="26.0" prefWidth="203.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Composite Trigger" textAlignment="CENTER" textFill="#6f0b0b">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="219.0" layoutY="14.0" prefHeight="26.0" prefWidth="210.0" style="-fx-font-size: 18; -fx-font-weight: bold;" text="Composite Trigger" textAlignment="CENTER" textFill="#6f0b0b">
          <font>
             <Font name="CMU Serif Roman" size="13.0" />
          </font></Label>
       <Label layoutX="120.0" layoutY="74.0" text="Composite Trigger Name" />
       <TextField fx:id="compositeTrigName" layoutX="119.0" layoutY="91.0" />
-      <Label fx:id="CTLabelError" layoutX="424.0" layoutY="363.0" text="Missing info" textFill="RED" visible="false" />
+      <Label fx:id="CTLabelError" layoutX="381.0" layoutY="344.0" prefHeight="15.0" prefWidth="67.0" text="Missing info" textFill="RED" visible="false" />
    </AnchorPane>
-   <AnchorPane fx:id="anchorPane" prefHeight="399.0" prefWidth="646.0">
-      <Pane fx:id="rulePane" layoutX="-3.0" prefHeight="399.0" prefWidth="1095.0" AnchorPane.bottomAnchor="-199.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-446.0" AnchorPane.topAnchor="0.0">
+   <AnchorPane fx:id="anchorPane" prefHeight="479.0" prefWidth="734.0">
+      <Pane fx:id="rulePane" layoutX="-3.0" prefHeight="488.0" prefWidth="743.0" AnchorPane.bottomAnchor="-9.0" AnchorPane.leftAnchor="-3.0" AnchorPane.rightAnchor="-6.0" AnchorPane.topAnchor="0.0">
          <Label layoutX="24.0" layoutY="50.0" text="Rule Name" />
          <TextField fx:id="ruleNameTxtField" layoutX="24.0" layoutY="67.0" prefHeight="25.0" prefWidth="210.0" />
          <Label layoutX="24.0" layoutY="125.0" text="Trigger" />
@@ -52,7 +52,7 @@
       </Pane>
    </AnchorPane>
    <AnchorPane fx:id="anchorPaneCompositeAction" prefHeight="399.0" prefWidth="618.0" visible="false">
-      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="246.0" layoutY="6.0" prefHeight="40.0" prefWidth="176.0" style="-fx-font-weight: bold;" text="Composite Action" textAlignment="CENTER" textFill="#792132">
+      <Label alignment="CENTER" contentDisplay="CENTER" layoutX="219.0" layoutY="6.0" prefHeight="40.0" prefWidth="190.0" style="-fx-font-weight: bold;" text="Composite Action" textAlignment="CENTER" textFill="#792132">
          <font>
             <Font name="CMU Serif Roman" size="18.0" />
          </font>

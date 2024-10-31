@@ -120,7 +120,6 @@ public class RuleManager {
      */
     public Rule createRule(String ruleName, String triggerType, String triggerValue, String actionType, String actionValue) {
         Trigger trigger = createTrigger(triggerType, triggerValue);
-        System.out.println(actionType + "   "+  actionValue);
         Action action = createAction(actionType, actionValue);
         Rule newRule = new Rule(ruleName, trigger, action);
         addRule(newRule);

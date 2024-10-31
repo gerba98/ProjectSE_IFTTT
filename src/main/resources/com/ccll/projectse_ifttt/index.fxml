@@ -13,16 +13,15 @@
     <SplitPane prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
             <children>
-                <TableView fx:id="rulesTable" layoutX="-4.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="362.0" prefWidth="750.0" AnchorPane.bottomAnchor="-2.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="-5.0" AnchorPane.topAnchor="0.0">
+                <TableView fx:id="rulesTable" layoutX="-7.0" layoutY="-8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="368.0" prefWidth="755.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="-7.0" AnchorPane.rightAnchor="-7.0" AnchorPane.topAnchor="-8.0">
                     <columns>
-                        <TableColumn fx:id="nameColumn" maxWidth="150.0" prefWidth="150.0" text="Nome" />
-                        <TableColumn fx:id="triggerColumn" maxWidth="150.0" prefWidth="150.0" text="Trigger" />
-                        <TableColumn fx:id="actionColumn" maxWidth="150.0" prefWidth="150.0" text="Azione" />
-                        <TableColumn fx:id="stateColumn" maxWidth="150.0" prefWidth="150.0" text="Stato" />
-                        <TableColumn fx:id="typeColumn" maxWidth="150.0" prefWidth="150.0" text="Tipologia" />
+                        <TableColumn fx:id="nameColumn" maxWidth="500.0" prefWidth="150.0" text="Nome" />
+                        <TableColumn fx:id="triggerColumn" maxWidth="500.0" prefWidth="150.0" text="Trigger" />
+                        <TableColumn fx:id="actionColumn" maxWidth="500.0" prefWidth="150.0" text="Azione" />
+                        <TableColumn fx:id="stateColumn" maxWidth="500.0" prefWidth="150.0" text="Stato" />
+                        <TableColumn fx:id="typeColumn" maxWidth="500.0" prefWidth="150.0" text="Tipologia" />
                     </columns>
                 </TableView>
-                <Pane prefHeight="200.0" prefWidth="200.0" />
             </children>
         </AnchorPane>
     </SplitPane>
@@ -30,7 +29,7 @@
     <AnchorPane maxHeight="500.0" maxWidth="647.0" minHeight="0.0" minWidth="0.0" prefHeight="75.0" prefWidth="647.0">
         <Button fx:id="createRuleButton" layoutX="210.0" layoutY="2.0" mnemonicParsing="false" onAction="#OnCreateRuleClick" text="Create rule" />
         <Button fx:id="deleteRuleButton" layoutX="324.0" layoutY="2.0" mnemonicParsing="false" onAction="#onDeleteRuleButton" text="Delete rule" textFill="WHITE" />
-        <Label fx:id="errorLabel" layoutX="14.0" layoutY="89.0" prefHeight="17.0" prefWidth="74.0" text="Select a Rule" visible="false" />
+        <Label fx:id="errorLabel" layoutX="475.0" layoutY="47.0" prefHeight="17.0" prefWidth="82.0" text="Select a Rule" visible="false" />
         <Button fx:id="activateButton" layoutX="193.0" layoutY="41.0" mnemonicParsing="false" onAction="#onActivateButtonClick" prefHeight="27.0" prefWidth="99.0" text="Activate rule" textFill="#cdcdcd" />
         <Button fx:id="deactivateButton" layoutX="324.0" layoutY="41.0" mnemonicParsing="false" onAction="#onDeactivateButtonClick" text="Deactivate rule" />
     </AnchorPane>
