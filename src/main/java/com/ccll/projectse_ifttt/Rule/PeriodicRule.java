@@ -6,7 +6,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -157,7 +156,6 @@ public class PeriodicRule extends Rule {
             if (super.isState()) {
                 endPeriod = null;
                 reactivated.set(true);
-                return;
             } else {
                 // CASO 2
                 if (!reactivated.get()) {

@@ -1,12 +1,8 @@
 package com.ccll.projectse_ifttt.Rule;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,7 +32,7 @@ public class RulePersistence {
 
     /**
      * Salva le regole attualmente gestite da RuleManager in un file CSV.
-     *
+     * <p>
      * Le regole vengono scritte nel formato stringa e nel caso di
      * PeriodicRule, vengono inclusi anche il periodo e lo stato di
      * riattivazione.
@@ -70,10 +66,10 @@ public class RulePersistence {
 
     /**
      * Carica le regole da un file CSV e le aggiunge a RuleManager.
-     *
+     * <p>
      * Le regole vengono lette come stringhe e, nel caso di
      * PeriodicRule, viene impostato lo stato di riattivazione.
-     *
+     * <p>
      * Se il file CSV non esiste, viene creato automaticamente.
      */
     public void loadRules(){

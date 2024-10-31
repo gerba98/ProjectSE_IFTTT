@@ -2,13 +2,10 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import com.ccll.projectse_ifttt.Rule.RuleManager;
 import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 class CompositeTriggerTest {

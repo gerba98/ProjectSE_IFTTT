@@ -2,7 +2,6 @@ package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Implementazione concreta di {@link TriggerCreator} per la creazione di trigger basati sull'esistenza di un file.

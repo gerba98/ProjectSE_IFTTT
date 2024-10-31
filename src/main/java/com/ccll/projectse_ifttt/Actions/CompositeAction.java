@@ -1,8 +1,5 @@
 package com.ccll.projectse_ifttt.Actions;
 
-import com.ccll.projectse_ifttt.Triggers.CompositeTrigger;
-import com.ccll.projectse_ifttt.Triggers.Trigger;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +80,7 @@ public class CompositeAction implements Action {
                 sb.append(">>>");
             }
         }
-        System.out.println("composite action: " + sb.toString());
+        System.out.println("composite action: " + sb);
         return sb.toString();
     }
 

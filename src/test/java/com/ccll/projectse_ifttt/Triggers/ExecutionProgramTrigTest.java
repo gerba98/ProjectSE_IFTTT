@@ -1,10 +1,7 @@
 package com.ccll.projectse_ifttt.Triggers;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import java.io.InputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 

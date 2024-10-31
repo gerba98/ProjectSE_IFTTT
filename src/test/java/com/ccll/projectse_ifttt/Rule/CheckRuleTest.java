@@ -2,8 +2,6 @@ package com.ccll.projectse_ifttt.Rule;
 
 import com.ccll.projectse_ifttt.TestUtilsClasses.ActionTestUtils;
 import com.ccll.projectse_ifttt.TestUtilsClasses.TriggerTestUtils;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

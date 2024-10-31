@@ -1,7 +1,6 @@
 package com.ccll.projectse_ifttt.TestUtilsClasses;
 
 import com.ccll.projectse_ifttt.Triggers.AbstractTrigger;
-import com.ccll.projectse_ifttt.Triggers.Trigger;
 
 public class TriggerTestUtils extends AbstractTrigger {
     private boolean shouldTrigger;

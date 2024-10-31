@@ -1,7 +1,6 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 import java.io.File;
-import java.nio.file.Path;
 
 /**
  * Implementa un trigger che si attiva in base alla presenza di un file in un percorso specificato.

@@ -1,8 +1,6 @@
 package com.ccll.projectse_ifttt.Triggers;
 
 
-import java.util.Arrays;
-
 /**
  * Implementazione concreta di {@link TriggerCreator} per la creazione di trigger basati sulla dimensione di un file.
  * Fornisce un metodo per creare istanze di {@link FileDimensionTrig}, che si attivano quando il file specificato
