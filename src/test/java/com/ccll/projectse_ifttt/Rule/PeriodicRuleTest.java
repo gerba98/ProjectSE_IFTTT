@@ -120,7 +120,7 @@ class PeriodicRuleTest {
     void testManualReactivationDuringPeriod() {
         TriggerTestUtils trigger = new TriggerTestUtils(false);
         ActionTestUtils action = new ActionTestUtils();
-        Rule periodicRule = new PeriodicRule("test", trigger, action, "0:0:1");
+        PeriodicRule periodicRule = new PeriodicRule("test", trigger, action, "0:0:1");
 
         testRuleManager.addRule(periodicRule);
         waitCheckRule();
@@ -132,7 +132,8 @@ class PeriodicRuleTest {
         Assertions.assertFalse(periodicRule.isState(), "La regola dovrebbe essere disattivata dopo l'esecuzione");
 
         trigger.setShouldTrigger(false);
-        periodicRule.setState(true); // L'utente riattiva la regola
+        periodicRule.setState(true);// L'utente riattiva la regola
+        periodicRule.setReactivated(true);
         waitCheckRule();
         Assertions.assertTrue(periodicRule.isState(), "La regola dovrebbe essere attiva dopo la riattivazione dell'utente");
 
