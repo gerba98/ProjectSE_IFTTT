@@ -30,7 +30,7 @@ stimata la velocità della sprint.
 È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=496373581#gid=496373581).
 
 ### Sprint Backlog #3
-Nel terzo Sprint Backlog sono state selezionate le User Stories delle user epic quattro e cinque. A causa di problemi emersi successivamente, legati al salvataggio delle regole e al funzionamento delle azioni composte, il team ha dato priorità alla risoluzione dei debiti tecnici. La velocità della sprint è stata quindi adattata alle nuove esigenze. È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=496373581#gid=49637358)
+Nel terzo Sprint Backlog sono state selezionate le User Stories delle user epic quattro e cinque. A causa di problemi emersi successivamente, legati al salvataggio delle regole e al funzionamento delle azioni composte, il team ha dato priorità alla risoluzione dei debiti tecnici. La velocità della sprint è stata quindi adattata alle nuove esigenze. È possibile consultare il documento al seguente [link](https://docs.google.com/spreadsheets/d/1JuIgbtGOiu7iUel3T4vI1Dh6UPTLYzwwYyUsrXdiE00/edit?gid=1501445547#gid=1501445547)
 
 
 ## Organizzazione del Team
